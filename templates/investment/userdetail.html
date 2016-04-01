@@ -1,0 +1,30 @@
+{% extends "investment/systembase.html" %}
+{% block content %}
+  {% load staticfiles %}
+<div class="inner">
+
+
+      <!-- <div class="text-center col-md-12 col-md-offset-4 col-sm-4 col-sm-offset-4 col-sx-12"> -->
+        <div class="col-md-6">
+        <p class="" >
+          On our global investment journey, let us begin at the traditional home of horseracing: Great Britain. The new flat season is almost upon us and runs until November 2016. Using statistics from the past 3 seasons, we have found over <span id="nosystems"> 40</span> consistently profitable systems covering various angles and built on solid logical reasining. We took these systems and further diversified by including baskets of trainers/jockeys over individuals, spreading risk over different grade tracks, locations, and market positions.
+        </p>
+        <p>
+        As well as diversification, our focus is on value. This is the represented by the ratio of actual to expected wins in the fund and system statistics we provide. For the equivalent risk, there is greater potential reward. Consistently selecting value runners is the only way to succeed over the medium-to-long term.
+
+        We have run simulations combining systems in different proportions to generate various fund alternatives. Initially, we will be offering the top<span id="noactivefunds"> 2 </span> funds.
+
+        Click a currency to learn how you can get involved.
+        </p>
+      </div>
+
+      <!-- <div class="text-center col-md-12 "> -->
+      <!-- <div class="text-center col-md-12 col-md-offset-4 col-sm-4 col-sm-offset-4 col-sx-12"> -->
+        <div class="col-md-6">
+      <h3>Choose your fund currency</h3>
+        <a class="btn btn-lg btn-success" href="{% url 'GBP' %}">GBP</a>
+        <a class="btn btn-lg btn-success" href="{% url 'AUD' %}">AUD</a>
+      </div>
+
+</div>
+{% endblock %}

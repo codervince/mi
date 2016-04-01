@@ -1,0 +1,52 @@
+{% extends "investment/systembase.html" %}
+{% block content %}
+<div class="inner">
+
+     <h3>AUD investment</h3>
+
+      <!-- <div class="text-center col-md-4 col-md-offset-4 col-sm-4 col-sm-offset-4 col-sx-12"> -->
+ <div class="row">
+     	<div class="col-md-6">
+      	<!-- <div class="text-center col-md-4 col-md-offset-4 col-sm-4 col-sm-offset-4 col-sx-12"> -->
+        <p>
+	        Investments can be active or passive.
+	        If you are a more hands-on type, you can choose to make use of our daily candidates updates and place the bets yourself. The first month is free while we set up the candidates feed, after that AUD <span id="subscriptionfeeaud"> 30 </span> per month.
+	    </p><p>
+	        Alternatively, you can make an investment in the fund and allow us to manage it for you. We have set up a primary and secondary exchange account plus some back-up corporate accounts to make the investments. 
+    	</p><p>
+	        In either case, we will be keeping records of all fund investments and displaying the results and current rois, value stats etc here.
+	    </p>
+	    
+
+		<p>  
+	        To make a payment to our Hong Kong account and choose to pay fees now or out of any profits.
+	        Include your username as the payment reference.
+	    
+	    </p>
+	        <div class="auslocalpayment">
+        		To make a payment locally, please email <a href="mailto:office@metainvest.io?subject=Investment">us</a> for bank details. We can also provide a local phone number to which you can pay.
+    		</div>
+	     <p>
+	        Please include your username as the payment reference.
+	        After payment your balance will be updated and you can choose your fund investment.
+	    </p>
+
+        </div>
+      	 <div class="text-center col-md-6">
+             <!-- <div class="text-center col-md-4 col-md-offset-4 col-sm-4 col-sm-offset-4 col-sx-12"> -->
+             <div id="hkbankdetails">
+                 Account Name: <br/>Meta Information Services Limited<br/>
+                 Hang Seng Bank Ltd<br/>
+                 Account Number: 369-173810-883<br/>
+                 Bank Code: 024<br/>
+                 SWIFT: HASEHKHHXXX
+             </div>
+             <br/>
+             <p>
+             <a class="btn btn-lg btn-success" href="{% url 'tandcs' %}">Click here for the terms and conditions</a>
+             </p>
+         </div>
+	</div> <!-- row -->
+ 
+</div>
+{% endblock %}

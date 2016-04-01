@@ -1,0 +1,55 @@
+{% extends "app/base.html" %}
+{% load guardian_tags %}
+
+{% block navbar-funds-active %}class=active{% endblock %}
+
+{% block content %}
+<h2> The Funds </h2>
+
+<table class="table">
+   <thead>
+      <th>Name</th>
+      <th>Currency</th>
+      <th>Subscribed</th>
+      <th>Action</th>
+      <th>Share</th>
+   </thead>
+   <tbody>
+      {% for f in object_list %}
+      <tr>
+         {% get_obj_perms user for f as "fundacount_perms" %}
+
+         {% if "view_task" in fundacount_perms %}
+         <td><a href="{% url 'funds:fundaccount_detail' f.slug %}">{{ f.fundname }}</td>
+         <td>{{ f.currency }}</td>
+         <td>True</td>
+         <td>
+            <form action="{% url 'funds:unsubscribe' f.id %}">
+               <button type="submit" class="btn btn-primary">Unsubscribe</button>
+            </form>
+         </td>
+         <td></td>
+         {% else %}
+         <td>{{ f.fundname }}</td>
+         <td>{{ f.currency }}</td>
+         <td>False</td>
+         <form action="{% url 'funds:subscribe' f.id %}" method="post">
+         {% csrf_token %}
+         <td>
+             <button type="submit" class="btn btn-primary">Subscribe</button>
+         </td>
+         <td><input name="share"></td>
+         </form>
+         {% endif %}
+      </tr>
+      {% endfor %}
+   </tbody>
+</table>
+
+<br/>
+<br/>
+<div>I am Mr: {{ username }}</div>
+<div>GBP balance: {{ GBPbalance }}</div>
+<div>AUD balance: {{ AUDbalance }}</div>
+
+{% endblock %}

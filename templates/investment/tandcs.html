@@ -1,0 +1,52 @@
+{% extends "investment/systembase.html" %}
+{% block content %}
+  {% load staticfiles %}
+
+<div class="inner">
+	<h2>Caveat emptor</h2><p>
+	Investments are obviously not guarantees! Past performance does not necessarily reflect future outcomes.
+	</p>
+	<h2>Fee structure</h2><p>
+	Passive investors subscribe to the information service at GBP <span id="subscriptionfeegbp"> 20</span>/AUD<span id="subscriptionfeeaud"> 40</span> or USD <span class="subscriptionfeeusd"> 30 </span> per month (28 days). The season runs for 7 calendar months. 
+        Each fund has its own structure but initially the basic settings are as follows:
+	The management fee is the equivalent to the subscription fee above. It is linked to fund performance as a % of profit. Currently, it is <span class="defaultmanagefee"> 5% </span>
+	There is also a performance fee for any excess profits beyond a threshold. This is standard practice in investment funds.
+	Dividend-based funds are either priced higher or incur a dividend fee on profits, typically 5%.
+	The current figures are <span class="defaultperformancefee"> 5 </span> % for investments over <span class="defaultperformancethreshold> 150% </span>.
+	When you use your funds to make an investment, these figures will be included in the investment agreement.
+	Using a percentage simplifies matters since the funds are in principal currency-agnostic.
+	</p>
+	<h2>Bets</h2><p>
+	We intend to bet a percentage of bank, generally <span class="defaultbettingratio"> 5 </span> %.
+	To minimize exposure, the balance will be kept to a maximum daily amount equivalent to the performance threshold, i.e. 1.5 * opening bank.
+	For example, 1,500 for a 1000 fund. Excess amounts are cashed out on a daily basis. See Dividends below for details
+	</p>
+	<h2>Winnings</h2><p>
+	In principal, you receive a percentage of the fund profit in proportion to your share less the above fees.
+	This will be paid into your account at the end of the season. See Dividends.
+	</p>
+	<h2>Dividends</h2><p>
+	In funds offering dividends, at the end of each month, cashed out amounts will be paid out to investors pro rata, i.e. in accordance with their stake in the fund, less dividend fee.
+	This does not affect the funds invested as the initial balance is maintained after each cashout. Obviously, no dividend payments will be made if the current balance is less than the threshold.
+	</p><h2> Risks </h2><p>
+	We have tried to minimize the risks of overfitting the data as much as possible, or relying too much on a single trainer or jockey especially. Obviously, with systems investment, unlike regular 'punting' or gambling, the risks of backing on an individual horse (profile) are eliminated.
+	<p>
+	Some other potential risks:
+	<ul>
+	<li>Bookmakers do close down accounts especially if the client is doing well. It is less likely to happen on the exchanges where Betfair, Betdaq get a return on turnover.Therefore, this where the fund accounts will primarily be based. </li>
+	<li>Poor performing systems. Performance will be monitored weekly in the active fund. Statistically-valid poor performing systems will be replaced by successful ones during the season if there are good logical grounds for doing so. For instance, a trainer may be having an uncharacteristically poor season for a specific reason.</li>
+	<li>Systems lose value as they become more well-known. We intend to limit our fund exposure to a small number of investors. More importantly, the systems have been composed for this specific season. Older, exposed systems are diversified against in the system selection process and will be monitored more closely. As the season progresses, we intend to develop more systems of our own under the 'MI' category.</li> 
+        <li>Inability to place large stakes. In less popular races, placing even a 50 unit investment at a value price may prove difficult. That said, the simulation has accounted for a 50% reduction in price for such high investments. We will also be splitting larger stakes over different exchanges where necessary.</li>
+	<li>Meta invest runs off with my cash. Possible but unlikely. We are looking to build a solid investment vehicle over the long-term and to beat mainstream investment and banking organizations by emphasising trust and a select service to a limited number of investors.</li>
+	<li>The government/law. See above comments on exposure. Betting is big business and governments 
+	<li>Lack of liquidity/general decline in the horseracing betting markets. As discussed above, liquidity is a problem for bigger stakes which can be countered by capping fund balances and/or using multiple bets. While we look at medium- long-term strategies, our investment period is relatively short.
+	We have found that changes in betting patterns proceed slowly.</li>
+	</ul> 
+
+	</p>
+	</p>
+
+</div>
+
+</div>
+{% endblock %}

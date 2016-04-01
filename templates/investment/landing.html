@@ -1,0 +1,67 @@
+{% extends "investment/systembase.html" %}
+{% block content %}
+  {% load staticfiles %}
+<div class="inner">
+ {% load i18n %}
+    {% if not user.is_authenticated %}
+      <div class="col-md-12 text-right">
+      <p class="lead">
+        <a class="btn btn-md btn-primary" href="{% url 'login' %}">Login</a>
+      </p>
+      </div>
+     {% endif %}
+
+      <div class="col-md-12">
+      <p class="lead">
+       <h1>{% trans "Serious about winning?" noop %}</h1>
+        <img src="{% static '/static/investment/images/image2.jpg' %}" style="width:100%">
+      </p>
+      </div>
+        {% if not user.is_authenticated %}
+      <div class="col-md-12 text-center">
+      <p class="lead">
+        <a class="btn btn-lg btn-success" href="{% url 'register' %}">Sign up</a>
+      </p>
+      </div>
+        {% endif %}
+
+      <!-- <div class="col-md-6 col-md-offset-3 col-sm-6 col-sm-offset-3 col-sx-12 text-center"> -->
+      <div class="row">
+        <div class="col-md-12">
+        <br/>
+        <p>
+          Statistical methods of handicapping have come a long way since Beyer. <br/>
+          Modern technology helps you track patterns not seen by the generic public which are crucial to get <span class="em">value</span> from your investments. 
+        </p><p>
+          But applying past data without reasoned argument is little more than wishful thinking: <br/>
+          Anyone can overfit the past in an attempt to predict the future.
+          <p>
+            Our systems are built from the ground up from solid reasoning. For example:
+          <div class="systemreasoninglist">
+          <ul> 
+            <li>Successful trainers transferring in poor-performing youngsters.</li>
+            <li>Local owners on ocal, lower-grade tracks and trainers.</li>
+            <li>Hungry, up and coming jockeys with a point to prove.</li>
+            <li>Breeding is crucial in horseracing. However, sire and owner performance data are hard to find.</li>
+          </ul>
+        </div>
+          </p> 
+          <p>
+           Let's not forget two other things: <br/>
+           <b>Form is temporary but class is permanent!</b> <br/>
+           The "day wagerer" will always lose in the long run. 
+           <p> Thinking in the medium term and taking the rough with the smooth are essential attributes of character on any journey to healthy profits. </p> 
+           <p>Secondly: <br/>
+           <b>To lower risk, it pays to diversify!</b> <br/>
+           This is why it pays to bring together systems with different angles. 
+         </p>
+         <br/>
+         {% if not user.is_authenticated %}
+         <p>
+           Sign up today to learn more about the specifics. 
+        </p>
+        {% endif %}
+      </div>
+    </div>
+</div>
+{% endblock %}
