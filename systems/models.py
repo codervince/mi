@@ -6,13 +6,15 @@ from django.contrib.postgres.fields import JSONField
 from django.contrib.postgres.fields import ArrayField
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
-
+#from
 
 
 class Runner(models.Model):
     # objects = models.Manager()
     # live = LiveManager()
-
+    '''
+    RPfields LIVE racedate, racecoursename, racecourseid, racename, racetypehorse, racetypeconditins, racetypehs, ages...
+    '''
     RUNTYPE = (
     ('LIVE', 'LIVE'),
     ('HISTORICAL', 'HISTORICAL'),
@@ -79,6 +81,22 @@ class Runner(models.Model):
 #enter manually initially or via CSV each day
 # racecourseid horseid including outcome as per rpraceday/races
 
+class LiveRunnersManager(models.Manager):
+    ''' Returns the most recent snapshot of runners since the system began'''
+    def get_query_set(self):
+        return super(LiveRunnersManager, self).get_query_set().systemsnapshot.filter(snapshottype='LIVE').latest().runners
+
+class HistoricalRunnersManager(models.Manager):
+    '''Use: System.liverunners.filter(systemname = systemname) '''
+    def get_query_set(self):
+        return super(HistoricalRunnersManager, self).get_query_set().systemsnapshot.filter(snapshottype='HISTORICAL').latest().runners
+
+'''
+Permissions: if a user is subscribed to a System, can TRACK that system
+i.e. user can view a certain query set of the system.liverunners and system.snapshot.is live
+ALl users can always view historical snapshots for system
+
+'''
 class System(models.Model):
 
     # def get_absolute_url(self):
@@ -99,13 +117,23 @@ class System(models.Model):
     exposure = ArrayField(models.CharField(max_length=500),)
     query = JSONField()
     rpquery = JSONField(null=True)
+    runners = models.ManyToManyField(Runner)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True, blank=True)
+
+    objects = models.Manager() #default
+    liverunners = LiveRunnersManager()
+    historicalrunners = HistoricalRunnersManager()
+
+
     def __str__(self):
         return self.systemname
 
     class Meta:
+        default_permissions = (  ('view_system', 'View system'),        )
         ordering = ('snapshotid',)
+
+
 
 #base model variation for Simple, Advanced also Fund, System
 #unique on time created
@@ -157,7 +185,8 @@ class SystemSnapshot(models.Model):
     totalbackyears = models.SmallIntegerField(default=None, null=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True, blank=True)
+
     class Meta:
+        default_permissions = ('view', 'add', 'change', 'delete')
         ordering = ('-levelbsprofitpc',)
         get_latest_by = 'created'
-

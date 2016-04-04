@@ -4,15 +4,12 @@ from django.conf                     import settings
 from django.contrib.postgres.fields import JSONField, ArrayField
 from django.utils.translation import ugettext_lazy as _
 from decimal import Decimal as D
-from investors.models                           import Investor
-from investors.models                           import Transaction
+
 
 CURRENCIES = ( ('AUD', 'AUD'), ('GBP', 'GBP'), )
 
 
-#1 field ALERTS WILL DO RACEDAY AND ALERTS UPDATE FROM CSV INITIALLY
-
-class FundAccount( models.Model ):
+class Fund( models.Model ):
 
     fundname             = models.CharField(max_length=20)
     description          = models.CharField(max_length=50, help_text=_('rationale'),blank=True)
@@ -79,19 +76,9 @@ class FundAccount( models.Model ):
 
 
     class Meta:
-        unique_together = (('fundname', "description"),)
-        index_together = [ ['fundname', "description"],]
         default_permissions = ('view', 'add', 'change', 'delete')
         ordering = ['-totalwinnings']
         get_latest_by = "wentLive"
 
-    def __unicode__(self):
-        return self.fundname
-
-
-class Investment( models.Model ):
-
-    transaction   = models.ForeignKey   ( Transaction )
-    fundaccount   = models.ForeignKey   ( FundAccount )
-    startdate     = models.DateTimeField( auto_now_add = True )
-    enddate       = models.DateTimeField( null = True, blank = True )
+    def __str__(self):
+        return '%s %f.2' % (self.slug, self.bfbalance)

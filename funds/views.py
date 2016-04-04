@@ -6,9 +6,9 @@ from django.core.urlresolvers   import reverse
 from guardian.shortcuts         import assign_perm
 from guardian.shortcuts         import remove_perm
 from decimal                    import Decimal
-from .models                    import FundAccount, Investment
-from investment                 import logic
-from investors.models 			import Investor
+from .models                    import Fund
+from investment_accounts.models import InvestmentAccount,Transfer, Transaction
+# from investors.models 			import Investor
 from django.shortcuts           import (get_object_or_404,redirect, render)
 import logging
 import json
@@ -16,7 +16,7 @@ import ast
 from datetime import datetime
 
 
-##todo zip lists to get racedate- data 
+##todo zip lists to get racedate- data
 # repeat for line grapsns
 
 # look for chart for sequences and done!
@@ -39,60 +39,89 @@ def docashedout(cashout, racedates, year):
     return cashedoutamounts
 
 
+def funds_myindex(request):
+    '''
+    takes currentuser gets latest snapshot info for that fund.
+    displays runners list incl candidates for these funds -
+    color coded by fund orderd by date
+    '''
+    now = datetime.now()
+    current_user = request.user
+    #for user get investor, get investments get fundaccountid
+    #return Funds for fundaccountid
+    #display by roi.
+    #also get last 50 runs?
+    ## if use 2016 get latest runners stats off the bat
+    #what funds am i subscribed to?
+    #funds = Fund.objects.filter(year='2016')
+
+    #prepare runners list?
+    #latest runners system. latest systemsnapshot runners
+
+    #locals() would also include request
+    return render_to_response('funds/myfunds.html', {'funds': funds, 'now':now})
+
+
+
 
 
 def fundaccount_detail(request, slug):
-   
 
-    f = get_object_or_404(FundAccount, slug=slug)
+    '''
+    takes funds stats and prepares arrays for display in charts.
+    slices fund stats for easier display on fund detail page
+    ##TODO: allow for users to subscribe to this fund on this page.
 
-    l_stats = ["bettingratio", "bfbalance", "openingbank", "totalinvested", "nobets", "nowinners", "nolosers","uniquewinners", 
+    '''
+    f = get_object_or_404(Fund, slug=slug)
+
+    l_stats = ["bettingratio", "bfbalance", "openingbank", "totalinvested", "nobets", "nowinners", "nolosers","uniquewinners",
     "maxlosingsequence", "avglosingsequence", "maxbalance", "a_e", "maxstake", "avgstake"]
     g_stats = ["managementfee", "performancefee", "bailoutfee", "stakescap", "performancethreshold", "paysDividends","nosystems", "isLive", "liveSince"]
     pie_stats = ["jratio", "tratio", "sratio", "miratio", "oratio", "lratio"]
 
     bar_data = ["racedates", "dailybfbalances"]
     candlestick_col =  ["bfstartdaybalances", "bfenddaybalances"]
-    
+
 
     returns_col = ["returns"]
     patterns_col = ["placepattern", "winpattern"]
 
-    returns_list15 = FundAccount.objects.filter(year=2015).values_list(*returns_col)
+    returns_list15 = Fund.objects.filter(year=2015).values_list(*returns_col)
     dailyreturns15 = ast.literal_eval(list(returns_list15[0])[0])
-    returns_list14 = FundAccount.objects.filter(year=2014).values_list(*returns_col)
+    returns_list14 = Fund.objects.filter(year=2014).values_list(*returns_col)
     dailyreturns14 = ast.literal_eval(list(returns_list14[0])[0])
-    returns_list13 = FundAccount.objects.filter(year=2013).values_list(*returns_col)
+    returns_list13 = Fund.objects.filter(year=2013).values_list(*returns_col)
     dailyreturns13 = ast.literal_eval(list(returns_list13[0])[0])
 
     #do with date barchart
-    patterns_list15 = FundAccount.objects.filter(year=2015).values_list(*patterns_col)
+    patterns_list15 = Fund.objects.filter(year=2015).values_list(*patterns_col)
     winpatternstr_15 = patterns_list15[0][1]
-    patterns_list14 = FundAccount.objects.filter(year=2014).values_list(*patterns_col)
+    patterns_list14 = Fund.objects.filter(year=2014).values_list(*patterns_col)
     winpatternstr_14 = patterns_list14[0][1]
-    patterns_list13 = FundAccount.objects.filter(year=2013).values_list(*patterns_col)
+    patterns_list13 = Fund.objects.filter(year=2013).values_list(*patterns_col)
     winpatternstr_13 = patterns_list13[0][1]
 
 
-    statslist = FundAccount.objects.values_list(*l_stats)
+    statslist = Fund.objects.values_list(*l_stats)
     statslist_d = { k: round(v,2) for k,v in zip(l_stats, statslist[0])}
 
-    statslistg = FundAccount.objects.values_list(*g_stats)
+    statslistg = Fund.objects.values_list(*g_stats)
     statslistg_d = { k: round(v,2) for k,v in zip(g_stats, statslistg[0]) if v is not None}
 
-    pielist = FundAccount.objects.values_list(*pie_stats)
+    pielist = Fund.objects.values_list(*pie_stats)
     pielist_d = { k: v for k,v in zip(pie_stats, pielist[0])}
-    
-    barlist2015 = FundAccount.objects.filter(year=2015).values_list(*bar_data)
+
+    barlist2015 = Fund.objects.filter(year=2015).values_list(*bar_data)
     barlist_d2015 = { k: v for k,v in zip(bar_data, barlist2015)}
     racedates = barlist_d2015['racedates'][0]
     bl_2015 = ast.literal_eval(barlist_d2015['racedates'][1])
 
-    barlist2014 = FundAccount.objects.filter(year=2014).values_list(*bar_data)
+    barlist2014 = Fund.objects.filter(year=2014).values_list(*bar_data)
     barlist_d2014 = { k: v for k,v in zip(bar_data, barlist2014)}
     racedates2014 = barlist_d2014['racedates'][0]
     bl_2014 = ast.literal_eval(barlist_d2014['racedates'][1])
-    barlist2013 = FundAccount.objects.filter(year=2013).values_list(*bar_data)
+    barlist2013 = Fund.objects.filter(year=2013).values_list(*bar_data)
     barlist_d2013 = { k: v for k,v in zip(bar_data, barlist2013)}
     racedates2013 = barlist_d2013['racedates'][0]
     bl_2013 = ast.literal_eval(barlist_d2013['racedates'][1])
@@ -109,11 +138,11 @@ def fundaccount_detail(request, slug):
     # bfbalancedata=[
     #    ['Date', 'daily balance'],]
     # bfstartdaybalances bfenddaybalances
-    
+
     cashedout_col = ["dailycashoutbalances", "bfbalance", "enddate"]
-    cashout15 = FundAccount.objects.filter(year='2015').values_list(*cashedout_col)
-    cashout14 = FundAccount.objects.filter(year='2014').values_list(*cashedout_col)
-    cashout13 = FundAccount.objects.filter(year='2013').values_list(*cashedout_col)
+    cashout15 = Fund.objects.filter(year='2015').values_list(*cashedout_col)
+    cashout14 = Fund.objects.filter(year='2014').values_list(*cashedout_col)
+    cashout13 = Fund.objects.filter(year='2013').values_list(*cashedout_col)
     cashedoutamounts15 =docashedout(cashout15, racedates, '2015')
     cashedoutamounts14 = docashedout(cashout14, racedates, '2014')
     cashedoutamounts13 = docashedout(cashout13, racedates,'2013')
@@ -130,7 +159,7 @@ def fundaccount_detail(request, slug):
         # racedate= 'new Date(%s, %s, %s)' % (year, month, day)
         bfbalancedata.append([racedate, round(x,3),round(y,3),round(z,3)])
 
-    candle2015 = FundAccount.objects.filter(year=2015).values_list(*candlestick_col)
+    candle2015 = Fund.objects.filter(year=2015).values_list(*candlestick_col)
     startdaybalances = ast.literal_eval(list(candle2015[0])[0])
     enddaybalances = ast.literal_eval(list(candle2015[0])[1])
 
@@ -149,9 +178,9 @@ def fundaccount_detail(request, slug):
           ['lratio', pielist_d['lratio']]
         ]
 
-    
-    return render(request,'funds/fund.html', 
-        {   
+
+    return render(request,'funds/fund.html',
+        {
         'fund': f,
         'statslist': statslist_d,
         'startdate': startdate,
@@ -169,21 +198,21 @@ def fundaccount_detail(request, slug):
         })
 
 
-class FundAccountsView( generic.ListView ):
-
-    template_name  = 'funds/funds.html'
-    model          = FundAccount
-
-    def get_context_data( self, **kwargs ):
-
-        context = super( FundAccountsView, self ).get_context_data( **kwargs )
-        investor = Investor.objects.get( user = self.request.user )
-
-        context[ 'GBPbalance'     ] = investor.GBPbalance
-        context[ 'AUDbalance'     ] = investor.AUDbalance
-        context[ 'username'     ] =     self.request.user.username
-        
-        return context        
+# class FundsView( generic.ListView ):
+#
+#     template_name  = 'funds/funds.html'
+#     model          = Fund
+#
+#     def get_context_data( self, **kwargs ):
+#
+#         context = super( FundsView, self ).get_context_data( **kwargs )
+#         investor = Investor.objects.get( user = self.request.user )
+#
+#         context[ 'GBPbalance'     ] = investor.GBPbalance
+#         context[ 'AUDbalance'     ] = investor.AUDbalance
+#         context[ 'username'     ] =     self.request.user.username
+#
+#         return context
 
 
 
@@ -198,44 +227,84 @@ no already subscribed
 messages
 
 
-** the fund comes as a currency variant  
+** the fund comes as a currency variant
 '''
 
+## DO SUBSCRIBE WHICH CAN WORK FOR FUND OR SYSTEM
+
+##TODO: IMport SYSTEMS update model auto create system accounts
+
+##TODO: ALerts
 class SubscribeView( generic.View ):
 
     def post( self, request, *args, **kwargs ):
-
-        fundaccount = FundAccount.objects.get( slug = args[0] )
-        investor    = Investor.objects.get( user = self.request.user  )
-        admin       = Investor.objects.get( user__is_superuser = True )
+        #ex top10all-500-unlimited-5
 
         share = request.POST[ 'share' ].replace('%', '').strip()
         chosencurrency = request.POST[ 'currency' ].strip()
+
         if share != '' and chosencurrency !='':
-            _share = Decimal( share )
-            amount = (_share * Decimal( fundaccount.openingbank )) / Decimal('100.0')
-            logger.info(fundaccount.openingbank)
-            logger.info(amount)
-            logger.info(chosencurrency)
-            #   
-            if (fundaccount.currency == settings.CURRENCY_AUD and amount < investor.AUDbalance) or (fundaccount.currency == settings.CURRENCY_GBP and amount < investor.GBPbalance):
-                
-                transaction = logic.transfer( investor, admin, amount, fundaccount.currency )
-                Investment.objects.create( transaction = transaction, fundaccount = fundaccount )
-                assign_perm( 'view_task', request.user, fundaccount )
+            #SOURCE
+            investor   = self.request.user
+            investor_account = InvestmentAccount.objects.filter(user=investor)
+            #DESTINATION
+            fund = Fund.objects.get( slug = args[0] )
+            fund_account =  FundAccount.objects.filter(fund=fund, currency=chosencurrency)
+            if not fund_account:
+                pass
+                #message cannot find a fund in your chosen currency
+                #redirect to form
+            #AUTHORIZED BY
+            admin   = User.objects.get(is_superuser= True,username='superadmin' )
+            _share = D( share )
+            #requested_amount is the share % of openingbalance
+            requested_amount = ( _share * Decimal( fund_account.openingbank ) ) / D('100.0')
+            ## If requested_amount balance == openingbalance of fund then no more subscriptions
+            amount_available = fund.openingbalance - fund_account.balance
 
-        # TODO: Here is place to create investment
+            if requested_amount > amount_available:
+                pass
+                #output message to user SOrry no more shaers available
+            else:
+                #do transfer
+                amount = requested_amount
+                description = "Purchase of " + _share + "shares in fund" + ' '+ fund.fundname
+                transfer = Transfer.objects.create(source=investor_account, destination=fund_account, amount=amount, user=admin, username=admin.username, description= description)
 
+                #update transaction table
+                # the debit from the source account NEGATIVE
+                #teh credit to the destination account POSITIVE
+                tdebit = Transaction.objects.create(transfer=transfer, account=investor_account, amount= amount*D('-1.0'))
+                tcredit = Transaction.objects.create(transfer=transfer, account=fund_account, amount= amount*D('1.0'))
+
+                ## ASSIGN permissin for user to view detail page of this particular fund!
+                assign_perm( 'view_task', investor, fund )
+
+                #rudimentary testing##
+                logger.info(fundaccount.openingbank)
+                logger.info(amount)
+                logger.info(chosencurrency)
+                logger.info(transfer)
+                logger.info(tdebit)
+
+            #     #ASSIGN VIEW permission to investor
+            #
+            # if (fundaccount.currency == settings.CURRENCY_AUD and amount < investor.AUDbalance) or (fundaccount.currency == settings.CURRENCY_GBP and amount < investor.GBPbalance):
+            #
+            #     transaction = logic.transfer( investor, admin, amount, fundaccount.currency )
+            #     Investment.objects.create( transaction = transaction, fundaccount = fundaccount )
+            #     assign_perm( 'view_task', request.user, fundaccount )
+
+        #return what?
         return HttpResponseRedirect( reverse( 'funds:fundaccounts' ) )
 
 
-class UnsubscribeView( generic.View ):
-
-    def get( self, request, *args, **kwargs ):
-        ##unsubscribe if...
-        fundaccount = models.FundAccount.objects.get( pk = args[0] )
-        remove_perm( 'view_task', request.user, fundaccount )
-
-        return HttpResponseRedirect( reverse( 'funds:fundaccounts' ) )
-
-        
+#descrubscriptions handled by admin
+# class UnsubscribeView( generic.View ):
+#
+#     def get( self, request, *args, **kwargs ):
+#         ##unsubscribe if...
+#         fundaccount = models.Fund.objects.get( pk = args[0] )
+#         remove_perm( 'view_task', request.user, fundaccount )
+#
+#         return HttpResponseRedirect( reverse( 'funds:fundaccounts' ) )

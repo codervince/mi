@@ -17,7 +17,9 @@ class UserRegistrationForm(forms.ModelForm):
             raise forms.ValidationError('Passwords don\'t match.')
         return cd['password2']
 
+# class InvestorCreateForm(forms.ModelForm):
+#     model = Investor
+#     fields = ('language', )
 
 class UserAuthForm(AuthenticationForm):
     remember_me = forms.BooleanField(label='Remember me', required=False, widget=forms.CheckboxInput())
-

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import FundAccount
+from .models import Fund
 # Register your models here.
 
-admin.site.register(FundAccount)
+admin.site.register(Fund)

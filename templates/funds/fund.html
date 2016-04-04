@@ -1,0 +1,301 @@
+{% extends "investment/systembase.html" %}
+{# {% load guardian_tags %} #}
+
+{% block navbar-funds-active %}class=active{% endblock %}
+{% load staticfiles %}
+
+{% block headerextension %}
+<style>
+.kw {
+	background-color=yellow;
+}
+
+.fig {
+	background-color=yellow;
+}
+p.winpattern {
+   word-wrap: break-word;
+   width: 500px;
+}
+
+span.win {
+    font-weight: bold;
+    font-size: 120%;
+    color: red;
+}
+span.lose {
+    font-size: 100%;
+    color: gray;
+
+ul
+{
+    list-style-type: none;
+}
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+  <!--Load the AJAX API-->
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+
+      // Load the Visualization API and the corechart package.
+      google.charts.load('current', {'packages':['corechart']});
+
+      // Set a callback to run when the Google Visualization API is loaded.
+      google.charts.setOnLoadCallback(drawPie);
+      google.charts.setOnLoadCallback(drawChart1);
+      google.charts.setOnLoadCallback(drawCashedOutBalanceChart15);
+      // google.charts.setOnLoadCallback(drawCashedOutBalanceChart14);
+      // google.charts.setOnLoadCallback(drawCashedOutBalanceChart13);
+
+
+	  // google.charts.setOnLoadCallback(drawReturnsChart);
+
+
+  //     function drawReturnsChart() {
+  //     	var datain = {{dailyreturns|safe}}
+		// var data = google.visualization.arrayToDataTable(datain);
+		// var options = {
+		//     title: 'Charges of subatomic particles',
+		//     legend: { position: 'top', maxLines: 2 },
+		//     colors: ['#5C3292', '#1A8763', '#871B47'],
+		//     interpolateNulls: false,
+		//   };
+
+  //       var chart = new google.visualization.Histogram(document.getElementById('returns_div'));
+  //       chart.draw(data, options);
+  //     	}
+
+      function drawPie() {
+
+        // Create the data table.
+        var piedata = new google.visualization.DataTable();
+
+        piedata.addColumn('string', 'Topping');
+        piedata.addColumn('number', 'Slices');
+        piedata.addRows({{djangodict|safe}});
+        var pieoptions = {'title':'Breakdown by asset class',
+                       'width':400,
+                       'height':300};
+
+        // Instantiate and draw our chart, passing in some options.
+        var chart = new google.visualization.PieChart(document.getElementById('piechart_div'));
+        chart.draw(piedata, pieoptions);
+      }
+
+
+		function drawCashedOutBalanceChart15() {
+	      	var datain = {{cashedoutamounts15|safe}}
+	      	console.log(datain)
+	      	var data = google.visualization.arrayToDataTable(datain);
+	      	var options = {
+		        title: "Winnings 2015",
+		        width: 600,
+		        height: 400,
+		        bar: {groupWidth: "95%"},
+		        legend: { position: "none" },
+		     };
+
+      		var chart = new google.visualization.ColumnChart(document.getElementById("columnchart_values15"));
+      		chart.draw(data, options);
+  		}
+		function drawCashedOutBalanceChart14() {
+	      	var datain = {{cashedoutamounts14|safe}}
+	      	console.log(datain)
+	      	var data = google.visualization.arrayToDataTable(datain);
+	      	var options = {
+		        title: "Cashed Out 2014",
+		        width: 600,
+		        height: 400,
+		        bar: {groupWidth: "95%"},
+		        legend: { position: "none" },
+		     };
+
+      		var chart = new google.visualization.ColumnChart(document.getElementById("columnchart_values14"));
+      		chart.draw(data, options);
+  		}
+		function drawCashedOutBalanceChart13() {
+	      	var datain = {{cashedoutamounts13|safe}}
+	      	console.log(datain)
+	      	var data = google.visualization.arrayToDataTable(datain);
+	      	var options = {
+		        title: "Cashed Out 2013",
+		        width: 600,
+		        height: 400,
+		        bar: {groupWidth: "95%"},
+		        legend: { position: "none" },
+		     };
+
+      		var chart = new google.visualization.ColumnChart(document.getElementById("columnchart_values13"));
+      		chart.draw(data, options);
+  		}
+
+      function drawChart1() {
+      	var datax = {{bfbalancedata|safe}}
+        // console.log(datax )
+        // console.log('here')
+        // Create the data table.
+        var balancedata = new google.visualization.DataTable();
+        // var bfbalancedata = new google.visualization.arrayToDataTable(datax);
+        balancedata.addColumn('string', 'Date');
+	      balancedata.addColumn('number', '2015');
+	      balancedata.addColumn('number', '2014');
+	      balancedata.addColumn('number', '2013');
+	      balancedata.addRows(datax);
+// var data = new google.visualization.DataTable();
+        // Set chart options
+        var opts = {
+        	chart: {
+        		title:'Account Balance',
+        	},
+	        width: 900,
+	        height: 500
+        };
+
+        // Instantiate and draw our chart, passing in some options.
+        var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+        chart.draw(balancedata, opts);
+      }
+
+	  // function drawCandle() {
+	  // 	var datac = {{dailybalancedata|safe}}
+
+	  //   var data2 = google.visualization.arrayToDataTable(datac
+
+	  //     // ['Mon', 20, 28, 38, 45],
+	  //     // ['Tue', 31, 38, 55, 66],
+	  //     // ['Wed', 50, 55, 77, 80],
+	  //     // ['Thu', 77, 77, 66, 50],
+	  //     // ['Fri', 68, 66, 22, 15]
+	  //     // Treat first row as data as well.
+	  //   , true);
+
+	  //   var options = {
+	  //     legend:'none',
+	  //     candlestick: {
+   //          fallingColor: { strokeWidth: 0, fill: '#a52714' }, // red
+   //          risingColor: { strokeWidth: 0, fill: '#0f9d58' }   // green
+   //        }
+	  //   };
+	  //   console.log(data2)
+	  //   var chart = new google.visualization.CandlestickChart(document.getElementById('candle_div'));
+
+	  //   chart.draw(data2, options);
+	  // }
+
+
+
+
+    </script>
+
+ {% endblock headerextension %}
+
+{% block content %}
+	<div class="row">
+			<h1>{{ fund.fundname }}</h1>
+	</div>
+	<div class="row">
+
+			  <div class="col-sm-8">
+
+					<h2> 2016 Season Performance </h2>
+							The fund began on {{startdate}}<br/>
+							Next turf flat races on Saturday.<br/>
+							First report to follow after a sufficient sample of results have been gathered.
+						No runs yet.
+								For the latest results please check back soon
+
+				</div>
+
+				<div class="col-sm-4">
+					Size of fund: {{fund.openingbank}}
+					You are {{ user }}
+						<form action="" method="post">
+						 {% csrf_token %}
+						 <td>
+								 <button type="submit" class="btn btn-primary">Invest</button>
+						 </td>
+						 <td>
+							<input name="share" value="%">
+							<select name="currency">
+								<option value="gbp">GBP</option>
+								<option value="aud">AUD</option>
+							</select>
+						 </td>
+						 </form>
+					 </div>
+	</div> <!-- row -->
+	<div class="row">
+
+			  <div class="col-sm-8">
+					<h2> 2015 Highlights</h2>
+					<p>
+					The <span class="kw">return on investment (ROI)</span> was <span class="fig">182.60%</span>.
+					You would have received 4 dividends in quick succession of amounts
+					492.5, 346.4, 773.4, 69.4 plus the final balance of 144.30 pro rata.
+					</p><p>
+					So a 20% share in the 1000 Fund (200 Units, either AUD or GBP) would have grossed you:<br/>
+					0.20 * (492.5+346.4+773.4+69.4+144.30)= 0.20 * 1826 =365.2<br/>
+					This gives you the return on investment stated above, excluding fees.
+					The strike rate was 29%. </p>
+					The results: 1 = win, 0 = loss
+
+
+
+				</div>
+				<div class="col-sm-4">
+					<ul>
+	 		{% for key, values in statslist.items %}
+	 			<li>{{key}} {{ values }}</li>
+	 		{% endfor %}
+	 		</ul>
+		 			<div id="piechart_div"></div>
+
+				</div>
+
+	</div> <!-- row -->
+	<div class="row">
+
+			  <div class="col-sm-6">
+
+					<p class="winpattern">
+				{{ winpatternstr_15}}
+					</p>
+
+
+				</div>
+				<div class="col-sm-6">
+					<h2> 2013-14-15 Performance </h2>
+					<div id="columnchart_values15" style="width: 300px; height: 200px;"></div>
+					<div id="curve_chart" style="width: 600px; height: 500px"></div>
+
+					<h2> 2015 Performance </h2>
+					<ul>
+					{% for key, values in genericstats.items %}
+					<li>{{key}} {{ values }}</li>
+				{% endfor %}
+					</ul>
+
+
+				</div>
+
+	</div> <!-- row -->
+
+
+		<script type="text/javascript">
+
+						if (window.jQuery) {
+						    console.log("loaded");
+						} else {
+						    console.log("jQuery is not loaded");
+						}
+
+
+					$('p.winpattern').html(function(i,el) {
+					    return el.replace(/1/g, '<span class="win">1</span>');
+					});
+					$('p.winpattern').html(function(i,el) {
+					    return el.replace(/0/g, '<span class="lose">0</span>');
+					});
+			</script>
+
+{% endblock %}

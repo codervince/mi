@@ -42,7 +42,6 @@ urlpatterns = [
     url(r'^account/reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$', auth_views.password_reset_confirm),
     url(r'^account/reset/done/$', auth_views.password_reset_complete,{'template_name': 'investment/account/password-reset-complete.html'} ),
     url(r'^account/', include('django.contrib.auth.urls')),
-    #url(r'^investors/', include('investors.urls')),
+    url(r'^funds/', include('funds.urls')),
+    #url(r'^systems/', include('systems.urls')),
 ]
-
-

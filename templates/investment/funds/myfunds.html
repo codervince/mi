@@ -1,0 +1,22 @@
+{% extends "investment/systembase.html" %}
+
+{% load guardian_tags %}
+
+{% block navbar-funds-active %}class=active{% endblock %}
+
+{% block content %}
+
+Current time: {{ now }}
+
+TABS ?? Funds Runners Candidates
+
+<ul>
+{% for f in funds %}
+<li> LINK TO {{ f.slug }} </li>
+{% endfor %}
+</ul>
+
+
+Today's candidates and all runners
+
+{% endblock %}

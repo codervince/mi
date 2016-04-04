@@ -27,9 +27,10 @@ CURRENCIES = ( (CURRENCY_AUD, 'AUD'), (CURRENCY_GBP, 'GBP'), )
 SECRET_KEY = '!1mhk49#$6#n(vp(8=464a%)!-f3w$ph8ahd4!cg^h4!lj)_h7'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['139.59.249.64' , 'metainvest.io' ]
+ALLOWED_HOSTS = []
+# ALLOWED_HOSTS = ['139.59.249.64' , 'metainvest.io' ]
 
 
 # Application definition
@@ -42,9 +43,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'investors',
+    'guardian',
+    'investment_accounts',
     'systems',
     'funds'
 ]
+#remove investments
 
 MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',
@@ -81,17 +85,29 @@ WSGI_APPLICATION = 'investment.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
 
-
+#local
 DATABASES = {
    'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'lucky78',
-        'USER': 'devdb',
-        'PASSWORD': '1devdb6',
+        'NAME': 'lucky9',
+        'USER': 'vmac',
+        'PASSWORD': '',
         'HOST': '127.0.0.1',
         'PORT': '5432',
     }
 }
+
+#remote
+# DATABASES = {
+#    'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'lucky78',
+#         'USER': 'devdb',
+#         'PASSWORD': '1devdb6',
+#         'HOST': '127.0.0.1',
+#         'PORT': '5432',
+#     }
+# }
 
 
 # Password validation
@@ -112,6 +128,14 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+
+AUTHENTICATION_BACKENDS = (
+    # Needed to login by username in Django admin, regardless of `allauth`
+    # 'django.contrib.auth.backends.ModelBackend',
+    # `allauth` specific authentication methods, such as login by e-mail
+    # 'allauth.account.auth_backends.AuthenticationBackend',
+    'guardian.backends.ObjectPermissionBackend',
+)
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.9/topics/i18n/

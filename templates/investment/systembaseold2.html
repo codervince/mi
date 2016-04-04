@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {# <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+
+    <title>{% block title %}{% endblock %}</title>
+    {% load staticfiles %}
+    <!-- Bootstrap core CSS -->
+    <link href="{% static '/static/investment/css/bootstrap.min.css' %}" rel="stylesheet", media="screen">
+    <link href="{% static '/static/investment/css/cover.css' %}" rel="stylesheet", media="screen">
+    <link href="{% static '/static/investment/css/base.css' %}" rel="stylesheet", media="screen">
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script> #}
+    {# <![endif]--> #}
+    <meta charset="utf-8">
+  <title> SmartAdmin </title>
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+  <!-- #CSS Links -->
+  <!-- Basic Styles -->
+  <link rel="stylesheet" type="text/css" media="screen" href="css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" media="screen" href="css/font-awesome.min.css">
+
+  <!-- SmartAdmin Styles : Caution! DO NOT change the order -->
+  <link rel="stylesheet" type="text/css" media="screen" href="css/smartadmin-production.min.css">
+  <link rel="stylesheet" type="text/css" media="screen" href="css/smartadmin-skins.min.css">
+
+  <!-- We recommend you use "your_style.css" to override SmartAdmin
+       specific styles this will also ensure you retrain your customization with each SmartAdmin update.
+  <link rel="stylesheet" type="text/css" media="screen" href="css/your_style.css"> -->
+
+  <!-- #FAVICONS -->
+  <link rel="shortcut icon" href="img/favicon/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="img/favicon/favicon.ico" type="image/x-icon">
+
+  <!-- #GOOGLE FONT -->
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,300,400,700">
+
+  <!-- #APP SCREEN / ICONS -->
+  <!-- Specifying a Webpage Icon for Web Clip
+     Ref: https://developer.apple.com/library/ios/documentation/AppleApplications/Reference/SafariWebContent/ConfiguringWebApplications/ConfiguringWebApplications.html -->
+  <link rel="apple-touch-icon" href="img/splash/sptouch-icon-iphone.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="img/splash/touch-icon-ipad.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="img/splash/touch-icon-iphone-retina.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="img/splash/touch-icon-ipad-retina.png">
+
+  <!-- iOS web-app metas : hides Safari UI Components and Changes Status Bar Appearance -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <!-- Startup image for web apps -->
+  <link rel="apple-touch-startup-image" href="img/splash/ipad-landscape.png" media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:landscape)">
+  <link rel="apple-touch-startup-image" href="img/splash/ipad-portrait.png" media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:portrait)">
+  <link rel="apple-touch-startup-image" href="img/splash/iphone.png" media="screen and (max-device-width: 320px)">
+  <style type="text/css">
+  body {
+    color: WhiteSmoke;
+    background-color: #262626;
+  }
+  label{
+  color: #fff;
+  }
+  form{
+  color: #333;
+    }
+  ul {
+    list-style: None;
+  }
+  .em{
+    text-decoration: underline;
+  }
+  .money{
+    background-color: crimson;
+  }
+  .masthead-brand {
+    color: red;
+  }
+  p {
+    text-align: center;
+  }
+
+  label{
+  color: #fff;
+  }
+  form{
+  color: #333;
+    }
+
+  .systemgreen {
+    color: green;
+    border: 1px solid green;
+  }
+  .systemgreen {
+    color: red;
+    border: 1px solid red;
+  }
+  .systemgreen:after{
+      height: 0;
+      width: 0;
+      border: 4px solid transparent;
+      border-bottom-color: green;
+  }
+  .systemred:after{
+      height: 0;
+      width: 0;
+      border: 4px solid transparent;
+      border-top-color: red;
+  }
+
+  </style>
+  {% block extendedheader %}{% endblock %}
+  </head>
+
+  <body>
+    <!-- Navigation -->
+    <a id="menu-toggle" href="#" class="btn btn-dark btn-lg toggle"><i class="fa fa-bars"></i></a>
+    <nav id="sidebar-wrapper">
+        <ul class="sidebar-nav">
+            <a id="menu-close" href="#" class="btn btn-light btn-lg pull-right toggle"><i class="fa fa-times"></i></a>
+            <li class="sidebar-brand">
+                <a href="#top"  onclick = $("#menu-close").click(); >Metainvest</a>
+            </li>
+            <li>
+                <a href="#top" onclick = $("#menu-close").click(); >Home</a>
+            </li>
+            <li>
+                <a href="#about" onclick = $("#menu-close").click(); >About</a>
+            </li>
+            <li>
+                <a href="#services" onclick = $("#menu-close").click(); >Invest</a>
+            </li>
+            <li>
+                <a href="#portfolio" onclick = $("#menu-close").click(); >Systems+Funds</a>
+            </li>
+            <li>
+                <a href="#contact" onclick = $("#menu-close").click(); >Contact</a>
+            </li>
+        </ul>
+    </nav>
+      {% block content %}
+    <!-- Header -->
+    <header id="top" class="header">
+        <div class="text-vertical-center">
+            <h1>Metainvest</h1>
+            <br>
+            <a href="#about" class="btn btn-dark btn-lg">Find Out More</a>
+        </div>
+    </header>
+
+    <!-- About -->
+    <section id="about" class="about">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <h2>Stylish Portfolio is the perfect theme for your next project!</h2>
+                    <p class="lead">This theme features some wonderful photography courtesy of <a target="_blank" href="http://join.deathtothestockphoto.com/">Death to the Stock Photo</a>.</p>
+                </div>
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- /.container -->
+    </section>
+    {% endblock %}
+    {# <div class="site-wrapper">
+
+      <div class="site-wrapper-inner">
+
+        <div class="cover-container">
+
+          <div class="clearfix">
+            <div class="inner">
+              <h3 class="masthead-brand">Metainvest</h3>
+              <nav>
+                <ul class="nav masthead-nav">
+                  <li><a href="/">Home</a></li>
+                  {% if user.is_authenticated %}
+                  <li><a href="{% url 'userdetail' %}">MyInvestments</a></li>
+                  <li><a href="{% url 'logout' %}">Logout({{user.username}})</a></li>
+                  {% else %}
+                  <li><a href="{% url 'login' %}">Login</a></li>
+                  {% endif %}
+                </ul>
+              </nav>
+            </div>
+          </div>
+
+          <div class="col-md-12">
+            <div class="inner">
+              <p></p>
+              {% block footer %}{% endblock %}
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div> #} #}
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="{% static '/static/investment/js/bootstrap.min.js' %}"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+</body>
+</html>

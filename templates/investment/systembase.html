@@ -19,13 +19,73 @@
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
   <style type="text/css">
+  body {
+    color: WhiteSmoke;
+    background-color: #262626;
+  }
   label{
   color: #fff;
   }
   form{
   color: #333;
     }
+  ul {
+    list-style: None;
+  }
+  .em{
+    text-decoration: underline;
+  }
+  .money{
+    background-color: crimson;
+  }
+  .masthead-brand {
+    color: red;
+  }
+  p {
+    text-align: center;
+  }
+
+  label{
+  color: #fff;
+  }
+  form{
+  color: #333;
+    }
+
+  .systemgreen {
+    color: green;
+    border: 1px solid green;
+  }
+  .systemgreen {
+    color: red;
+    border: 1px solid red;
+  }
+  .systemgreen:after{
+      height: 0;
+      width: 0;
+      border: 4px solid transparent;
+      border-bottom-color: green;
+  }
+  .systemred:after{
+      height: 0;
+      width: 0;
+      border: 4px solid transparent;
+      border-top-color: red;
+  }
+  /*.header {
+      display: table;
+      position: relative;
+      width: 100%;
+      height: 100%;
+      background: {{ url(../static/images/bg.jpg) no-repeat center center scroll;
+      -webkit-background-size: cover;
+      -moz-background-size: cover;
+      background-size: cover;
+      -o-background-size: cover;
+  }*/
+
   </style>
+  {% block extendedheader %}{% endblock %}
   </head>
 
   <body>
@@ -44,7 +104,7 @@
                   <li><a href="/">Home</a></li>
                   {% if user.is_authenticated %}
                   <li><a href="{% url 'userdetail' %}">MyInvestments</a></li>
-                  <li><a href="{% url 'logout' %}">Logout({{user.username}})</a></li>
+                  <li><a href="{% url 'logout' %}">Logout ({{user.username}})</a></li>
                   {% else %}
                   <li><a href="{% url 'login' %}">Login</a></li>
                   {% endif %}
@@ -52,10 +112,11 @@
               </nav>
             </div>
           </div>
-  {% block content %}{% endblock %}
+{% block content %}{% endblock %}
           <div class="col-md-12">
             <div class="inner">
               <p></p>
+              {% block footer %}{% endblock %}
             </div>
           </div>
 
@@ -71,5 +132,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="{% static '/static/investment/js/bootstrap.min.js' %}"></script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+
 </body>
 </html>
