@@ -130,7 +130,7 @@ class System(models.Model):
         return self.systemname
 
     class Meta:
-        default_permissions = (  ('view_system', 'View system'),        )
+        permissions = (  ('view_system', 'View system'),        )
         ordering = ('snapshotid',)
 
 
