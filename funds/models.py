@@ -76,7 +76,6 @@ class Fund( models.Model ):
 
 
     class Meta:
-        default_permissions = ('view', 'add', 'change', 'delete')
         permissions = (  ('view_fund', 'View fund'),        )
         ordering = ['-totalwinnings']
         get_latest_by = "wentLive"
