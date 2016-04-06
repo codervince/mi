@@ -3,11 +3,12 @@ from django.http                import HttpResponseRedirect
 from django.views               import generic
 from django.utils.decorators    import method_decorator
 from django.core.urlresolvers   import reverse
+from django.contrib.auth.models import User
 from guardian.shortcuts         import assign_perm
 from guardian.shortcuts         import remove_perm
 from decimal                    import Decimal
 from .models                    import Fund
-from investment_accounts.models import InvestmentAccount,Transfer, Transaction
+from investment_accounts.models import InvestmentAccount,Transfer, Transaction, FundAccount
 # from investors.models 			import Investor
 from django.shortcuts           import (get_object_or_404,redirect, render)
 import logging
@@ -63,9 +64,78 @@ def funds_myindex(request):
 
 
 
+def subscribe( request, fund ):
+
+    #ex top10all-500-unlimited-5
+
+    if 'share' not in request.POST or 'currency' not in request.POST:
+        return
+
+    share          = request.POST[ 'share'    ].replace('%', '').strip()
+    chosencurrency = request.POST[ 'currency' ].upper().strip()
+
+    if share == '' or chosencurrency == '':
+        return
+        
+    #SOURCE
+    investor         = request.user
+    investor_account = InvestmentAccount.objects.get(user=investor,currency=chosencurrency)
+
+    #DESTINATION
+    fund_account    =  FundAccount.objects.filter(fund=fund, currency=chosencurrency)
+
+    if fund_account.count() != 1:
+        pass
+        #message cannot find a fund in your chosen currency
+        #redirect to form
+
+    fund_account = fund_account[0]
+
+    #AUTHORIZED BY
+    admin  = User.objects.get(is_superuser= True,username='superadmin' )
+    _share = Decimal( share )
+
+    #requested_amount is the share % of openingbalance
+    requested_amount = ( _share * Decimal( fund.openingbank ) ) / Decimal('100.0')
+    ## If requested_amount balance == openingbalance of fund then no more subscriptions
+    amount_available = fund.openingbank - fund_account.balance
+
+    if requested_amount > amount_available:
+        pass
+        #output message to user SOrry no more shaers available
+    else:
+        #do transfer
+        amount = requested_amount
+        description = "Purchase of " + share + "shares in fund" + ' '+ fund.fundname
+       #transfer = Transfer.objects.create(source=investor_account, destination=fund_account, amount=amount, user=admin, username=admin.username, description= description)
+
+        #update transaction table
+        # the debit from the source account NEGATIVE
+        #teh credit to the destination account POSITIVE
+       #tdebit = Transaction.objects.create(transfer=transfer, account=investor_account, amount= amount*Decimal('-1.0'))
+       #tcredit = Transaction.objects.create(transfer=transfer, account=fund_account, amount= amount*Decimal('1.0'))
+
+        ## ASSIGN permission for user to view detail page of this particular fund!
+        assign_perm( 'view_fund', investor, fund )
+
+        #rudimentary testing##
+        logger.info(fund.openingbank)
+        logger.info(amount)
+        logger.info(chosencurrency)
+       #logger.info(transfer)
+       #logger.info(tdebit)
+
+        #     #ASSIGN VIEW permission to investor
+        #
+        # if (fundaccount.currency == settings.CURRENCY_AUD and amount < investor.AUDbalance) or (fundaccount.currency == settings.CURRENCY_GBP and amount < investor.GBPbalance):
+        #
+        #     transaction = logic.transfer( investor, admin, amount, fundaccount.currency )
+        #     Investment.objects.create( transaction = transaction, fundaccount = fundaccount )
+        #     assign_perm( 'view_task', request.user, fundaccount )
 
 
 def fundaccount_detail(request, slug):
+
 
     '''
     takes funds stats and prepares arrays for display in charts.
@@ -74,6 +144,9 @@ def fundaccount_detail(request, slug):
 
     '''
     f = get_object_or_404(Fund, slug=slug)
+
+    subscribe( request, f )
+
 
     l_stats = ["bettingratio", "bfbalance", "openingbank", "totalinvested", "nobets", "nowinners", "nolosers","uniquewinners",
     "maxlosingsequence", "avglosingsequence", "maxbalance", "a_e", "maxstake", "avgstake"]
@@ -235,6 +308,7 @@ messages
 ##TODO: IMport SYSTEMS update model auto create system accounts
 
 ##TODO: ALerts
+'''
 class SubscribeView( generic.View ):
 
     def post( self, request, *args, **kwargs ):
@@ -297,7 +371,7 @@ class SubscribeView( generic.View ):
 
         #return what?
         return HttpResponseRedirect( reverse( 'funds:fundaccounts' ) )
-
+'''   
 
 #descrubscriptions handled by admin
 # class UnsubscribeView( generic.View ):
