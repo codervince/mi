@@ -1,5 +1,5 @@
 {% extends "investment/systembase.html" %}
-{# {% load guardian_tags %} #}
+{% load guardian_tags %}
 
 {% block navbar-funds-active %}class=active{% endblock %}
 {% load staticfiles %}
@@ -224,6 +224,11 @@ ul
 						 </form>
 					 </div>
 	</div> <!-- row -->
+
+         {% get_obj_perms user for fund as "fund_perms" %}
+
+         {% if "view_fund" in fund_perms %}
+        
 	<div class="row">
 
 			  <div class="col-sm-8">
@@ -253,6 +258,8 @@ ul
 				</div>
 
 	</div> <!-- row -->
+
+
 	<div class="row">
 
 			  <div class="col-sm-6">
@@ -279,7 +286,7 @@ ul
 				</div>
 
 	</div> <!-- row -->
-
+        {% endif %}
 
 		<script type="text/javascript">
 
