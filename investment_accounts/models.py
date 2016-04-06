@@ -34,7 +34,7 @@ class Account(models.Model):
     name = models.CharField(max_length=128, null=True, blank=True) #eg 'EUR account'
     #if there is no user associated with the account, it is associated with a fundname or systenname
     #user is then admin
-
+    currency = models.CharField( max_length = 25, choices = settings.CURRENCIES )
 
     OPEN, FROZEN, CLOSED = 'Open', 'Frozen', 'Closed'
     status = models.CharField(max_length=32, default=OPEN)
@@ -51,7 +51,7 @@ class Account(models.Model):
     # recalculated from the account transactions.
     balance = models.DecimalField(decimal_places=2, max_digits=12,
                                   default=D('0.00'), null=True)
-    currency = models.CharField( max_length = 25, choices = settings.CURRENCIES )
+
     date_created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -131,7 +131,6 @@ class Account(models.Model):
 
 class InvestmentAccount(Account):
         user = models.ForeignKey(User, related_name="accounts",null=True, blank=True,on_delete=models.SET_NULL)
-
         class Meta:
             unique_together= ('user', 'currency',)
 
@@ -140,14 +139,16 @@ class FundAccount(Account):
     '''A fund is associated with an offline account automatically via its slug name/description'''
     fund = models.ForeignKey(Fund, related_name="fundaccounts",null=True, blank=True,on_delete=models.SET_NULL)
     user = models.ForeignKey(User, related_name="fundaccounts",null=True, blank=True,on_delete=models.SET_NULL)
+
     class Meta:
         unique_together= ('user', 'fund', 'currency',)
 
 class SystemAccount(Account):
-        system = models.ForeignKey(System, related_name="systemaccounts",null=True, blank=True,on_delete=models.SET_NULL)
-        user = models.ForeignKey(User, related_name="systemaccounts",null=True, blank=True,on_delete=models.SET_NULL)
-        class Meta:
-            unique_together= ('user','system', 'currency',)
+    '''the subscription fee is to view the subscription but still need a currency'''
+    system = models.ForeignKey(System, related_name="systemaccounts",null=True, blank=True,on_delete=models.SET_NULL)
+    user = models.ForeignKey(User, related_name="systemaccounts",null=True, blank=True,on_delete=models.SET_NULL)
+    class Meta:
+        unique_together= ('user','system', 'currency')
 
 def create_gbp_investment_account(sender, instance, created, **kwargs):
     if created:

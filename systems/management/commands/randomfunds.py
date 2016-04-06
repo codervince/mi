@@ -59,6 +59,23 @@ enco = lambda obj: (
     else None
 )
 
+def getKey(item):
+    return item[1]
+
+#internal use only for generating this one system
+def gettop10winsrsystems():
+    sys = list()
+    sys_set = set()
+    #get systems ordered by winsr for 2015, 2014, 2013
+    for s in SystemSnapshot.objects.all():
+        if s.winsr:
+            if s.winsr >40.0:
+                sys.append( ( System.objects.get(pk=s.system_id).systemname, s.winsr) )
+    sys_set = set(sys)
+    sys = sorted(sys_set, key=getKey, reverse=True)
+    sys = [s for s,w in sys[:10]]
+    return sys
+    #shuld be [<System: 2016-T-01A>, <System: 2016-T-03T>, <System: 2016-T-10A>, <System: 2016-T-11A>, <System: 2016-S-14T>, <System: 2016-T-04A>, <System: 2016-J-07A>, <System: 2016-T-20T>, <System: 2016-S-10A>, <System: 2016-S-13A>]
 
 
 class Command( BaseCommand ):
@@ -74,6 +91,37 @@ class Command( BaseCommand ):
     # managementfee = f1.managementfee
     # performancefee = f1.performancefee
     # performancethreshold = f1.performancethreshold
+
+#freeloader switches to funds on losing streak dynamically
+    sires = [
+    '2016-S-01T','2016-S-02A', '2016-S-03T', '2016-S-04A', '2016-S-05A', '2016-S-06A',
+    '2016-S-07T', '2016-S-08A', '2016-S-09T', '2016-S-10A', '2016-S-11A', '2016-S-12T',
+    '2016-S-13A', '2016-S-14T']
+
+    jockeys = ['2016-J-01T','2016-J-02T','2016-J-03T','2016-J-04A','2016-J-05A','2016-J-06T',
+    '2016-J-07A','2016-J-08A','2016-J-09A','2016-J-10T']
+
+    metainvest= ['2016-MI-S-01A','2016-MI-S-02A','2016-AW-01A','2016-AW-02A','2016-MI-AW-03A','2016-MI-O-01T','2016-MI-T-01T',
+    '2016-MI-O-02A','2016-MI-O-03A']
+
+    trainers = ['2016-T-01A','2016-T-02A','2016-T-03T','2016-T-04A','2016-T-05T','2016-T-06T','2016-T-07T','2016-T-08T',
+    '2016-T-09A','2016-T-10A','2016-T-11A','2016-T-12T',
+    '2016-T-13A', '2016-T-14T', '2016-T-15A','2016-T-16T', '2016-T-17A', '2016-T-18T', '2016-T-19T',
+    '2016-T-20T','2016-T-21T']
+
+
+    ALL_ACTIVE = list()
+    ALL_ACTIVE.extend([s for s in sires if s[-1] == 'A'])
+    ALL_ACTIVE.extend([s for s in jockeys if s[-1] == 'A'])
+    ALL_ACTIVE.extend([s for s in trainers if s[-1] == 'A'])
+    ALL_ACTIVE.extend([s for s in metainvest if s[-1] == 'A'])
+
+    # print(ALL_ACTIVE)
+    # assert False
+
+    TOP10_WINSR = ['2016-T-01A', '2016-T-03T', '2016-T-10A', '2016-T-11A', '2016-S-14T', '2016-T-04A', '2016-J-07A', '2016-T-20T', '2016-S-10A', '2016-S-13A']
+
+
     TOP_10ACTIVE = [
     '2016-S-04A',
     '2016-S-05A',
@@ -122,9 +170,9 @@ class Command( BaseCommand ):
     S-T-J-MI .3.4.2.1
     '''
     season = '2013'
-    fundname = 'TOP10 ALL'
-    SYSTEMLIST =TOP10ALL
-    description = season + ' '+ "500 Unlimited 5%"
+    fundname = 'TOP10 WINSR'
+    SYSTEMLIST =TOP10_WINSR
+    description = season + " 500 Unlimited 0.05"
     bettingratio  = 0.05
     openingbank = D('500.00')
     managementfee = D('0.05')
@@ -189,21 +237,7 @@ class Command( BaseCommand ):
     a1_metainvest = ["2016-MI-S-01A","2016-MI-S-02A","2016-MI-O-01T","2016-MI-O-02A" ]
     a1_trainers = ["2016-T-17A","2016-T-20T","2016-T-02A"]
 
-    sires = [
-    '2016-S-01T','2016-S-02A', '2016-S-03T', '2016-S-04A', '2016-S-05A', '2016-S-06A',
-    '2016-S-07T', '2016-S-08A', '2016-S-09T', '2016-S-10A', '2016-S-11A', '2016-S-12T',
-    '2016-S-13A', '2016-S-14T']
 
-    jockeys = ['2016-J-01T','2016-J-02T','2016-J-03T','2016-J-04A','2016-J-05A','2016-J-06T',
-    '2016-J-07A','2016-J-08A','2016-J-09A','2016-J-10T']
-
-    metainvest= ['2016-MI-S-01A','2016-MI-S-02A','2016-AW-01A','2016-AW-02A','2016-MI-AW-03A','2016-MI-O-01T','2016-MI-T-01T',
-    '2016-MI-O-02A','2016-MI-O-03A']
-
-    trainers = ['2016-T-01A','2016-T-02A','2016-T-03T','2016-T-04A','2016-T-05T','2016-T-06T','2016-T-07T','2016-T-08T',
-    '2016-T-09A','2016-T-10A','2016-T-11A','2016-T-12T',
-    '2016-T-13A', '2016-T-14T', '2016-T-15A','2016-T-16T', '2016-T-17A', '2016-T-18T', '2016-T-19T',
-    '2016-T-20T','2016-T-21T']
     row_num = 0
 
     @transaction.atomic
@@ -641,17 +675,22 @@ class Command( BaseCommand ):
             )
             #create fundaccount for this object
             #get admin users
-            _name = 'Account: ' + fund.slug + ' ' + fund.currency
+            _name = 'Account: ' + fund.slug + ' '
             admin   = User.objects.get(is_superuser= True,username='superadmin')
+            #create one for GBP, AUD:
+            for curr in ['AUD', 'GBP']:
+                fundaccount = FA.objects.create(
+                    name= _name + curr,
+                    currency = curr,
+                    user= admin,
+                    fund= fund,
+                    is_source_account= True
+                    )
+                print(fund.pk, fundaccount.pk)
 
-            fundaccount = FA.objects.create(
-                name= _name,
-                currency = fund.currency,
-                user= admin,
-                fund= fund,
-                is_source_account= True
-            )
-            print(fund.pk, fundaccount.pk)
+            #how about add some fund-systems
+            fund.systems.set(systems)
+
         except IntegrityError as e:
             print("error %s" % e)
             pass
