@@ -9,6 +9,112 @@ from django.utils.translation import ugettext_lazy as _
 #from
 
 
+''' 
+Retrieves all runners for today
+Query this table to get candidates
+Update with result and sps, plus bet amounts post-race
+
+'''
+class RPRunner(models.Model):
+    racecourse_id = models.IntegerField()
+    racecoursename= models.CharField(max_length=35)
+    racecoursegrade= models.CharField(max_length=35)
+    racecoursedirection= models.CharField(max_length=35)
+    racecoursespeed= models.CharField(max_length=35)
+    racecoursesurface= models.CharField(max_length=35)
+    racecourselocation= models.CharField(max_length=35)
+    racedate_d =models.DateTimeField()
+    racedate_str =models.CharField(max_length=35)
+    race_id =models.IntegerField(null=True,default=None)
+    season = models.CharField(max_length=35)
+    racemonth = models.CharField(max_length=35)
+    norunners = models.IntegerField(null=True,default=None) 
+    racewinningprize= scrapy.Field() #decimal
+    racenumber = models.IntegerField(null=True,default=None)
+    rpracegoing = models.CharField(max_length=35) 
+    racegoing = models.CharField(max_length=35)
+    racedistance = models.FloatField()
+    racedistancerange = models.CharField(max_length=35) #select from
+    racetime=models.CharField(max_length=35) 
+    raceclass =models.IntegerField(null=True,default=None) #not ire
+    ireraceclass = models.CharField(max_length=35)
+    racediv =  models.IntegerField(null=True,default=None)
+    racegrade =  models.IntegerField(null=True,default=None)  
+    racename =models.CharField(max_length=135)
+    racetitle =models.CharField(max_length=135)
+    racetypehorse= models.CharField(max_length=35) #select from
+    racetypeconditions= models.CharField(max_length=35) #select from
+    racetypehs= models.CharField(max_length=35) #select from    
+    isHurdle= models.BooleanField()
+    isChase = models.BooleanField() 
+    ages = models.CharField(max_length=35) 
+    isStraight= models.BooleanField() #bool
+    ridertype = models.CharField(max_length=35)
+    ismaidenrace= models.BooleanField() #bool
+    draw =  models.IntegerField(null=True,default=None)
+    jockey_id=  models.IntegerField(null=True,default=None)
+    horse_id=  models.IntegerField(null=True,default=None)
+    breeder_name = models.CharField(max_length=135)
+    trainer_id = models.IntegerField(null=True,default=None, null=True)
+    previous_trainer_name = models.CharField(max_length=135)
+    dam_id = models.IntegerField(null=True,default=None, null=True)
+    sire_id= models.IntegerField(null=True,default=None, null=True)
+    damsire_id = models.IntegerField(null=True,default=None, null=True)
+    owner_id=  models.IntegerField(null=True,default=None, null=True)
+    horsename= models.CharField(max_length=135)
+    damname= models.CharField(max_length=135, null=True)
+    sirename= models.CharField(max_length=135, null=True)
+    damsirename = models.CharField(max_length=135, null=True)
+    jockeyname= models.CharField(max_length=135, null=True)  
+    trainername= models.CharField(max_length=135, null=True)
+    ownername= models.CharField(max_length=135, null=True)
+    previous_trainer_name= models.CharField(max_length=135, null=True)
+    previous_owner_name= models.CharField(max_length=135, null=True)
+    racecoursecode= models.CharField(max_length=135, null=True)
+    penalty = models.IntegerField(null=True,default=None)
+    notips = models.IntegerField(null=True,default=None)
+    horseage=  models.IntegerField(null=True,default=None)
+    gender =  models.CharField(max_length=10, null=True)
+    gear   =  models.CharField(max_length=10, null=True)
+    trainerrtf= models.FloatField(null=True)
+    diomed= models.CharField(max_length=500, null=True)
+    hwtlbs=  models.IntegerField(null=True,default=None)
+    oddschance = models.FloatField(null=True)
+    sppos =  models.IntegerField(null=True,default=None)
+    isScratched = models.BooleanField() #bool
+    totalruns=  models.IntegerField(null=True,default=None)
+    totalwins=  models.FloatField(null=True,default=None)
+    breedername= models.CharField(max_length=135, null=True)
+    l1racedate= models.DateTimeField(null=True)
+    isFROY= models.BooleanField()
+    dayssincelastrun=  models.IntegerField(null=True,default=None)
+    dayssincelastwin=  models.IntegerField(null=True,default=None)
+    l1racecoursecode= models.CharField(max_length=35, null=True)
+    l1racecourse_id=  models.IntegerField(null=True,default=None)
+    l1distance= models.FloatField(null=True)
+    l1going= models.CharField(max_length=35, null=True)
+    l1raceclass= models.CharField(max_length=135, null=True)
+    l1racetype= models.CharField(max_length=135, null=True)
+    l1racecomment= models.CharField(max_length=135, null=True)
+    l1finalpos= models.CharField(max_length=35, null=True)
+    l1sp = models.FloatField(null=True)
+    l1gear = models.CharField(max_length=135, null=True)
+    l1jockey_id=  models.IntegerField(null=True,default=None)
+    l1jockeychanged= models.BooleanField(null=True) #bool
+    isMaiden = models.BooleanField() #bool
+    lastownername= models.CharField(max_length=135, null=True)
+    thisownersince= models.DateTImeField(null=True)
+    lasttrainername= models.CharField(max_length=135, null=True)
+    thistrainersince= models.DateTimeField(null=True)
+    newtrainerl1= models.BooleanField(null=True)
+    newownerl1 = models.BooleanField(null=True) 
+    firsttimethisracetypehs= models.BooleanField(null=True)
+    l1classchange= models.CharField(max_length=135, null=True) #string Up Same Down
+    l1distancechange= models.CharField(max_length=135, null=True) #as classchange
+    allowance = models.IntegerField(null=True,default=None)
+    ###extra fields
+    
+
 class Runner(models.Model):
     # objects = models.Manager()
     # live = LiveManager()
@@ -117,9 +223,13 @@ class System(models.Model):
     exposure = ArrayField(models.CharField(max_length=500),)
     query = JSONField()
     rpquery = JSONField(null=True)
+
+    isLayWin = models.BooleanField(help_text=_('to back or to lay?'), default=False)
+    isLayPlace = models.BooleanField(help_text=_('Win lay or place lay?'), default=False)
+    oddsconditions = JSONField(default= {})
+    
     runners = models.ManyToManyField(Runner)
     created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True, blank=True)
 
     objects = models.Manager() #default
     liverunners = LiveRunnersManager()
