@@ -9,7 +9,7 @@ class SystemPermissionsTestCase( TestCase ):
     def test_system_permissions( self ):
 
         # Create new User and System
-        system = System.objects.create( systemname = 'test_system', snapshotid = 0, isActive = True, isTurf = True, exposure = ()  )
+        system = System.objects.create( systemname = 'test_system', snapshotid = 0, isActive = True, isTurf = True, exposure = (), query = {} )
         user   =   User.objects.create( username   = 'test_user' )
 
         # Check that User don't have permission for System initially

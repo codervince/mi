@@ -31,14 +31,14 @@ class Account(models.Model):
      it is available and manages its own budgets
      Create a user GBP AUD account by default
      '''
-    name = models.CharField(max_length=128, null=True, blank=True) #eg 'EUR account'
+    name = models.CharField(max_length=128, null=True, blank=True,default='Base Account') #eg 'EUR account'
     #if there is no user associated with the account, it is associated with a fundname or systenname
     #user is then admin
 
 
     OPEN, FROZEN, CLOSED = 'Open', 'Frozen', 'Closed'
     status = models.CharField(max_length=32, default=OPEN)
-
+    
     # This is the limit to which the account can go into debt.  The default is
     # zero which means the account cannot run a negative balance.  A 'source'
     # account will have no credit limit meaning it can transfer funds to other
@@ -51,7 +51,7 @@ class Account(models.Model):
     # recalculated from the account transactions.
     balance = models.DecimalField(decimal_places=2, max_digits=12,
                                   default=D('0.00'), null=True)
-    currency = models.CharField( max_length = 25, choices = settings.CURRENCIES )
+    
     date_created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -124,30 +124,31 @@ class Account(models.Model):
         if self.end_date:
             data['end_date'] = self.end_date.isoformat()
         return data
+    
 
-    class Meta:
-        abstract = True
 
 
 class InvestmentAccount(Account):
-        user = models.ForeignKey(User, related_name="accounts",null=True, blank=True,on_delete=models.SET_NULL)
-
-        class Meta:
-            unique_together= ('user', 'currency',)
+    user = models.ForeignKey(User, related_name="accounts",null=True, blank=True,on_delete=models.SET_NULL)
+    currency = models.CharField( max_length = 25, choices = settings.CURRENCIES )
+    class Meta:
+        unique_together= ('user', 'currency',)
 
 ###FIXTURES TO CREATE FOR SUPERUSER
 class FundAccount(Account):
     '''A fund is associated with an offline account automatically via its slug name/description'''
     fund = models.ForeignKey(Fund, related_name="fundaccounts",null=True, blank=True,on_delete=models.SET_NULL)
     user = models.ForeignKey(User, related_name="fundaccounts",null=True, blank=True,on_delete=models.SET_NULL)
+    currency = models.CharField( max_length = 25, choices = settings.CURRENCIES )
     class Meta:
         unique_together= ('user', 'fund', 'currency',)
 
 class SystemAccount(Account):
-        system = models.ForeignKey(System, related_name="systemaccounts",null=True, blank=True,on_delete=models.SET_NULL)
-        user = models.ForeignKey(User, related_name="systemaccounts",null=True, blank=True,on_delete=models.SET_NULL)
-        class Meta:
-            unique_together= ('user','system', 'currency',)
+    system = models.ForeignKey(System, related_name="systemaccounts",null=True, blank=True,on_delete=models.SET_NULL)
+    user = models.ForeignKey(User, related_name="systemaccounts",null=True, blank=True,on_delete=models.SET_NULL)
+    currency = models.CharField( max_length = 25, choices = settings.CURRENCIES )
+    class Meta:
+        unique_together= ('user','system', 'currency',)
 
 def create_gbp_investment_account(sender, instance, created, **kwargs):
     if created:
@@ -221,7 +222,7 @@ class Transaction(models.Model):
     # (a) the debit from the source account
     # (b) the credit to the destination account
     transfer = models.ForeignKey('Transfer',related_name="transactions")
-    account = models.ForeignKey('InvestmentAccount',related_name='transactions')
+    account = models.ForeignKey('Account',related_name='transactions')
     # The sum of this field over the whole table should always be 0.
     # Credits should be positive while debits should be negative
     amount = models.DecimalField(decimal_places=2, max_digits=12)

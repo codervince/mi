@@ -9,63 +9,128 @@ from django.utils.translation import ugettext_lazy as _
 #from
 
 
-''' 
+'''
 Retrieves all runners for today
 Query this table to get candidates
-Update with result and sps, plus bet amounts post-race
+Bets in separate table
 
 '''
 class RPRunner(models.Model):
+    DIRECTION = (
+    ('STRAIGHT', 'STRAIGHT'),
+    ('LEFT', 'LEFT'),
+    ('RIGHT', 'RIGHT'),
+    )
+    SHAPE= (
+    ('CIRCLE', 'CIRCLE'),
+    ('HORSESHOE', 'HORSESHOE'),
+    ('OVAL', 'OVAL'),
+    ('PEAR', 'PEAR'),
+    ('TRIANGLE', 'TRIANGLE'),
+    )
+    SPEED = (
+         ('GALLOPING', 'GALLOPING'),
+    ('STIFF', 'STIFF'),
+    ('TIGHT', 'TIGHT'),
+        )   
+    SURFACE = (
+         ('UNDULATING', 'UNDULATING'),
+    ('UPHILL', 'UPHILL'),
+    ('FLAT', 'FLAT'),
+        )  
+    LOCATION = (
+    ('SCOTLAND', 'SCOTLAND'),
+    ('NORTH', 'NORTH'),
+    ('MIDLANDS', 'MIDLANDS'),
+    ('SOUTH', 'SOUTH'),
+    ('IRE', 'IRE'),
+        )          
+    DISTANCERANGE= (
+    ('SPRINT', 'SPRINT'),
+    ('MIDDLE', 'MIDDLE'),
+    ('LONG', 'LONG'),
+        )
+    RACETYPEHORSE= (
+    ('MAIDEN', 'MAIDEN'),
+    ('NOVICE', 'NOVICE'),
+    ('ORDINARY', 'ORDINARY'),
+        )
+    RACETYPECONDITIONS= (
+    ('CLAIMING', 'CLAIMING'),
+    ('CLASSIFIED', 'CLASSIFIED'),
+    ('CONDITIONS', 'CONDITIONS'),
+    ('SELLING', 'SELLING'),
+    ('ORDINARY', 'ORDINARY'),
+    )
+    RACETYPEHS = (
+    ('H', 'HANDICAP'),
+    ('S', 'STAKES'),
+    )
+    RIDERTYPE= (
+    ('AMATEUR', 'AMATEUR'),
+    ('APPRENTICE', 'APPRENTICE'),
+    ('LADY', 'LADY'),
+    ('ORDINARY', 'ORDINARY'),
+    )
+    CHANGES= (
+    ('UP', 'UP'),
+    ('DOWN', 'SOWN'),
+    ('SAME', 'SAME'),
+    )
     racecourse_id = models.IntegerField()
     racecoursename= models.CharField(max_length=35)
-    racecoursegrade= models.CharField(max_length=35)
-    racecoursedirection= models.CharField(max_length=35)
-    racecoursespeed= models.CharField(max_length=35)
-    racecoursesurface= models.CharField(max_length=35)
-    racecourselocation= models.CharField(max_length=35)
-    racedate_d =models.DateTimeField()
-    racedate_str =models.CharField(max_length=35)
-    race_id =models.IntegerField(null=True,default=None)
+    racecoursegrade= models.IntegerField(null=True) #number
+    racecoursedirection= models.CharField(max_length=35,null=True,choices=DIRECTION)
+    racecourseshape= models.CharField(max_length=35,null=True,choices=SHAPE)
+    racecoursespeed= models.CharField(max_length=35,null=True, choices=SPEED)
+    racecoursesurface= models.CharField(max_length=35,null=True,choices=SPEED)
+    racecourselocation= models.CharField(max_length=35,null=True,choices=LOCATION)
+
+    racedate =models.DateTimeField()
+
+    race_id =models.IntegerField()
     season = models.CharField(max_length=35)
-    racemonth = models.CharField(max_length=35)
-    norunners = models.IntegerField(null=True,default=None) 
-    racewinningprize= scrapy.Field() #decimal
-    racenumber = models.IntegerField(null=True,default=None)
-    rpracegoing = models.CharField(max_length=35) 
-    racegoing = models.CharField(max_length=35)
+    racemonth = models.CharField(max_length=15)
+    norunners = models.IntegerField()
+
+    racewinningprize= models.DecimalField(max_digits=6, decimal_places=2)
+
+    racenumber = models.IntegerField()
+    rpracegoing = models.CharField(max_length=15) #full name
+    racegoing = models.CharField(max_length=35,null=True) #abb name
     racedistance = models.FloatField()
-    racedistancerange = models.CharField(max_length=35) #select from
-    racetime=models.CharField(max_length=35) 
-    raceclass =models.IntegerField(null=True,default=None) #not ire
-    ireraceclass = models.CharField(max_length=35)
+    racedistancerange = models.CharField(max_length=35, choices=DISTANCERANGE)
+    racetime=models.CharField(max_length=35)
+    raceclass =models.IntegerField(null=True,default=None)
+    ireraceclass = models.CharField(max_length=35,null=True)
     racediv =  models.IntegerField(null=True,default=None)
-    racegrade =  models.IntegerField(null=True,default=None)  
+    racegrade =  models.IntegerField(null=True,default=None)
     racename =models.CharField(max_length=135)
     racetitle =models.CharField(max_length=135)
-    racetypehorse= models.CharField(max_length=35) #select from
-    racetypeconditions= models.CharField(max_length=35) #select from
-    racetypehs= models.CharField(max_length=35) #select from    
+    racetypehorse= models.CharField(max_length=35,null=True,choices=RACETYPEHORSE)
+    racetypeconditions= models.CharField(max_length=35,null=True, choices=RACETYPECONDITIONS) #select from
+    racetypehs= models.CharField(max_length=35,null=True, choices=RACETYPEHS) 
     isHurdle= models.BooleanField()
-    isChase = models.BooleanField() 
-    ages = models.CharField(max_length=35) 
-    isStraight= models.BooleanField() #bool
-    ridertype = models.CharField(max_length=35)
-    ismaidenrace= models.BooleanField() #bool
+    isChase = models.BooleanField()
+    ages = models.CharField(max_length=10,null=True)
+    isStraight= models.BooleanField()
+    ridertype = models.CharField(max_length=35, choices=RIDERTYPE)
+    ismaidenrace= models.BooleanField() 
     draw =  models.IntegerField(null=True,default=None)
-    jockey_id=  models.IntegerField(null=True,default=None)
-    horse_id=  models.IntegerField(null=True,default=None)
-    breeder_name = models.CharField(max_length=135)
-    trainer_id = models.IntegerField(null=True,default=None, null=True)
-    previous_trainer_name = models.CharField(max_length=135)
-    dam_id = models.IntegerField(null=True,default=None, null=True)
-    sire_id= models.IntegerField(null=True,default=None, null=True)
-    damsire_id = models.IntegerField(null=True,default=None, null=True)
-    owner_id=  models.IntegerField(null=True,default=None, null=True)
+    jockey_id=  models.IntegerField(null=True)
+    horse_id=  models.IntegerField()
+    breeder_name = models.CharField(max_length=135,null=True)
+    trainer_id = models.IntegerField(null=True)
+    previous_trainer_name = models.CharField(max_length=135,null=True)
+    dam_id = models.IntegerField(default=None, null=True)
+    sire_id= models.IntegerField(default=None, null=True)
+    damsire_id = models.IntegerField(default=None, null=True)
+    owner_id=  models.IntegerField(default=None, null=True)
     horsename= models.CharField(max_length=135)
     damname= models.CharField(max_length=135, null=True)
     sirename= models.CharField(max_length=135, null=True)
     damsirename = models.CharField(max_length=135, null=True)
-    jockeyname= models.CharField(max_length=135, null=True)  
+    jockeyname= models.CharField(max_length=135, null=True)
     trainername= models.CharField(max_length=135, null=True)
     ownername= models.CharField(max_length=135, null=True)
     previous_trainer_name= models.CharField(max_length=135, null=True)
@@ -86,7 +151,7 @@ class RPRunner(models.Model):
     totalwins=  models.FloatField(null=True,default=None)
     breedername= models.CharField(max_length=135, null=True)
     l1racedate= models.DateTimeField(null=True)
-    isFROY= models.BooleanField()
+    isFROY= models.NullBooleanField() #if never ran
     dayssincelastrun=  models.IntegerField(null=True,default=None)
     dayssincelastwin=  models.IntegerField(null=True,default=None)
     l1racecoursecode= models.CharField(max_length=35, null=True)
@@ -100,20 +165,32 @@ class RPRunner(models.Model):
     l1sp = models.FloatField(null=True)
     l1gear = models.CharField(max_length=135, null=True)
     l1jockey_id=  models.IntegerField(null=True,default=None)
-    l1jockeychanged= models.BooleanField(null=True) #bool
+    l1jockeychanged= models.NullBooleanField() #bool
     isMaiden = models.BooleanField() #bool
     lastownername= models.CharField(max_length=135, null=True)
-    thisownersince= models.DateTImeField(null=True)
+    thisownersince= models.DateTimeField(null=True)
     lasttrainername= models.CharField(max_length=135, null=True)
     thistrainersince= models.DateTimeField(null=True)
-    newtrainerl1= models.BooleanField(null=True)
-    newownerl1 = models.BooleanField(null=True) 
-    firsttimethisracetypehs= models.BooleanField(null=True)
-    l1classchange= models.CharField(max_length=135, null=True) #string Up Same Down
-    l1distancechange= models.CharField(max_length=135, null=True) #as classchange
+    newtrainerl1= models.NullBooleanField()
+    newownerl1 = models.NullBooleanField()
+    firsttimethisracetypehs= models.NullBooleanField()
+    l1classchange= models.CharField(max_length=135, null=True, choices=CHANGES) #string Up Same Down
+    l1distancechange= models.CharField(max_length=135, null=True,choices=CHANGES) #as classchange
     allowance = models.IntegerField(null=True,default=None)
     ###extra fields
-    
+    finalpos = models.CharField(help_text=_('Final position'),max_length=5,null=True)
+    isplaced = models.NullBooleanField()
+    isbfplaced= models.NullBooleanField()
+    winsp = models.FloatField(help_text=_('final starting price win'),null=True) #may need to be converted
+    winsppos = models.SmallIntegerField(help_text=_('rank final starting price'),null=True)
+    bfsp = models.DecimalField(help_text=_('Betfair SP win'),max_digits=6, decimal_places=2,null=True)
+    bfpsp = models.DecimalField(help_text=_('Betfair SP place'),max_digits=6, decimal_places=2,null=True)
+    def __str__(self):
+        return '%s- %d' % (self.racedate, self.horse_id)
+    #snapshotid runnerid--> system_runner table
+    class Meta:
+        unique_together = ('racedate', 'horsename',)
+        ordering = ('-racedate','racenumber', 'horsename')
 
 class Runner(models.Model):
     # objects = models.Manager()
@@ -126,7 +203,7 @@ class Runner(models.Model):
     ('HISTORICAL', 'HISTORICAL'),
     )
     #unique identifiers
-    runtype = models.CharField(help_text=_('live_or_historical'), choices=RUNTYPE, max_length=15, default='HISTORICAL')
+    runtype = models.CharField(max_length=20, help_text=_('live_or_historical'), choices=RUNTYPE, default='HISTORICAL')
     racedate = models.DateField(help_text=_('race date'),)
     racecoursename = models.CharField(help_text=_('racecourse'), max_length=35)
     racecourseid = models.IntegerField(help_text=_('racecourseid'),blank=True)
@@ -217,20 +294,21 @@ class System(models.Model):
     systemtype = models.CharField(choices=SYSTEMTYPES, default='tg',max_length=50)
     systemname =  models.CharField(max_length=50,unique=True) #2016-T-21T unique=true?
     snapshotid  = models.IntegerField()
-    description= models.TextField(help_text=_('rationale'),blank=True)
-    isActive = models.BooleanField(help_text=_('active or test?'))
-    isTurf = models.BooleanField(help_text=_('turf or AWT?'))
+    description= models.TextField(null=True)
+    isActive = models.BooleanField()
+    isTurf = models.BooleanField()
     exposure = ArrayField(models.CharField(max_length=500),)
     query = JSONField()
     rpquery = JSONField(null=True)
 
-    isLayWin = models.BooleanField(help_text=_('to back or to lay?'), default=False)
-    isLayPlace = models.BooleanField(help_text=_('Win lay or place lay?'), default=False)
-    oddsconditions = JSONField(default= {})
-    
+    isLayWin = models.BooleanField(default=False)
+    isLayPlace = models.BooleanField(default=False)
+    oddsconditions = JSONField(null=True)
+
     runners = models.ManyToManyField(Runner)
     created = models.DateTimeField(auto_now_add=True)
-
+    updated = models.DateTimeField(auto_now=True, blank=True)
+    
     objects = models.Manager() #default
     liverunners = LiveRunnersManager()
     historicalrunners = HistoricalRunnersManager()
