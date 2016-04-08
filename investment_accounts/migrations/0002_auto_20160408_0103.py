@@ -118,19 +118,19 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='fundaccount',
             name='account_ptr',
-            field=models.OneToOneField(auto_created=True, default='Account', on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='investment_accounts.Account'),
+            field=models.OneToOneField(auto_created=True, default=0, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='investment_accounts.Account'),
             preserve_default=False,
         ),
         migrations.AddField(
             model_name='investmentaccount',
             name='account_ptr',
-            field=models.OneToOneField(auto_created=True, default='Account', on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='investment_accounts.Account'),
+            field=models.OneToOneField(auto_created=True, default=0, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='investment_accounts.Account'),
             preserve_default=False,
         ),
         migrations.AddField(
             model_name='systemaccount',
             name='account_ptr',
-            field=models.OneToOneField(auto_created=True, default='Account', on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='investment_accounts.Account'),
+            field=models.OneToOneField(auto_created=True, default=0, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='investment_accounts.Account'),
             preserve_default=False,
         ),
     ]
