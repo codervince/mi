@@ -129,7 +129,7 @@ class Account(models.Model):
 
 
 class InvestmentAccount(Account):
-    user = models.ForeignKey(User, related_name="accounts",null=True, blank=True,on_delete=models.SET_NULL)
+    user = models.ForeignKey(User, related_name="investmentaccounts",null=True, blank=True,on_delete=models.SET_NULL)
     currency = models.CharField( max_length = 25, choices = settings.CURRENCIES )
     class Meta:
         unique_together= ('user', 'currency',)
@@ -171,8 +171,8 @@ class Transfer(models.Model):
     Accounts must have SAME Currencies!
     """
     reference = models.CharField(max_length=64, unique=True, null=True)
-    source = models.ForeignKey(InvestmentAccount,related_name='source_transfers')
-    destination = models.ForeignKey(InvestmentAccount,related_name='destination_transfers')
+    source = models.ForeignKey(Account,related_name='source_transfers')
+    destination = models.ForeignKey(Account,related_name='destination_transfers')
     amount = models.DecimalField(decimal_places=2, max_digits=12)
 
     #who authorized it?

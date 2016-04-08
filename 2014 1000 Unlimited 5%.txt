@@ -1,0 +1,2580 @@
+---------------------
+tdy_betstoday, 2
+investedtoday, 95.000
+tdy_bfbalance_start, 1000.00
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 2
+tdy_returns_list, [Decimal('0.00'), Decimal('0.00')]
+cashedoutbalance, 0.00
+bfbalanceendofday, 810.00
+totalbalanceinclcashout, 810.00
+date, 2014-03-29
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('50.000'), Decimal('45.000')]
+tdy_netgains, -95.000
+---------------------
+tdy_betstoday, 1
+investedtoday, 40.500
+tdy_bfbalance_start, 810.00
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 1
+tdy_returns_list, [Decimal('0.00')]
+cashedoutbalance, 0.00
+bfbalanceendofday, 729.00
+totalbalanceinclcashout, 729.00
+date, 2014-03-30
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('40.500')]
+tdy_netgains, -40.500
+---------------------
+tdy_betstoday, 1
+investedtoday, 36.450
+tdy_bfbalance_start, 729.00
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 1
+tdy_returns_list, [Decimal('0.00')]
+cashedoutbalance, 0.00
+bfbalanceendofday, 656.10
+totalbalanceinclcashout, 656.10
+date, 2014-04-02
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('36.450')]
+tdy_netgains, -36.450
+---------------------
+tdy_betstoday, 1
+investedtoday, 32.805
+tdy_bfbalance_start, 656.10
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 1
+tdy_returns_list, [Decimal('0.00')]
+cashedoutbalance, 0.00
+bfbalanceendofday, 590.50
+totalbalanceinclcashout, 590.50
+date, 2014-04-04
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('32.805')]
+tdy_netgains, -32.805
+---------------------
+tdy_betstoday, 1
+investedtoday, 29.525
+tdy_bfbalance_start, 590.50
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 1
+tdy_returns_list, [Decimal('0.00')]
+cashedoutbalance, 0.00
+bfbalanceendofday, 531.46
+totalbalanceinclcashout, 531.46
+date, 2014-04-05
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('29.525')]
+tdy_netgains, -29.525
+---------------------
+tdy_betstoday, 1
+investedtoday, 26.573
+tdy_bfbalance_start, 531.46
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 1
+tdy_returns_list, [Decimal('0.00')]
+cashedoutbalance, 0.00
+bfbalanceendofday, 478.32
+totalbalanceinclcashout, 478.32
+date, 2014-04-07
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('26.573')]
+tdy_netgains, -26.573
+---------------------
+tdy_betstoday, 3
+investedtoday, 64.812
+tdy_bfbalance_start, 478.32
+tdy_returns, 83.836
+cashedouttoday, 0.00
+tdy_loserstoday, 2
+tdy_returns_list, [Decimal('0.00'), Decimal('83.836'), Decimal('0.00')]
+cashedoutbalance, 0.00
+bfbalanceendofday, 432.54
+totalbalanceinclcashout, 432.54
+date, 2014-04-09
+tdy_winnerstoday, 1
+tdy_invested_list, [Decimal('23.916'), Decimal('21.524'), Decimal('19.372')]
+tdy_netgains, 19.024
+---------------------
+tdy_betstoday, 1
+investedtoday, 21.627
+tdy_bfbalance_start, 432.54
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 1
+tdy_returns_list, [Decimal('0.00')]
+cashedoutbalance, 0.00
+bfbalanceendofday, 389.28
+totalbalanceinclcashout, 389.28
+date, 2014-04-10
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('21.627')]
+tdy_netgains, -21.627
+---------------------
+tdy_betstoday, 1
+investedtoday, 19.464
+tdy_bfbalance_start, 389.28
+tdy_returns, 445.07
+cashedouttoday, 0.00
+tdy_loserstoday, 0
+tdy_returns_list, [Decimal('445.07')]
+cashedoutbalance, 0.00
+bfbalanceendofday, 795.43
+totalbalanceinclcashout, 795.43
+date, 2014-04-11
+tdy_winnerstoday, 1
+tdy_invested_list, [Decimal('19.464')]
+tdy_netgains, 425.61
+---------------------
+tdy_betstoday, 2
+investedtoday, 75.566
+tdy_bfbalance_start, 795.43
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 2
+tdy_returns_list, [Decimal('0.00'), Decimal('0.00')]
+cashedoutbalance, 0.00
+bfbalanceendofday, 644.31
+totalbalanceinclcashout, 644.31
+date, 2014-04-12
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('39.772'), Decimal('35.794')]
+tdy_netgains, -75.566
+---------------------
+tdy_betstoday, 1
+investedtoday, 32.216
+tdy_bfbalance_start, 644.31
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 1
+tdy_returns_list, [Decimal('0.00')]
+cashedoutbalance, 0.00
+bfbalanceendofday, 579.87
+totalbalanceinclcashout, 579.87
+date, 2014-04-16
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('32.216')]
+tdy_netgains, -32.216
+---------------------
+tdy_betstoday, 2
+investedtoday, 55.088
+tdy_bfbalance_start, 579.87
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 2
+tdy_returns_list, [Decimal('0.00'), Decimal('0.00')]
+cashedoutbalance, 0.00
+bfbalanceendofday, 469.71
+totalbalanceinclcashout, 469.71
+date, 2014-04-17
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('28.994'), Decimal('26.094')]
+tdy_netgains, -55.088
+---------------------
+tdy_betstoday, 1
+investedtoday, 23.486
+tdy_bfbalance_start, 469.71
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 1
+tdy_returns_list, [Decimal('0.00')]
+cashedoutbalance, 0.00
+bfbalanceendofday, 422.73
+totalbalanceinclcashout, 422.73
+date, 2014-04-18
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('23.486')]
+tdy_netgains, -23.486
+---------------------
+tdy_betstoday, 2
+investedtoday, 40.158
+tdy_bfbalance_start, 422.73
+tdy_returns, 569.96
+cashedouttoday, 0.00
+tdy_loserstoday, 1
+tdy_returns_list, [Decimal('0.00'), Decimal('569.96')]
+cashedoutbalance, 0.00
+bfbalanceendofday, 912.37
+totalbalanceinclcashout, 912.37
+date, 2014-04-19
+tdy_winnerstoday, 1
+tdy_invested_list, [Decimal('21.136'), Decimal('19.022')]
+tdy_netgains, 529.80
+---------------------
+tdy_betstoday, 1
+investedtoday, 45.618
+tdy_bfbalance_start, 912.37
+tdy_returns, 78.441
+cashedouttoday, 0.00
+tdy_loserstoday, 0
+tdy_returns_list, [Decimal('78.441')]
+cashedoutbalance, 0.00
+bfbalanceendofday, 899.57
+totalbalanceinclcashout, 899.57
+date, 2014-04-21
+tdy_winnerstoday, 1
+tdy_invested_list, [Decimal('45.618')]
+tdy_netgains, 32.823
+---------------------
+tdy_betstoday, 3
+investedtoday, 121.89
+tdy_bfbalance_start, 899.57
+tdy_returns, 328.41
+cashedouttoday, 0.00
+tdy_loserstoday, 2
+tdy_returns_list, [Decimal('0.00'), Decimal('328.41'), Decimal('0.00')]
+cashedoutbalance, 0.00
+bfbalanceendofday, 984.20
+totalbalanceinclcashout, 984.20
+date, 2014-04-23
+tdy_winnerstoday, 1
+tdy_invested_list, [Decimal('44.978'), Decimal('40.480'), Decimal('36.432')]
+tdy_netgains, 206.52
+---------------------
+tdy_betstoday, 1
+investedtoday, 49.210
+tdy_bfbalance_start, 984.20
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 1
+tdy_returns_list, [Decimal('0.00')]
+cashedoutbalance, 0.00
+bfbalanceendofday, 885.78
+totalbalanceinclcashout, 885.78
+date, 2014-04-24
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('49.210')]
+tdy_netgains, -49.210
+---------------------
+tdy_betstoday, 1
+investedtoday, 44.289
+tdy_bfbalance_start, 885.78
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 1
+tdy_returns_list, [Decimal('0.00')]
+cashedoutbalance, 0.00
+bfbalanceendofday, 797.20
+totalbalanceinclcashout, 797.20
+date, 2014-04-25
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('44.289')]
+tdy_netgains, -44.289
+---------------------
+tdy_betstoday, 2
+investedtoday, 75.734
+tdy_bfbalance_start, 797.20
+tdy_returns, 176.84
+cashedouttoday, 0.00
+tdy_loserstoday, 1
+tdy_returns_list, [Decimal('176.84'), Decimal('0.00')]
+cashedoutbalance, 0.00
+bfbalanceendofday, 822.58
+totalbalanceinclcashout, 822.58
+date, 2014-04-26
+tdy_winnerstoday, 1
+tdy_invested_list, [Decimal('39.860'), Decimal('35.874')]
+tdy_netgains, 101.11
+---------------------
+tdy_betstoday, 1
+investedtoday, 41.129
+tdy_bfbalance_start, 822.58
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 1
+tdy_returns_list, [Decimal('0.00')]
+cashedoutbalance, 0.00
+bfbalanceendofday, 740.32
+totalbalanceinclcashout, 740.32
+date, 2014-04-27
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('41.129')]
+tdy_netgains, -41.129
+---------------------
+tdy_betstoday, 1
+investedtoday, 37.016
+tdy_bfbalance_start, 740.32
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 1
+tdy_returns_list, [Decimal('0.00')]
+cashedoutbalance, 0.00
+bfbalanceendofday, 666.28
+totalbalanceinclcashout, 666.28
+date, 2014-04-28
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('37.016')]
+tdy_netgains, -37.016
+---------------------
+tdy_betstoday, 1
+investedtoday, 33.314
+tdy_bfbalance_start, 666.28
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 1
+tdy_returns_list, [Decimal('0.00')]
+cashedoutbalance, 0.00
+bfbalanceendofday, 599.66
+totalbalanceinclcashout, 599.66
+date, 2014-04-29
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('33.314')]
+tdy_netgains, -33.314
+---------------------
+tdy_betstoday, 1
+investedtoday, 29.983
+tdy_bfbalance_start, 599.66
+tdy_returns, 59.816
+cashedouttoday, 0.00
+tdy_loserstoday, 0
+tdy_returns_list, [Decimal('59.816')]
+cashedoutbalance, 0.00
+bfbalanceendofday, 599.52
+totalbalanceinclcashout, 599.52
+date, 2014-04-30
+tdy_winnerstoday, 1
+tdy_invested_list, [Decimal('29.983')]
+tdy_netgains, 29.833
+---------------------
+tdy_betstoday, 1
+investedtoday, 29.976
+tdy_bfbalance_start, 599.52
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 1
+tdy_returns_list, [Decimal('0.00')]
+cashedoutbalance, 0.00
+bfbalanceendofday, 539.56
+totalbalanceinclcashout, 539.56
+date, 2014-05-02
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('29.976')]
+tdy_netgains, -29.976
+---------------------
+tdy_betstoday, 2
+investedtoday, 51.258
+tdy_bfbalance_start, 539.56
+tdy_returns, 572.50
+cashedouttoday, 0.00
+tdy_loserstoday, 1
+tdy_returns_list, [Decimal('0.00'), Decimal('572.50')]
+cashedoutbalance, 0.00
+bfbalanceendofday, 1009.5
+totalbalanceinclcashout, 1009.5
+date, 2014-05-03
+tdy_winnerstoday, 1
+tdy_invested_list, [Decimal('26.978'), Decimal('24.280')]
+tdy_netgains, 521.24
+---------------------
+tdy_betstoday, 2
+investedtoday, 95.902
+tdy_bfbalance_start, 1009.5
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 2
+tdy_returns_list, [Decimal('0.00'), Decimal('0.00')]
+cashedoutbalance, 0.00
+bfbalanceendofday, 817.68
+totalbalanceinclcashout, 817.68
+date, 2014-05-04
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('50.475'), Decimal('45.427')]
+tdy_netgains, -95.902
+---------------------
+tdy_betstoday, 3
+investedtoday, 110.80
+tdy_bfbalance_start, 817.68
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 3
+tdy_returns_list, [Decimal('0.00'), Decimal('0.00'), Decimal('0.00')]
+cashedoutbalance, 0.00
+bfbalanceendofday, 596.08
+totalbalanceinclcashout, 596.08
+date, 2014-05-05
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('40.884'), Decimal('36.796'), Decimal('33.116')]
+tdy_netgains, -110.80
+---------------------
+tdy_betstoday, 1
+investedtoday, 29.804
+tdy_bfbalance_start, 596.08
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 1
+tdy_returns_list, [Decimal('0.00')]
+cashedoutbalance, 0.00
+bfbalanceendofday, 536.48
+totalbalanceinclcashout, 536.48
+date, 2014-05-06
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('29.804')]
+tdy_netgains, -29.804
+---------------------
+tdy_betstoday, 6
+investedtoday, 125.69
+tdy_bfbalance_start, 536.48
+tdy_returns, 846.52
+cashedouttoday, 0.00
+tdy_loserstoday, 2
+tdy_returns_list, [Decimal('63.198'), Decimal('0.00'), Decimal('132.11'), Decimal('315.82'), Decimal('335.39'), Decimal('0.00')]
+cashedoutbalance, 0.00
+bfbalanceendofday, 1131.6
+totalbalanceinclcashout, 1131.6
+date, 2014-05-07
+tdy_winnerstoday, 4
+tdy_invested_list, [Decimal('26.824'), Decimal('24.142'), Decimal('21.728'), Decimal('19.555'), Decimal('17.599'), Decimal('15.839')]
+tdy_netgains, 720.83
+---------------------
+tdy_betstoday, 5
+investedtoday, 231.70
+tdy_bfbalance_start, 1131.6
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 5
+tdy_returns_list, [Decimal('0.00'), Decimal('0.00'), Decimal('0.00'), Decimal('0.00'), Decimal('0.00')]
+cashedoutbalance, 0.00
+bfbalanceendofday, 668.18
+totalbalanceinclcashout, 668.18
+date, 2014-05-08
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('56.580'), Decimal('50.920'), Decimal('45.828'), Decimal('41.245'), Decimal('37.121')]
+tdy_netgains, -231.70
+---------------------
+tdy_betstoday, 3
+investedtoday, 90.538
+tdy_bfbalance_start, 668.18
+tdy_returns, 470.68
+cashedouttoday, 0.00
+tdy_loserstoday, 0
+tdy_returns_list, [Decimal('111.08'), Decimal('120.26'), Decimal('239.34')]
+cashedoutbalance, 0.00
+bfbalanceendofday, 957.78
+totalbalanceinclcashout, 957.78
+date, 2014-05-09
+tdy_winnerstoday, 3
+tdy_invested_list, [Decimal('33.409'), Decimal('30.068'), Decimal('27.061')]
+tdy_netgains, 380.14
+---------------------
+tdy_betstoday, 5
+investedtoday, 196.11
+tdy_bfbalance_start, 957.78
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 5
+tdy_returns_list, [Decimal('0.00'), Decimal('0.00'), Decimal('0.00'), Decimal('0.00'), Decimal('0.00')]
+cashedoutbalance, 0.00
+bfbalanceendofday, 565.56
+totalbalanceinclcashout, 565.56
+date, 2014-05-10
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('47.889'), Decimal('43.100'), Decimal('38.790'), Decimal('34.911'), Decimal('31.420')]
+tdy_netgains, -196.11
+---------------------
+tdy_betstoday, 2
+investedtoday, 53.728
+tdy_bfbalance_start, 565.56
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 2
+tdy_returns_list, [Decimal('0.00'), Decimal('0.00')]
+cashedoutbalance, 0.00
+bfbalanceendofday, 458.10
+totalbalanceinclcashout, 458.10
+date, 2014-05-12
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('28.278'), Decimal('25.450')]
+tdy_netgains, -53.728
+---------------------
+tdy_betstoday, 1
+investedtoday, 22.905
+tdy_bfbalance_start, 458.10
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 1
+tdy_returns_list, [Decimal('0.00')]
+cashedoutbalance, 0.00
+bfbalanceendofday, 412.30
+totalbalanceinclcashout, 412.30
+date, 2014-05-14
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('22.905')]
+tdy_netgains, -22.905
+---------------------
+tdy_betstoday, 3
+investedtoday, 55.866
+tdy_bfbalance_start, 412.30
+tdy_returns, 105.95
+cashedouttoday, 0.00
+tdy_loserstoday, 2
+tdy_returns_list, [Decimal('105.95'), Decimal('0.00'), Decimal('0.00')]
+cashedoutbalance, 0.00
+bfbalanceendofday, 406.51
+totalbalanceinclcashout, 406.51
+date, 2014-05-15
+tdy_winnerstoday, 1
+tdy_invested_list, [Decimal('20.615'), Decimal('18.553'), Decimal('16.698')]
+tdy_netgains, 50.084
+---------------------
+tdy_betstoday, 5
+investedtoday, 83.236
+tdy_bfbalance_start, 406.51
+tdy_returns, 420.62
+cashedouttoday, 0.00
+tdy_loserstoday, 4
+tdy_returns_list, [Decimal('0.00'), Decimal('0.00'), Decimal('0.00'), Decimal('420.62'), Decimal('0.00')]
+cashedoutbalance, 0.00
+bfbalanceendofday, 660.65
+totalbalanceinclcashout, 660.65
+date, 2014-05-16
+tdy_winnerstoday, 1
+tdy_invested_list, [Decimal('20.326'), Decimal('18.292'), Decimal('16.464'), Decimal('14.818'), Decimal('13.336')]
+tdy_netgains, 337.38
+---------------------
+tdy_betstoday, 3
+investedtoday, 89.518
+tdy_bfbalance_start, 660.65
+tdy_returns, 2086.6
+cashedouttoday, 1068.2
+tdy_loserstoday, 1
+tdy_returns_list, [Decimal('0.00'), Decimal('258.43'), Decimal('1828.2')]
+cashedoutbalance, 1068.2
+bfbalanceendofday, 1500.0
+totalbalanceinclcashout, 2568.2
+date, 2014-05-17
+tdy_winnerstoday, 2
+tdy_invested_list, [Decimal('33.032'), Decimal('29.730'), Decimal('26.756')]
+tdy_netgains, 1997.1
+---------------------
+tdy_betstoday, 1
+investedtoday, 75.000
+tdy_bfbalance_start, 1500.0
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 1
+tdy_returns_list, [Decimal('0.00')]
+cashedoutbalance, 1068.2
+bfbalanceendofday, 1350.0
+totalbalanceinclcashout, 2418.2
+date, 2014-05-18
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('75.000')]
+tdy_netgains, -75.000
+---------------------
+tdy_betstoday, 1
+investedtoday, 67.500
+tdy_bfbalance_start, 1350.0
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 1
+tdy_returns_list, [Decimal('0.00')]
+cashedoutbalance, 1068.2
+bfbalanceendofday, 1215.0
+totalbalanceinclcashout, 2283.2
+date, 2014-05-19
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('67.500')]
+tdy_netgains, -67.500
+---------------------
+tdy_betstoday, 1
+investedtoday, 60.750
+tdy_bfbalance_start, 1215.0
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 1
+tdy_returns_list, [Decimal('0.00')]
+cashedoutbalance, 1068.2
+bfbalanceendofday, 1093.4
+totalbalanceinclcashout, 2161.6
+date, 2014-05-20
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('60.750')]
+tdy_netgains, -60.750
+---------------------
+tdy_betstoday, 4
+investedtoday, 188.00
+tdy_bfbalance_start, 1093.4
+tdy_returns, 179.96
+cashedouttoday, 0.00
+tdy_loserstoday, 3
+tdy_returns_list, [Decimal('0.00'), Decimal('179.96'), Decimal('0.00'), Decimal('0.00')]
+cashedoutbalance, 1068.2
+bfbalanceendofday, 897.33
+totalbalanceinclcashout, 1965.5
+date, 2014-05-21
+tdy_winnerstoday, 1
+tdy_invested_list, [Decimal('54.670'), Decimal('49.202'), Decimal('44.282'), Decimal('39.854')]
+tdy_netgains, -8.04
+---------------------
+tdy_betstoday, 3
+investedtoday, 121.59
+tdy_bfbalance_start, 897.33
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 3
+tdy_returns_list, [Decimal('0.00'), Decimal('0.00'), Decimal('0.00')]
+cashedoutbalance, 1068.2
+bfbalanceendofday, 654.15
+totalbalanceinclcashout, 1722.4
+date, 2014-05-23
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('44.866'), Decimal('40.380'), Decimal('36.342')]
+tdy_netgains, -121.59
+---------------------
+tdy_betstoday, 3
+investedtoday, 88.636
+tdy_bfbalance_start, 654.15
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 3
+tdy_returns_list, [Decimal('0.00'), Decimal('0.00'), Decimal('0.00')]
+cashedoutbalance, 1068.2
+bfbalanceendofday, 476.87
+totalbalanceinclcashout, 1545.1
+date, 2014-05-24
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('32.708'), Decimal('29.436'), Decimal('26.492')]
+tdy_netgains, -88.636
+---------------------
+tdy_betstoday, 3
+investedtoday, 64.618
+tdy_bfbalance_start, 476.87
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 3
+tdy_returns_list, [Decimal('0.00'), Decimal('0.00'), Decimal('0.00')]
+cashedoutbalance, 1068.2
+bfbalanceendofday, 347.65
+totalbalanceinclcashout, 1415.8
+date, 2014-05-26
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('23.844'), Decimal('21.460'), Decimal('19.314')]
+tdy_netgains, -64.618
+---------------------
+tdy_betstoday, 1
+investedtoday, 17.382
+tdy_bfbalance_start, 347.65
+tdy_returns, 2146.6
+cashedouttoday, 959.5
+tdy_loserstoday, 0
+tdy_returns_list, [Decimal('2146.6')]
+cashedoutbalance, 2027.7
+bfbalanceendofday, 1500.0
+totalbalanceinclcashout, 3527.7
+date, 2014-05-27
+tdy_winnerstoday, 1
+tdy_invested_list, [Decimal('17.382')]
+tdy_netgains, 2129.2
+---------------------
+tdy_betstoday, 1
+investedtoday, 75.000
+tdy_bfbalance_start, 1500.0
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 1
+tdy_returns_list, [Decimal('0.00')]
+cashedoutbalance, 2027.7
+bfbalanceendofday, 1350.0
+totalbalanceinclcashout, 3377.7
+date, 2014-05-29
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('75.000')]
+tdy_netgains, -75.000
+---------------------
+tdy_betstoday, 1
+investedtoday, 67.500
+tdy_bfbalance_start, 1350.0
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 1
+tdy_returns_list, [Decimal('0.00')]
+cashedoutbalance, 2027.7
+bfbalanceendofday, 1215.0
+totalbalanceinclcashout, 3242.7
+date, 2014-05-30
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('67.500')]
+tdy_netgains, -67.500
+---------------------
+tdy_betstoday, 6
+investedtoday, 284.62
+tdy_bfbalance_start, 1215.0
+tdy_returns, 516.66
+cashedouttoday, 0.00
+tdy_loserstoday, 3
+tdy_returns_list, [Decimal('97.536'), Decimal('218.13'), Decimal('200.99'), Decimal('0.00'), Decimal('0.00'), Decimal('0.00')]
+cashedoutbalance, 2027.7
+bfbalanceendofday, 1162.3
+totalbalanceinclcashout, 3190.0
+date, 2014-05-31
+tdy_winnerstoday, 3
+tdy_invested_list, [Decimal('60.750'), Decimal('54.670'), Decimal('49.202'), Decimal('44.282'), Decimal('39.854'), Decimal('35.868')]
+tdy_netgains, 232.04
+---------------------
+tdy_betstoday, 1
+investedtoday, 58.115
+tdy_bfbalance_start, 1162.3
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 1
+tdy_returns_list, [Decimal('0.00')]
+cashedoutbalance, 2027.7
+bfbalanceendofday, 1046.1
+totalbalanceinclcashout, 3073.8
+date, 2014-06-01
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('58.115')]
+tdy_netgains, -58.115
+---------------------
+tdy_betstoday, 3
+investedtoday, 141.75
+tdy_bfbalance_start, 1046.1
+tdy_returns, 965.96
+cashedouttoday, 228.6
+tdy_loserstoday, 1
+tdy_returns_list, [Decimal('0.00'), Decimal('120.74'), Decimal('845.22')]
+cashedoutbalance, 2256.3
+bfbalanceendofday, 1500.0
+totalbalanceinclcashout, 3756.3
+date, 2014-06-02
+tdy_winnerstoday, 2
+tdy_invested_list, [Decimal('52.305'), Decimal('47.075'), Decimal('42.367')]
+tdy_netgains, 824.21
+---------------------
+tdy_betstoday, 1
+investedtoday, 75.000
+tdy_bfbalance_start, 1500.0
+tdy_returns, 387.60
+cashedouttoday, 237.6
+tdy_loserstoday, 0
+tdy_returns_list, [Decimal('387.60')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 1500.0
+totalbalanceinclcashout, 3993.9
+date, 2014-06-03
+tdy_winnerstoday, 1
+tdy_invested_list, [Decimal('75.000')]
+tdy_netgains, 312.60
+---------------------
+tdy_betstoday, 1
+investedtoday, 75.000
+tdy_bfbalance_start, 1500.0
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 1
+tdy_returns_list, [Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 1350.0
+totalbalanceinclcashout, 3843.9
+date, 2014-06-05
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('75.000')]
+tdy_netgains, -75.000
+---------------------
+tdy_betstoday, 6
+investedtoday, 316.25
+tdy_bfbalance_start, 1350.0
+tdy_returns, 583.65
+cashedouttoday, 0.00
+tdy_loserstoday, 4
+tdy_returns_list, [Decimal('0.00'), Decimal('277.02'), Decimal('0.00'), Decimal('306.63'), Decimal('0.00'), Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 1301.0
+totalbalanceinclcashout, 3794.9
+date, 2014-06-06
+tdy_winnerstoday, 2
+tdy_invested_list, [Decimal('67.500'), Decimal('60.750'), Decimal('54.670'), Decimal('49.202'), Decimal('44.282'), Decimal('39.854')]
+tdy_netgains, 267.40
+---------------------
+tdy_betstoday, 5
+investedtoday, 266.39
+tdy_bfbalance_start, 1301.0
+tdy_returns, 433.81
+cashedouttoday, 0.00
+tdy_loserstoday, 3
+tdy_returns_list, [Decimal('133.48'), Decimal('0.00'), Decimal('300.33'), Decimal('0.00'), Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 1202.0
+totalbalanceinclcashout, 3695.9
+date, 2014-06-07
+tdy_winnerstoday, 2
+tdy_invested_list, [Decimal('65.050'), Decimal('58.550'), Decimal('52.690'), Decimal('47.420'), Decimal('42.678')]
+tdy_netgains, 167.42
+---------------------
+tdy_betstoday, 3
+investedtoday, 162.87
+tdy_bfbalance_start, 1202.0
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 3
+tdy_returns_list, [Decimal('0.00'), Decimal('0.00'), Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 876.25
+totalbalanceinclcashout, 3370.2
+date, 2014-06-12
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('60.100'), Decimal('54.090'), Decimal('48.680')]
+tdy_netgains, -162.87
+---------------------
+tdy_betstoday, 3
+investedtoday, 118.73
+tdy_bfbalance_start, 876.25
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 3
+tdy_returns_list, [Decimal('0.00'), Decimal('0.00'), Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 638.79
+totalbalanceinclcashout, 3132.7
+date, 2014-06-13
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('43.812'), Decimal('39.432'), Decimal('35.488')]
+tdy_netgains, -118.73
+---------------------
+tdy_betstoday, 2
+investedtoday, 60.686
+tdy_bfbalance_start, 638.79
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 2
+tdy_returns_list, [Decimal('0.00'), Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 517.41
+totalbalanceinclcashout, 3011.3
+date, 2014-06-14
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('31.940'), Decimal('28.746')]
+tdy_netgains, -60.686
+---------------------
+tdy_betstoday, 1
+investedtoday, 25.870
+tdy_bfbalance_start, 517.41
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 1
+tdy_returns_list, [Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 465.67
+totalbalanceinclcashout, 2959.6
+date, 2014-06-15
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('25.870')]
+tdy_netgains, -25.870
+---------------------
+tdy_betstoday, 2
+investedtoday, 44.240
+tdy_bfbalance_start, 465.67
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 2
+tdy_returns_list, [Decimal('0.00'), Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 377.19
+totalbalanceinclcashout, 2871.1
+date, 2014-06-16
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('23.284'), Decimal('20.956')]
+tdy_netgains, -44.240
+---------------------
+tdy_betstoday, 1
+investedtoday, 18.860
+tdy_bfbalance_start, 377.19
+tdy_returns, 188.13
+cashedouttoday, 0.00
+tdy_loserstoday, 0
+tdy_returns_list, [Decimal('188.13')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 527.60
+totalbalanceinclcashout, 3021.5
+date, 2014-06-17
+tdy_winnerstoday, 1
+tdy_invested_list, [Decimal('18.860')]
+tdy_netgains, 169.27
+---------------------
+tdy_betstoday, 2
+investedtoday, 50.122
+tdy_bfbalance_start, 527.60
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 2
+tdy_returns_list, [Decimal('0.00'), Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 427.36
+totalbalanceinclcashout, 2921.3
+date, 2014-06-18
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('26.380'), Decimal('23.742')]
+tdy_netgains, -50.122
+---------------------
+tdy_betstoday, 1
+investedtoday, 21.368
+tdy_bfbalance_start, 427.36
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 1
+tdy_returns_list, [Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 384.62
+totalbalanceinclcashout, 2878.5
+date, 2014-06-19
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('21.368')]
+tdy_netgains, -21.368
+---------------------
+tdy_betstoday, 2
+investedtoday, 36.539
+tdy_bfbalance_start, 384.62
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 2
+tdy_returns_list, [Decimal('0.00'), Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 311.54
+totalbalanceinclcashout, 2805.4
+date, 2014-06-20
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('19.231'), Decimal('17.308')]
+tdy_netgains, -36.539
+---------------------
+tdy_betstoday, 5
+investedtoday, 63.787
+tdy_bfbalance_start, 311.54
+tdy_returns, 58.733
+cashedouttoday, 0.00
+tdy_loserstoday, 4
+tdy_returns_list, [Decimal('0.00'), Decimal('58.733'), Decimal('0.00'), Decimal('0.00'), Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 242.67
+totalbalanceinclcashout, 2736.6
+date, 2014-06-21
+tdy_winnerstoday, 1
+tdy_invested_list, [Decimal('15.577'), Decimal('14.019'), Decimal('12.617'), Decimal('11.355'), Decimal('10.219')]
+tdy_netgains, -5.054
+---------------------
+tdy_betstoday, 1
+investedtoday, 12.134
+tdy_bfbalance_start, 242.67
+tdy_returns, 242.07
+cashedouttoday, 0.00
+tdy_loserstoday, 0
+tdy_returns_list, [Decimal('242.07')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 460.48
+totalbalanceinclcashout, 2954.4
+date, 2014-06-23
+tdy_winnerstoday, 1
+tdy_invested_list, [Decimal('12.134')]
+tdy_netgains, 229.94
+---------------------
+tdy_betstoday, 2
+investedtoday, 43.746
+tdy_bfbalance_start, 460.48
+tdy_returns, 191.17
+cashedouttoday, 0.00
+tdy_loserstoday, 0
+tdy_returns_list, [Decimal('80.930'), Decimal('110.24')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 564.17
+totalbalanceinclcashout, 3058.1
+date, 2014-06-24
+tdy_winnerstoday, 2
+tdy_invested_list, [Decimal('23.024'), Decimal('20.722')]
+tdy_netgains, 147.42
+---------------------
+tdy_betstoday, 1
+investedtoday, 28.208
+tdy_bfbalance_start, 564.17
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 1
+tdy_returns_list, [Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 507.75
+totalbalanceinclcashout, 3001.6
+date, 2014-06-25
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('28.208')]
+tdy_netgains, -28.208
+---------------------
+tdy_betstoday, 1
+investedtoday, 25.388
+tdy_bfbalance_start, 507.75
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 1
+tdy_returns_list, [Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 456.97
+totalbalanceinclcashout, 2950.9
+date, 2014-06-27
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('25.388')]
+tdy_netgains, -25.388
+---------------------
+tdy_betstoday, 5
+investedtoday, 93.566
+tdy_bfbalance_start, 456.97
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 5
+tdy_returns_list, [Decimal('0.00'), Decimal('0.00'), Decimal('0.00'), Decimal('0.00'), Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 269.83
+totalbalanceinclcashout, 2763.7
+date, 2014-06-28
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('22.848'), Decimal('20.564'), Decimal('18.508'), Decimal('16.656'), Decimal('14.990')]
+tdy_netgains, -93.566
+---------------------
+tdy_betstoday, 5
+investedtoday, 55.250
+tdy_bfbalance_start, 269.83
+tdy_returns, 195.79
+cashedouttoday, 0.00
+tdy_loserstoday, 2
+tdy_returns_list, [Decimal('29.864'), Decimal('0.00'), Decimal('0.00'), Decimal('64.845'), Decimal('101.08')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 355.12
+totalbalanceinclcashout, 2849.0
+date, 2014-06-30
+tdy_winnerstoday, 3
+tdy_invested_list, [Decimal('13.492'), Decimal('12.142'), Decimal('10.928'), Decimal('9.8355'), Decimal('8.8515')]
+tdy_netgains, 140.54
+---------------------
+tdy_betstoday, 2
+investedtoday, 33.736
+tdy_bfbalance_start, 355.12
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 2
+tdy_returns_list, [Decimal('0.00'), Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 287.64
+totalbalanceinclcashout, 2781.5
+date, 2014-07-02
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('17.756'), Decimal('15.980')]
+tdy_netgains, -33.736
+---------------------
+tdy_betstoday, 6
+investedtoday, 67.391
+tdy_bfbalance_start, 287.64
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 6
+tdy_returns_list, [Decimal('0.00'), Decimal('0.00'), Decimal('0.00'), Decimal('0.00'), Decimal('0.00'), Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 152.88
+totalbalanceinclcashout, 2646.8
+date, 2014-07-04
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('14.382'), Decimal('12.944'), Decimal('11.650'), Decimal('10.485'), Decimal('9.4370'), Decimal('8.4930')]
+tdy_netgains, -67.391
+---------------------
+tdy_betstoday, 3
+investedtoday, 20.716
+tdy_bfbalance_start, 152.88
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 3
+tdy_returns_list, [Decimal('0.00'), Decimal('0.00'), Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 111.46
+totalbalanceinclcashout, 2605.4
+date, 2014-07-05
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('7.6440'), Decimal('6.8800'), Decimal('6.1920')]
+tdy_netgains, -20.716
+---------------------
+tdy_betstoday, 1
+investedtoday, 5.5730
+tdy_bfbalance_start, 111.46
+tdy_returns, 14.189
+cashedouttoday, 0.00
+tdy_loserstoday, 0
+tdy_returns_list, [Decimal('14.189')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 114.51
+totalbalanceinclcashout, 2608.4
+date, 2014-07-06
+tdy_winnerstoday, 1
+tdy_invested_list, [Decimal('5.5730')]
+tdy_netgains, 8.6160
+---------------------
+tdy_betstoday, 4
+investedtoday, 19.689
+tdy_bfbalance_start, 114.51
+tdy_returns, 122.68
+cashedouttoday, 0.00
+tdy_loserstoday, 2
+tdy_returns_list, [Decimal('13.652'), Decimal('0.00'), Decimal('109.03'), Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 197.80
+totalbalanceinclcashout, 2691.7
+date, 2014-07-07
+tdy_winnerstoday, 2
+tdy_invested_list, [Decimal('5.7255'), Decimal('5.1525'), Decimal('4.6373'), Decimal('4.1736')]
+tdy_netgains, 102.99
+---------------------
+tdy_betstoday, 2
+investedtoday, 18.791
+tdy_bfbalance_start, 197.80
+tdy_returns, 86.156
+cashedouttoday, 0.00
+tdy_loserstoday, 0
+tdy_returns_list, [Decimal('19.354'), Decimal('66.802')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 246.38
+totalbalanceinclcashout, 2740.3
+date, 2014-07-08
+tdy_winnerstoday, 2
+tdy_invested_list, [Decimal('9.8900'), Decimal('8.9010')]
+tdy_netgains, 67.365
+---------------------
+tdy_betstoday, 3
+investedtoday, 33.384
+tdy_bfbalance_start, 246.38
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 3
+tdy_returns_list, [Decimal('0.00'), Decimal('0.00'), Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 179.60
+totalbalanceinclcashout, 2673.5
+date, 2014-07-09
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('12.319'), Decimal('11.087'), Decimal('9.9780')]
+tdy_netgains, -33.384
+---------------------
+tdy_betstoday, 2
+investedtoday, 17.062
+tdy_bfbalance_start, 179.60
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 2
+tdy_returns_list, [Decimal('0.00'), Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 145.48
+totalbalanceinclcashout, 2639.4
+date, 2014-07-10
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('8.9800'), Decimal('8.0820')]
+tdy_netgains, -17.062
+---------------------
+tdy_betstoday, 2
+investedtoday, 13.821
+tdy_bfbalance_start, 145.48
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 2
+tdy_returns_list, [Decimal('0.00'), Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 117.84
+totalbalanceinclcashout, 2611.7
+date, 2014-07-11
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('7.2740'), Decimal('6.5470')]
+tdy_netgains, -13.821
+---------------------
+tdy_betstoday, 6
+investedtoday, 27.609
+tdy_bfbalance_start, 117.84
+tdy_returns, 45.341
+cashedouttoday, 0.00
+tdy_loserstoday, 5
+tdy_returns_list, [Decimal('0.00'), Decimal('45.341'), Decimal('0.00'), Decimal('0.00'), Decimal('0.00'), Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 107.97
+totalbalanceinclcashout, 2601.9
+date, 2014-07-12
+tdy_winnerstoday, 1
+tdy_invested_list, [Decimal('5.8920'), Decimal('5.3030'), Decimal('4.7728'), Decimal('4.2956'), Decimal('3.8660'), Decimal('3.4794')]
+tdy_netgains, 17.732
+---------------------
+tdy_betstoday, 1
+investedtoday, 5.3985
+tdy_bfbalance_start, 107.97
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 1
+tdy_returns_list, [Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 97.172
+totalbalanceinclcashout, 2591.1
+date, 2014-07-14
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('5.3985')]
+tdy_netgains, -5.3985
+---------------------
+tdy_betstoday, 2
+investedtoday, 9.2313
+tdy_bfbalance_start, 97.172
+tdy_returns, 33.076
+cashedouttoday, 0.00
+tdy_loserstoday, 0
+tdy_returns_list, [Decimal('8.4006'), Decimal('24.675')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 111.78
+totalbalanceinclcashout, 2605.7
+date, 2014-07-15
+tdy_winnerstoday, 2
+tdy_invested_list, [Decimal('4.8586'), Decimal('4.3727')]
+tdy_netgains, 23.845
+---------------------
+tdy_betstoday, 2
+investedtoday, 10.619
+tdy_bfbalance_start, 111.78
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 2
+tdy_returns_list, [Decimal('0.00'), Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 90.540
+totalbalanceinclcashout, 2584.4
+date, 2014-07-16
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('5.5890'), Decimal('5.0300')]
+tdy_netgains, -10.619
+---------------------
+tdy_betstoday, 2
+investedtoday, 8.6013
+tdy_bfbalance_start, 90.540
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 2
+tdy_returns_list, [Decimal('0.00'), Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 73.338
+totalbalanceinclcashout, 2567.2
+date, 2014-07-17
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('4.5270'), Decimal('4.0743')]
+tdy_netgains, -8.6013
+---------------------
+tdy_betstoday, 3
+investedtoday, 9.9373
+tdy_bfbalance_start, 73.338
+tdy_returns, 13.864
+cashedouttoday, 0.00
+tdy_loserstoday, 2
+tdy_returns_list, [Decimal('13.864'), Decimal('0.00'), Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 67.328
+totalbalanceinclcashout, 2561.2
+date, 2014-07-18
+tdy_winnerstoday, 1
+tdy_invested_list, [Decimal('3.6669'), Decimal('3.3002'), Decimal('2.9702')]
+tdy_netgains, 3.9267
+---------------------
+tdy_betstoday, 6
+investedtoday, 15.774
+tdy_bfbalance_start, 67.328
+tdy_returns, 157.07
+cashedouttoday, 0.00
+tdy_loserstoday, 2
+tdy_returns_list, [Decimal('8.3150'), Decimal('0.00'), Decimal('0.00'), Decimal('54.368'), Decimal('50.484'), Decimal('43.902')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 192.85
+totalbalanceinclcashout, 2686.8
+date, 2014-07-19
+tdy_winnerstoday, 4
+tdy_invested_list, [Decimal('3.3664'), Decimal('3.0298'), Decimal('2.7268'), Decimal('2.4541'), Decimal('2.2087'), Decimal('1.9878')]
+tdy_netgains, 141.30
+---------------------
+tdy_betstoday, 1
+investedtoday, 9.6425
+tdy_bfbalance_start, 192.85
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 1
+tdy_returns_list, [Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 173.57
+totalbalanceinclcashout, 2667.5
+date, 2014-07-20
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('9.6425')]
+tdy_netgains, -9.6425
+---------------------
+tdy_betstoday, 1
+investedtoday, 8.6785
+tdy_bfbalance_start, 173.57
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 1
+tdy_returns_list, [Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 156.21
+totalbalanceinclcashout, 2650.1
+date, 2014-07-21
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('8.6785')]
+tdy_netgains, -8.6785
+---------------------
+tdy_betstoday, 1
+investedtoday, 7.8105
+tdy_bfbalance_start, 156.21
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 1
+tdy_returns_list, [Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 140.59
+totalbalanceinclcashout, 2634.5
+date, 2014-07-23
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('7.8105')]
+tdy_netgains, -7.8105
+---------------------
+tdy_betstoday, 2
+investedtoday, 13.356
+tdy_bfbalance_start, 140.59
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 2
+tdy_returns_list, [Decimal('0.00'), Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 113.87
+totalbalanceinclcashout, 2607.8
+date, 2014-07-24
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('7.0295'), Decimal('6.3265')]
+tdy_netgains, -13.356
+---------------------
+tdy_betstoday, 1
+investedtoday, 5.6935
+tdy_bfbalance_start, 113.87
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 1
+tdy_returns_list, [Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 102.49
+totalbalanceinclcashout, 2596.4
+date, 2014-07-25
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('5.6935')]
+tdy_netgains, -5.6935
+---------------------
+tdy_betstoday, 3
+investedtoday, 13.888
+tdy_bfbalance_start, 102.49
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 3
+tdy_returns_list, [Decimal('0.00'), Decimal('0.00'), Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 74.716
+totalbalanceinclcashout, 2568.6
+date, 2014-07-26
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('5.1245'), Decimal('4.6121'), Decimal('4.1509')]
+tdy_netgains, -13.888
+---------------------
+tdy_betstoday, 3
+investedtoday, 10.124
+tdy_bfbalance_start, 74.716
+tdy_returns, 12.421
+cashedouttoday, 0.00
+tdy_loserstoday, 2
+tdy_returns_list, [Decimal('12.421'), Decimal('0.00'), Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 66.889
+totalbalanceinclcashout, 2560.8
+date, 2014-07-28
+tdy_winnerstoday, 1
+tdy_invested_list, [Decimal('3.7358'), Decimal('3.3622'), Decimal('3.0260')]
+tdy_netgains, 2.297
+---------------------
+tdy_betstoday, 2
+investedtoday, 6.3544
+tdy_bfbalance_start, 66.889
+tdy_returns, 69.231
+cashedouttoday, 0.00
+tdy_loserstoday, 0
+tdy_returns_list, [Decimal('31.486'), Decimal('37.745')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 123.41
+totalbalanceinclcashout, 2617.3
+date, 2014-07-30
+tdy_winnerstoday, 2
+tdy_invested_list, [Decimal('3.3444'), Decimal('3.0100')]
+tdy_netgains, 62.877
+---------------------
+tdy_betstoday, 3
+investedtoday, 16.722
+tdy_bfbalance_start, 123.41
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 3
+tdy_returns_list, [Decimal('0.00'), Decimal('0.00'), Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 89.970
+totalbalanceinclcashout, 2583.9
+date, 2014-07-31
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('6.1705'), Decimal('5.5535'), Decimal('4.9983')]
+tdy_netgains, -16.722
+---------------------
+tdy_betstoday, 2
+investedtoday, 8.5472
+tdy_bfbalance_start, 89.970
+tdy_returns, 16.881
+cashedouttoday, 0.00
+tdy_loserstoday, 1
+tdy_returns_list, [Decimal('16.881'), Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 89.757
+totalbalanceinclcashout, 2583.7
+date, 2014-08-01
+tdy_winnerstoday, 1
+tdy_invested_list, [Decimal('4.4985'), Decimal('4.0487')]
+tdy_netgains, 8.3338
+---------------------
+tdy_betstoday, 5
+investedtoday, 18.378
+tdy_bfbalance_start, 89.757
+tdy_returns, 17.585
+cashedouttoday, 0.00
+tdy_loserstoday, 3
+tdy_returns_list, [Decimal('9.1237'), Decimal('0.00'), Decimal('8.4609'), Decimal('0.00'), Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 70.586
+totalbalanceinclcashout, 2564.5
+date, 2014-08-02
+tdy_winnerstoday, 2
+tdy_invested_list, [Decimal('4.4878'), Decimal('4.0390'), Decimal('3.6352'), Decimal('3.2716'), Decimal('2.9444')]
+tdy_netgains, -0.793
+---------------------
+tdy_betstoday, 2
+investedtoday, 6.7057
+tdy_bfbalance_start, 70.586
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 2
+tdy_returns_list, [Decimal('0.00'), Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 57.176
+totalbalanceinclcashout, 2551.1
+date, 2014-08-03
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('3.5293'), Decimal('3.1764')]
+tdy_netgains, -6.7057
+---------------------
+tdy_betstoday, 1
+investedtoday, 2.8588
+tdy_bfbalance_start, 57.176
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 1
+tdy_returns_list, [Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 51.458
+totalbalanceinclcashout, 2545.4
+date, 2014-08-04
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('2.8588')]
+tdy_netgains, -2.8588
+---------------------
+tdy_betstoday, 2
+investedtoday, 4.8885
+tdy_bfbalance_start, 51.458
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 2
+tdy_returns_list, [Decimal('0.00'), Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 41.680
+totalbalanceinclcashout, 2535.6
+date, 2014-08-05
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('2.5729'), Decimal('2.3156')]
+tdy_netgains, -4.8885
+---------------------
+tdy_betstoday, 6
+investedtoday, 9.7647
+tdy_bfbalance_start, 41.680
+tdy_returns, 15.108
+cashedouttoday, 0.00
+tdy_loserstoday, 4
+tdy_returns_list, [Decimal('0.00'), Decimal('5.3098'), Decimal('9.7983'), Decimal('0.00'), Decimal('0.00'), Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 37.258
+totalbalanceinclcashout, 2531.2
+date, 2014-08-07
+tdy_winnerstoday, 2
+tdy_invested_list, [Decimal('2.0840'), Decimal('1.8756'), Decimal('1.6880'), Decimal('1.5192'), Decimal('1.3673'), Decimal('1.2306')]
+tdy_netgains, 5.3433
+---------------------
+tdy_betstoday, 3
+investedtoday, 5.0484
+tdy_bfbalance_start, 37.258
+tdy_returns, 6.1411
+cashedouttoday, 0.00
+tdy_loserstoday, 2
+tdy_returns_list, [Decimal('6.1411'), Decimal('0.00'), Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 33.301
+totalbalanceinclcashout, 2527.2
+date, 2014-08-08
+tdy_winnerstoday, 1
+tdy_invested_list, [Decimal('1.8629'), Decimal('1.6766'), Decimal('1.5089')]
+tdy_netgains, 1.0927
+---------------------
+tdy_betstoday, 3
+investedtoday, 4.5122
+tdy_bfbalance_start, 33.301
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 3
+tdy_returns_list, [Decimal('0.00'), Decimal('0.00'), Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 24.275
+totalbalanceinclcashout, 2518.2
+date, 2014-08-09
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('1.6650'), Decimal('1.4986'), Decimal('1.3486')]
+tdy_netgains, -4.5122
+---------------------
+tdy_betstoday, 3
+investedtoday, 3.2894
+tdy_bfbalance_start, 24.275
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 3
+tdy_returns_list, [Decimal('0.00'), Decimal('0.00'), Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 17.697
+totalbalanceinclcashout, 2511.6
+date, 2014-08-10
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('1.2138'), Decimal('1.0924'), Decimal('0.98315')]
+tdy_netgains, -3.2894
+---------------------
+tdy_betstoday, 2
+investedtoday, 1.6812
+tdy_bfbalance_start, 17.697
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 2
+tdy_returns_list, [Decimal('0.00'), Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 14.335
+totalbalanceinclcashout, 2508.2
+date, 2014-08-11
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('0.88485'), Decimal('0.79635')]
+tdy_netgains, -1.6812
+---------------------
+tdy_betstoday, 2
+investedtoday, 1.3618
+tdy_bfbalance_start, 14.335
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 2
+tdy_returns_list, [Decimal('0.00'), Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 11.611
+totalbalanceinclcashout, 2505.5
+date, 2014-08-13
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('0.71675'), Decimal('0.64505')]
+tdy_netgains, -1.3618
+---------------------
+tdy_betstoday, 2
+investedtoday, 1.1030
+tdy_bfbalance_start, 11.611
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 2
+tdy_returns_list, [Decimal('0.00'), Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 9.4042
+totalbalanceinclcashout, 2503.3
+date, 2014-08-14
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('0.58055'), Decimal('0.52245')]
+tdy_netgains, -1.1030
+---------------------
+tdy_betstoday, 3
+investedtoday, 1.2743
+tdy_bfbalance_start, 9.4042
+tdy_returns, 1.0292
+cashedouttoday, 0.00
+tdy_loserstoday, 2
+tdy_returns_list, [Decimal('0.00'), Decimal('1.0292'), Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 7.8848
+totalbalanceinclcashout, 2501.8
+date, 2014-08-15
+tdy_winnerstoday, 1
+tdy_invested_list, [Decimal('0.47021'), Decimal('0.42319'), Decimal('0.38087')]
+tdy_netgains, -0.2451
+---------------------
+tdy_betstoday, 10
+investedtoday, 2.5678
+tdy_bfbalance_start, 7.8848
+tdy_returns, 3.8379
+cashedouttoday, 0.00
+tdy_loserstoday, 8
+tdy_returns_list, [Decimal('0.92134'), Decimal('0.00'), Decimal('0.00'), Decimal('0.00'), Decimal('0.00'), Decimal('0.00'), Decimal('0.00'), Decimal('0.00'), Decimal('2.9166'), Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 6.5873
+totalbalanceinclcashout, 2500.5
+date, 2014-08-16
+tdy_winnerstoday, 2
+tdy_invested_list, [Decimal('0.39424'), Decimal('0.35482'), Decimal('0.31934'), Decimal('0.28741'), Decimal('0.25867'), Decimal('0.23280'), Decimal('0.20952'), Decimal('0.18857'), Decimal('0.16971'), Decimal('0.15274')]
+tdy_netgains, 1.2701
+---------------------
+tdy_betstoday, 2
+investedtoday, 0.62578
+tdy_bfbalance_start, 6.5873
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 2
+tdy_returns_list, [Decimal('0.00'), Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 5.3357
+totalbalanceinclcashout, 2499.2
+date, 2014-08-17
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('0.32936'), Decimal('0.29642')]
+tdy_netgains, -0.62578
+---------------------
+tdy_betstoday, 3
+investedtoday, 0.72298
+tdy_bfbalance_start, 5.3357
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 3
+tdy_returns_list, [Decimal('0.00'), Decimal('0.00'), Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 3.8897
+totalbalanceinclcashout, 2497.8
+date, 2014-08-19
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('0.26678'), Decimal('0.24010'), Decimal('0.21610')]
+tdy_netgains, -0.72298
+---------------------
+tdy_betstoday, 3
+investedtoday, 0.52706
+tdy_bfbalance_start, 3.8897
+tdy_returns, 2.9933
+cashedouttoday, 0.00
+tdy_loserstoday, 2
+tdy_returns_list, [Decimal('0.00'), Decimal('0.00'), Decimal('2.9933')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 5.8290
+totalbalanceinclcashout, 2499.7
+date, 2014-08-20
+tdy_winnerstoday, 1
+tdy_invested_list, [Decimal('0.19448'), Decimal('0.17504'), Decimal('0.15754')]
+tdy_netgains, 2.4662
+---------------------
+tdy_betstoday, 1
+investedtoday, 0.29145
+tdy_bfbalance_start, 5.8290
+tdy_returns, 6.2048
+cashedouttoday, 0.00
+tdy_loserstoday, 0
+tdy_returns_list, [Decimal('6.2048')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 11.451
+totalbalanceinclcashout, 2505.4
+date, 2014-08-21
+tdy_winnerstoday, 1
+tdy_invested_list, [Decimal('0.29145')]
+tdy_netgains, 5.9134
+---------------------
+tdy_betstoday, 3
+investedtoday, 1.5515
+tdy_bfbalance_start, 11.451
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 3
+tdy_returns_list, [Decimal('0.00'), Decimal('0.00'), Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 8.3472
+totalbalanceinclcashout, 2502.2
+date, 2014-08-22
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('0.57255'), Decimal('0.51525'), Decimal('0.46373')]
+tdy_netgains, -1.5515
+---------------------
+tdy_betstoday, 7
+investedtoday, 2.1772
+tdy_bfbalance_start, 8.3472
+tdy_returns, 2.5618
+cashedouttoday, 0.00
+tdy_loserstoday, 5
+tdy_returns_list, [Decimal('0.72162'), Decimal('0.00'), Decimal('1.8402'), Decimal('0.00'), Decimal('0.00'), Decimal('0.00'), Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 6.5544
+totalbalanceinclcashout, 2500.5
+date, 2014-08-23
+tdy_winnerstoday, 2
+tdy_invested_list, [Decimal('0.41736'), Decimal('0.37562'), Decimal('0.33806'), Decimal('0.30425'), Decimal('0.27383'), Decimal('0.24645'), Decimal('0.22181')]
+tdy_netgains, 0.3846
+---------------------
+tdy_betstoday, 2
+investedtoday, 0.62267
+tdy_bfbalance_start, 6.5544
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 2
+tdy_returns_list, [Decimal('0.00'), Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 5.3090
+totalbalanceinclcashout, 2499.2
+date, 2014-08-24
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('0.32772'), Decimal('0.29495')]
+tdy_netgains, -0.62267
+---------------------
+tdy_betstoday, 4
+investedtoday, 0.91290
+tdy_bfbalance_start, 5.3090
+tdy_returns, 1.2787
+cashedouttoday, 0.00
+tdy_loserstoday, 3
+tdy_returns_list, [Decimal('0.00'), Decimal('0.00'), Decimal('1.2787'), Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 4.7621
+totalbalanceinclcashout, 2498.7
+date, 2014-08-25
+tdy_winnerstoday, 1
+tdy_invested_list, [Decimal('0.26545'), Decimal('0.23891'), Decimal('0.21502'), Decimal('0.19352')]
+tdy_netgains, 0.36580
+---------------------
+tdy_betstoday, 3
+investedtoday, 0.64526
+tdy_bfbalance_start, 4.7621
+tdy_returns, 2.0391
+cashedouttoday, 0.00
+tdy_loserstoday, 1
+tdy_returns_list, [Decimal('0.00'), Decimal('0.96909'), Decimal('1.0700')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 5.5106
+totalbalanceinclcashout, 2499.4
+date, 2014-08-26
+tdy_winnerstoday, 2
+tdy_invested_list, [Decimal('0.23810'), Decimal('0.21430'), Decimal('0.19286')]
+tdy_netgains, 1.3938
+---------------------
+tdy_betstoday, 1
+investedtoday, 0.27553
+tdy_bfbalance_start, 5.5106
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 1
+tdy_returns_list, [Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 4.9596
+totalbalanceinclcashout, 2498.9
+date, 2014-08-27
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('0.27553')]
+tdy_netgains, -0.27553
+---------------------
+tdy_betstoday, 1
+investedtoday, 0.24798
+tdy_bfbalance_start, 4.9596
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 1
+tdy_returns_list, [Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 4.4636
+totalbalanceinclcashout, 2498.4
+date, 2014-08-28
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('0.24798')]
+tdy_netgains, -0.24798
+---------------------
+tdy_betstoday, 3
+investedtoday, 0.60481
+tdy_bfbalance_start, 4.4636
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 3
+tdy_returns_list, [Decimal('0.00'), Decimal('0.00'), Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 3.2538
+totalbalanceinclcashout, 2497.2
+date, 2014-08-29
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('0.22318'), Decimal('0.20086'), Decimal('0.18077')]
+tdy_netgains, -0.60481
+---------------------
+tdy_betstoday, 4
+investedtoday, 0.55949
+tdy_bfbalance_start, 3.2538
+tdy_returns, 4.4592
+cashedouttoday, 0.00
+tdy_loserstoday, 2
+tdy_returns_list, [Decimal('0.00'), Decimal('0.00'), Decimal('1.6538'), Decimal('2.8054')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 6.5940
+totalbalanceinclcashout, 2500.5
+date, 2014-08-30
+tdy_winnerstoday, 2
+tdy_invested_list, [Decimal('0.16269'), Decimal('0.14642'), Decimal('0.13178'), Decimal('0.11860')]
+tdy_netgains, 3.8997
+---------------------
+tdy_betstoday, 4
+investedtoday, 1.1338
+tdy_bfbalance_start, 6.5940
+tdy_returns, 0.81436
+cashedouttoday, 0.00
+tdy_loserstoday, 3
+tdy_returns_list, [Decimal('0.81436'), Decimal('0.00'), Decimal('0.00'), Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 5.1406
+totalbalanceinclcashout, 2499.0
+date, 2014-08-31
+tdy_winnerstoday, 1
+tdy_invested_list, [Decimal('0.32970'), Decimal('0.29673'), Decimal('0.26706'), Decimal('0.24035')]
+tdy_netgains, -0.31944
+---------------------
+tdy_betstoday, 1
+investedtoday, 0.25703
+tdy_bfbalance_start, 5.1406
+tdy_returns, 1.9388
+cashedouttoday, 0.00
+tdy_loserstoday, 0
+tdy_returns_list, [Decimal('1.9388')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 6.5654
+totalbalanceinclcashout, 2500.5
+date, 2014-09-01
+tdy_winnerstoday, 1
+tdy_invested_list, [Decimal('0.25703')]
+tdy_netgains, 1.6818
+---------------------
+tdy_betstoday, 1
+investedtoday, 0.32827
+tdy_bfbalance_start, 6.5654
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 1
+tdy_returns_list, [Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 5.9088
+totalbalanceinclcashout, 2499.8
+date, 2014-09-02
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('0.32827')]
+tdy_netgains, -0.32827
+---------------------
+tdy_betstoday, 1
+investedtoday, 0.29544
+tdy_bfbalance_start, 5.9088
+tdy_returns, 1.3248
+cashedouttoday, 0.00
+tdy_loserstoday, 0
+tdy_returns_list, [Decimal('1.3248')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 6.6428
+totalbalanceinclcashout, 2500.5
+date, 2014-09-03
+tdy_winnerstoday, 1
+tdy_invested_list, [Decimal('0.29544')]
+tdy_netgains, 1.0294
+---------------------
+tdy_betstoday, 2
+investedtoday, 0.63107
+tdy_bfbalance_start, 6.6428
+tdy_returns, 0.60898
+cashedouttoday, 0.00
+tdy_loserstoday, 1
+tdy_returns_list, [Decimal('0.60898'), Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 5.9898
+totalbalanceinclcashout, 2499.9
+date, 2014-09-04
+tdy_winnerstoday, 1
+tdy_invested_list, [Decimal('0.33214'), Decimal('0.29893')]
+tdy_netgains, -0.02209
+---------------------
+tdy_betstoday, 6
+investedtoday, 1.4034
+tdy_bfbalance_start, 5.9898
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 6
+tdy_returns_list, [Decimal('0.00'), Decimal('0.00'), Decimal('0.00'), Decimal('0.00'), Decimal('0.00'), Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 3.1834
+totalbalanceinclcashout, 2497.1
+date, 2014-09-05
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('0.29949'), Decimal('0.26954'), Decimal('0.24259'), Decimal('0.21833'), Decimal('0.19650'), Decimal('0.17685')]
+tdy_netgains, -1.4034
+---------------------
+tdy_betstoday, 5
+investedtoday, 0.65183
+tdy_bfbalance_start, 3.1834
+tdy_returns, 0.43398
+cashedouttoday, 0.00
+tdy_loserstoday, 4
+tdy_returns_list, [Decimal('0.43398'), Decimal('0.00'), Decimal('0.00'), Decimal('0.00'), Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 2.3140
+totalbalanceinclcashout, 2496.2
+date, 2014-09-06
+tdy_winnerstoday, 1
+tdy_invested_list, [Decimal('0.15917'), Decimal('0.14325'), Decimal('0.12893'), Decimal('0.11604'), Decimal('0.10444')]
+tdy_netgains, -0.21785
+---------------------
+tdy_betstoday, 2
+investedtoday, 0.21983
+tdy_bfbalance_start, 2.3140
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 2
+tdy_returns_list, [Decimal('0.00'), Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 1.8744
+totalbalanceinclcashout, 2495.8
+date, 2014-09-08
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('0.11570'), Decimal('0.10413')]
+tdy_netgains, -0.21983
+---------------------
+tdy_betstoday, 1
+investedtoday, 0.093720
+tdy_bfbalance_start, 1.8744
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 1
+tdy_returns_list, [Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 1.6870
+totalbalanceinclcashout, 2495.6
+date, 2014-09-09
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('0.093720')]
+tdy_netgains, -0.093720
+---------------------
+tdy_betstoday, 1
+investedtoday, 0.084350
+tdy_bfbalance_start, 1.6870
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 1
+tdy_returns_list, [Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 1.5182
+totalbalanceinclcashout, 2495.4
+date, 2014-09-10
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('0.084350')]
+tdy_netgains, -0.084350
+---------------------
+tdy_betstoday, 8
+investedtoday, 0.43235
+tdy_bfbalance_start, 1.5182
+tdy_returns, 1.5004
+cashedouttoday, 0.00
+tdy_loserstoday, 6
+tdy_returns_list, [Decimal('0.50480'), Decimal('0.00'), Decimal('0.00'), Decimal('0.00'), Decimal('0.99560'), Decimal('0.00'), Decimal('0.00'), Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 2.1540
+totalbalanceinclcashout, 2496.1
+date, 2014-09-11
+tdy_winnerstoday, 2
+tdy_invested_list, [Decimal('0.075910'), Decimal('0.068320'), Decimal('0.061490'), Decimal('0.055340'), Decimal('0.049808'), Decimal('0.044827'), Decimal('0.040344'), Decimal('0.036310')]
+tdy_netgains, 1.0680
+---------------------
+tdy_betstoday, 6
+investedtoday, 0.50466
+tdy_bfbalance_start, 2.1540
+tdy_returns, 0.85588
+cashedouttoday, 0.00
+tdy_loserstoday, 4
+tdy_returns_list, [Decimal('0.00'), Decimal('0.30388'), Decimal('0.00'), Decimal('0.55200'), Decimal('0.00'), Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 2.0007
+totalbalanceinclcashout, 2495.9
+date, 2014-09-12
+tdy_winnerstoday, 2
+tdy_invested_list, [Decimal('0.10770'), Decimal('0.096930'), Decimal('0.087240'), Decimal('0.078520'), Decimal('0.070670'), Decimal('0.063600')]
+tdy_netgains, 0.35122
+---------------------
+tdy_betstoday, 7
+investedtoday, 0.52196
+tdy_bfbalance_start, 2.0007
+tdy_returns, 2.0668
+cashedouttoday, 0.00
+tdy_loserstoday, 4
+tdy_returns_list, [Decimal('0.32788'), Decimal('0.00'), Decimal('0.43727'), Decimal('0.00'), Decimal('0.00'), Decimal('1.3017'), Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 3.0239
+totalbalanceinclcashout, 2496.9
+date, 2014-09-13
+tdy_winnerstoday, 3
+tdy_invested_list, [Decimal('0.10004'), Decimal('0.090035'), Decimal('0.081035'), Decimal('0.072935'), Decimal('0.065645'), Decimal('0.059085'), Decimal('0.053175')]
+tdy_netgains, 1.5448
+---------------------
+tdy_betstoday, 1
+investedtoday, 0.15120
+tdy_bfbalance_start, 3.0239
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 1
+tdy_returns_list, [Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 2.7215
+totalbalanceinclcashout, 2496.6
+date, 2014-09-14
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('0.15120')]
+tdy_netgains, -0.15120
+---------------------
+tdy_betstoday, 2
+investedtoday, 0.25854
+tdy_bfbalance_start, 2.7215
+tdy_returns, 0.81436
+cashedouttoday, 0.00
+tdy_loserstoday, 1
+tdy_returns_list, [Decimal('0.00'), Decimal('0.81436')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 3.0187
+totalbalanceinclcashout, 2496.9
+date, 2014-09-15
+tdy_winnerstoday, 1
+tdy_invested_list, [Decimal('0.13608'), Decimal('0.12246')]
+tdy_netgains, 0.55582
+---------------------
+tdy_betstoday, 3
+investedtoday, 0.40904
+tdy_bfbalance_start, 3.0187
+tdy_returns, 0.32980
+cashedouttoday, 0.00
+tdy_loserstoday, 2
+tdy_returns_list, [Decimal('0.32980'), Decimal('0.00'), Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 2.5305
+totalbalanceinclcashout, 2496.4
+date, 2014-09-16
+tdy_winnerstoday, 1
+tdy_invested_list, [Decimal('0.15094'), Decimal('0.13584'), Decimal('0.12226')]
+tdy_netgains, -0.07924
+---------------------
+tdy_betstoday, 2
+investedtoday, 0.24040
+tdy_bfbalance_start, 2.5305
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 2
+tdy_returns_list, [Decimal('0.00'), Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 2.0497
+totalbalanceinclcashout, 2495.9
+date, 2014-09-17
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('0.12652'), Decimal('0.11388')]
+tdy_netgains, -0.24040
+---------------------
+tdy_betstoday, 3
+investedtoday, 0.27774
+tdy_bfbalance_start, 2.0497
+tdy_returns, 0.45456
+cashedouttoday, 0.00
+tdy_loserstoday, 1
+tdy_returns_list, [Decimal('0.15577'), Decimal('0.29879'), Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 1.9489
+totalbalanceinclcashout, 2495.8
+date, 2014-09-18
+tdy_winnerstoday, 2
+tdy_invested_list, [Decimal('0.10248'), Decimal('0.092235'), Decimal('0.083015')]
+tdy_netgains, 0.17682
+---------------------
+tdy_betstoday, 3
+investedtoday, 0.26408
+tdy_bfbalance_start, 1.9489
+tdy_returns, 3.4316
+cashedouttoday, 0.00
+tdy_loserstoday, 1
+tdy_returns_list, [Decimal('1.8052'), Decimal('1.6264'), Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 4.8525
+totalbalanceinclcashout, 2498.8
+date, 2014-09-19
+tdy_winnerstoday, 2
+tdy_invested_list, [Decimal('0.097445'), Decimal('0.087705'), Decimal('0.078935')]
+tdy_netgains, 3.1675
+---------------------
+tdy_betstoday, 8
+investedtoday, 1.3817
+tdy_bfbalance_start, 4.8525
+tdy_returns, 4.2019
+cashedouttoday, 0.00
+tdy_loserstoday, 5
+tdy_returns_list, [Decimal('0.00'), Decimal('0.00'), Decimal('0.49474'), Decimal('0.65702'), Decimal('0.00'), Decimal('0.00'), Decimal('3.0501'), Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 6.2908
+totalbalanceinclcashout, 2500.2
+date, 2014-09-20
+tdy_winnerstoday, 3
+tdy_invested_list, [Decimal('0.24262'), Decimal('0.21836'), Decimal('0.19652'), Decimal('0.17688'), Decimal('0.15918'), Decimal('0.14326'), Decimal('0.12894'), Decimal('0.11604')]
+tdy_netgains, 2.8202
+---------------------
+tdy_betstoday, 1
+investedtoday, 0.31454
+tdy_bfbalance_start, 6.2908
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 1
+tdy_returns_list, [Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 5.6618
+totalbalanceinclcashout, 2499.6
+date, 2014-09-22
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('0.31454')]
+tdy_netgains, -0.31454
+---------------------
+tdy_betstoday, 1
+investedtoday, 0.28309
+tdy_bfbalance_start, 5.6618
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 1
+tdy_returns_list, [Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 5.0956
+totalbalanceinclcashout, 2499.0
+date, 2014-09-23
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('0.28309')]
+tdy_netgains, -0.28309
+---------------------
+tdy_betstoday, 2
+investedtoday, 0.48408
+tdy_bfbalance_start, 5.0956
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 2
+tdy_returns_list, [Decimal('0.00'), Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 4.1274
+totalbalanceinclcashout, 2498.0
+date, 2014-09-24
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('0.25478'), Decimal('0.22930')]
+tdy_netgains, -0.48408
+---------------------
+tdy_betstoday, 2
+investedtoday, 0.39210
+tdy_bfbalance_start, 4.1274
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 2
+tdy_returns_list, [Decimal('0.00'), Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 3.3432
+totalbalanceinclcashout, 2497.2
+date, 2014-09-25
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('0.20637'), Decimal('0.18573')]
+tdy_netgains, -0.39210
+---------------------
+tdy_betstoday, 4
+investedtoday, 0.57486
+tdy_bfbalance_start, 3.3432
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 4
+tdy_returns_list, [Decimal('0.00'), Decimal('0.00'), Decimal('0.00'), Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 2.1934
+totalbalanceinclcashout, 2496.1
+date, 2014-09-26
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('0.16716'), Decimal('0.15044'), Decimal('0.13540'), Decimal('0.12186')]
+tdy_netgains, -0.57486
+---------------------
+tdy_betstoday, 8
+investedtoday, 0.62456
+tdy_bfbalance_start, 2.1934
+tdy_returns, 0.42717
+cashedouttoday, 0.00
+tdy_loserstoday, 7
+tdy_returns_list, [Decimal('0.42717'), Decimal('0.00'), Decimal('0.00'), Decimal('0.00'), Decimal('0.00'), Decimal('0.00'), Decimal('0.00'), Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 1.3711
+totalbalanceinclcashout, 2495.3
+date, 2014-09-27
+tdy_winnerstoday, 1
+tdy_invested_list, [Decimal('0.10967'), Decimal('0.098700'), Decimal('0.088830'), Decimal('0.079950'), Decimal('0.071950'), Decimal('0.064750'), Decimal('0.058270'), Decimal('0.052440')]
+tdy_netgains, -0.19739
+---------------------
+tdy_betstoday, 3
+investedtoday, 0.18578
+tdy_bfbalance_start, 1.3711
+tdy_returns, 0.25261
+cashedouttoday, 0.00
+tdy_loserstoday, 2
+tdy_returns_list, [Decimal('0.00'), Decimal('0.25261'), Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 1.2521
+totalbalanceinclcashout, 2495.2
+date, 2014-09-28
+tdy_winnerstoday, 1
+tdy_invested_list, [Decimal('0.068555'), Decimal('0.061695'), Decimal('0.055525')]
+tdy_netgains, 0.06683
+---------------------
+tdy_betstoday, 3
+investedtoday, 0.16966
+tdy_bfbalance_start, 1.2521
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 3
+tdy_returns_list, [Decimal('0.00'), Decimal('0.00'), Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 0.91286
+totalbalanceinclcashout, 2494.8
+date, 2014-10-01
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('0.062605'), Decimal('0.056345'), Decimal('0.050715')]
+tdy_netgains, -0.16966
+---------------------
+tdy_betstoday, 1
+investedtoday, 0.045643
+tdy_bfbalance_start, 0.91286
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 1
+tdy_returns_list, [Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 0.82158
+totalbalanceinclcashout, 2494.7
+date, 2014-10-02
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('0.045643')]
+tdy_netgains, -0.045643
+---------------------
+tdy_betstoday, 1
+investedtoday, 0.041079
+tdy_bfbalance_start, 0.82158
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 1
+tdy_returns_list, [Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 0.73942
+totalbalanceinclcashout, 2494.6
+date, 2014-10-03
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('0.041079')]
+tdy_netgains, -0.041079
+---------------------
+tdy_betstoday, 3
+investedtoday, 0.10019
+tdy_bfbalance_start, 0.73942
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 3
+tdy_returns_list, [Decimal('0.00'), Decimal('0.00'), Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 0.53904
+totalbalanceinclcashout, 2494.4
+date, 2014-10-04
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('0.036971'), Decimal('0.033274'), Decimal('0.029947')]
+tdy_netgains, -0.10019
+---------------------
+tdy_betstoday, 1
+investedtoday, 0.026952
+tdy_bfbalance_start, 0.53904
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 1
+tdy_returns_list, [Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 0.48514
+totalbalanceinclcashout, 2494.4
+date, 2014-10-07
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('0.026952')]
+tdy_netgains, -0.026952
+---------------------
+tdy_betstoday, 5
+investedtoday, 0.099334
+tdy_bfbalance_start, 0.48514
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 5
+tdy_returns_list, [Decimal('0.00'), Decimal('0.00'), Decimal('0.00'), Decimal('0.00'), Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 0.28646
+totalbalanceinclcashout, 2494.2
+date, 2014-10-11
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('0.024257'), Decimal('0.021831'), Decimal('0.019648'), Decimal('0.017683'), Decimal('0.015915')]
+tdy_netgains, -0.099334
+---------------------
+tdy_betstoday, 1
+investedtoday, 0.014323
+tdy_bfbalance_start, 0.28646
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 1
+tdy_returns_list, [Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 0.25782
+totalbalanceinclcashout, 2494.2
+date, 2014-10-13
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('0.014323')]
+tdy_netgains, -0.014323
+---------------------
+tdy_betstoday, 4
+investedtoday, 0.044333
+tdy_bfbalance_start, 0.25782
+tdy_returns, 0.019595
+cashedouttoday, 0.00
+tdy_loserstoday, 3
+tdy_returns_list, [Decimal('0.019595'), Decimal('0.00'), Decimal('0.00'), Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 0.18876
+totalbalanceinclcashout, 2494.1
+date, 2014-10-14
+tdy_winnerstoday, 1
+tdy_invested_list, [Decimal('0.012891'), Decimal('0.011602'), Decimal('0.010442'), Decimal('0.0093980')]
+tdy_netgains, -0.024738
+---------------------
+tdy_betstoday, 3
+investedtoday, 0.025577
+tdy_bfbalance_start, 0.18876
+tdy_returns, 0.33706
+cashedouttoday, 0.00
+tdy_loserstoday, 1
+tdy_returns_list, [Decimal('0.12005'), Decimal('0.00'), Decimal('0.21701')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 0.47468
+totalbalanceinclcashout, 2494.4
+date, 2014-10-17
+tdy_winnerstoday, 2
+tdy_invested_list, [Decimal('0.0094380'), Decimal('0.0084940'), Decimal('0.0076450')]
+tdy_netgains, 0.31148
+---------------------
+tdy_betstoday, 1
+investedtoday, 0.023734
+tdy_bfbalance_start, 0.47468
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 1
+tdy_returns_list, [Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 0.42722
+totalbalanceinclcashout, 2494.3
+date, 2014-10-18
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('0.023734')]
+tdy_netgains, -0.023734
+---------------------
+tdy_betstoday, 2
+investedtoday, 0.040586
+tdy_bfbalance_start, 0.42722
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 2
+tdy_returns_list, [Decimal('0.00'), Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 0.34606
+totalbalanceinclcashout, 2494.2
+date, 2014-10-19
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('0.021361'), Decimal('0.019225')]
+tdy_netgains, -0.040586
+---------------------
+tdy_betstoday, 2
+investedtoday, 0.032876
+tdy_bfbalance_start, 0.34606
+tdy_returns, 0.053260
+cashedouttoday, 0.00
+tdy_loserstoday, 1
+tdy_returns_list, [Decimal('0.00'), Decimal('0.053260')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 0.33358
+totalbalanceinclcashout, 2494.2
+date, 2014-10-20
+tdy_winnerstoday, 1
+tdy_invested_list, [Decimal('0.017303'), Decimal('0.015573')]
+tdy_netgains, 0.020384
+---------------------
+tdy_betstoday, 2
+investedtoday, 0.031690
+tdy_bfbalance_start, 0.33358
+tdy_returns, 0.069243
+cashedouttoday, 0.00
+tdy_loserstoday, 1
+tdy_returns_list, [Decimal('0.069243'), Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 0.33944
+totalbalanceinclcashout, 2494.2
+date, 2014-10-21
+tdy_winnerstoday, 1
+tdy_invested_list, [Decimal('0.016679'), Decimal('0.015011')]
+tdy_netgains, 0.037553
+---------------------
+tdy_betstoday, 1
+investedtoday, 0.016972
+tdy_bfbalance_start, 0.33944
+tdy_returns, 0.041599
+cashedouttoday, 0.00
+tdy_loserstoday, 0
+tdy_returns_list, [Decimal('0.041599')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 0.34710
+totalbalanceinclcashout, 2494.2
+date, 2014-10-22
+tdy_winnerstoday, 1
+tdy_invested_list, [Decimal('0.016972')]
+tdy_netgains, 0.024627
+---------------------
+tdy_betstoday, 2
+investedtoday, 0.032974
+tdy_bfbalance_start, 0.34710
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 2
+tdy_returns_list, [Decimal('0.00'), Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 0.28114
+totalbalanceinclcashout, 2494.2
+date, 2014-10-24
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('0.017355'), Decimal('0.015619')]
+tdy_netgains, -0.032974
+---------------------
+tdy_betstoday, 3
+investedtoday, 0.038094
+tdy_bfbalance_start, 0.28114
+tdy_returns, 0.037124
+cashedouttoday, 0.00
+tdy_loserstoday, 2
+tdy_returns_list, [Decimal('0.037124'), Decimal('0.00'), Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 0.24206
+totalbalanceinclcashout, 2494.1
+date, 2014-10-25
+tdy_winnerstoday, 1
+tdy_invested_list, [Decimal('0.014057'), Decimal('0.012651'), Decimal('0.011386')]
+tdy_netgains, -0.000970
+---------------------
+tdy_betstoday, 2
+investedtoday, 0.022996
+tdy_bfbalance_start, 0.24206
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 2
+tdy_returns_list, [Decimal('0.00'), Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 0.19608
+totalbalanceinclcashout, 2494.1
+date, 2014-10-27
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('0.012103'), Decimal('0.010893')]
+tdy_netgains, -0.022996
+---------------------
+tdy_betstoday, 2
+investedtoday, 0.018628
+tdy_bfbalance_start, 0.19608
+tdy_returns, 0.087550
+cashedouttoday, 0.00
+tdy_loserstoday, 1
+tdy_returns_list, [Decimal('0.087550'), Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 0.24639
+totalbalanceinclcashout, 2494.1
+date, 2014-10-29
+tdy_winnerstoday, 1
+tdy_invested_list, [Decimal('0.0098040'), Decimal('0.0088240')]
+tdy_netgains, 0.068922
+---------------------
+tdy_betstoday, 1
+investedtoday, 0.012320
+tdy_bfbalance_start, 0.24639
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 1
+tdy_returns_list, [Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 0.22175
+totalbalanceinclcashout, 2494.1
+date, 2014-10-31
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('0.012320')]
+tdy_netgains, -0.012320
+---------------------
+tdy_betstoday, 1
+investedtoday, 0.011088
+tdy_bfbalance_start, 0.22175
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 1
+tdy_returns_list, [Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 0.19957
+totalbalanceinclcashout, 2494.1
+date, 2014-11-04
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('0.011088')]
+tdy_netgains, -0.011088
+---------------------
+tdy_betstoday, 3
+investedtoday, 0.027042
+tdy_bfbalance_start, 0.19957
+tdy_returns, 0.22751
+cashedouttoday, 0.00
+tdy_loserstoday, 2
+tdy_returns_list, [Decimal('0.22751'), Decimal('0.00'), Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 0.37300
+totalbalanceinclcashout, 2494.3
+date, 2014-11-05
+tdy_winnerstoday, 1
+tdy_invested_list, [Decimal('0.0099785'), Decimal('0.0089805'), Decimal('0.0080825')]
+tdy_netgains, 0.20047
+---------------------
+tdy_betstoday, 1
+investedtoday, 0.018650
+tdy_bfbalance_start, 0.37300
+tdy_returns, 0.35205
+cashedouttoday, 0.00
+tdy_loserstoday, 0
+tdy_returns_list, [Decimal('0.35205')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 0.68775
+totalbalanceinclcashout, 2494.6
+date, 2014-11-06
+tdy_winnerstoday, 1
+tdy_invested_list, [Decimal('0.018650')]
+tdy_netgains, 0.33340
+---------------------
+tdy_betstoday, 2
+investedtoday, 0.065336
+tdy_bfbalance_start, 0.68775
+tdy_returns, 0.00
+cashedouttoday, 0.00
+tdy_loserstoday, 2
+tdy_returns_list, [Decimal('0.00'), Decimal('0.00')]
+cashedoutbalance, 2493.9
+bfbalanceendofday, 0.55707
+totalbalanceinclcashout, 2494.5
+date, 2014-11-08
+tdy_winnerstoday, 0
+tdy_invested_list, [Decimal('0.034388'), Decimal('0.030948')]
+tdy_netgains, -0.065336

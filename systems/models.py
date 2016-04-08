@@ -6,7 +6,7 @@ from django.contrib.postgres.fields import JSONField
 from django.contrib.postgres.fields import ArrayField
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
-#from
+from datetime import datetime
 
 
 '''
@@ -299,13 +299,13 @@ class System(models.Model):
     isTurf = models.BooleanField()
     exposure = ArrayField(models.CharField(max_length=500),)
     query = JSONField()
-    rpquery = JSONField(null=True)
+    rpquery = JSONField(null=True,blank=True)
 
     isLayWin = models.BooleanField(default=False)
     isLayPlace = models.BooleanField(default=False)
-    oddsconditions = JSONField(null=True)
+    oddsconditions = JSONField(null=True,blank=True)
 
-    runners = models.ManyToManyField(Runner)
+    runners = models.ManyToManyField(Runner,blank=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True, blank=True)
     
@@ -344,7 +344,7 @@ class SystemSnapshot(models.Model):
     winsr = models.FloatField(default=None, null=True)
     expectedwins= models.FloatField(default=None, null=True)
     a_e = models.FloatField(default=None, null=True)
-    levelbspprofit= models.DecimalField(max_digits=10, decimal_places=2,default=None)
+    levelbspprofit= models.DecimalField(max_digits=10, decimal_places=2,default=None, null=True)
     levelbsprofitpc= models.FloatField(default=None, null=True)
     a_e_last50 = models.FloatField(default=None, null=True)
     archie_allruns= models.FloatField(default=None, null=True)
@@ -371,8 +371,13 @@ class SystemSnapshot(models.Model):
     yearstats= JSONField(default={})
     yearcolorcounts= JSONField(default={})
     totalbackyears = models.SmallIntegerField(default=None, null=True)
+    validuptonotincluding = models.DateTimeField() #real tracker for HISTORICAL will be MAR 15 2016
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True, blank=True)
+    
+    def __str__(self):
+        return '%s - %s - %s- A/E: %6.2f -WINSR: %6.2f -LVLPROF: %6.2f' % (self.system.systemname,self.snapshottype, 
+            datetime.strftime(self.validuptonotincluding, "%Y%m%d"), (self.a_e or 0.0), (self.winsr or 0.0), (self.levelbspprofit or 0.0))
 
     class Meta:
         default_permissions = ('view', 'add', 'change', 'delete')

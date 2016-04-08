@@ -59,7 +59,23 @@ enco = lambda obj: (
     else None
 )
 
+'''
+Prerequisites: 
+1. Systems (Systemsnapshots) in DB
+2. Import Runners in DB for SYSTEMS!!!  
+python manage.py importrunnersdata
+3/ Import layrunners
 
+--> see importjson_kirill
+
+USES Historical Data from predefined list of funds
+See ExperimentalFunds.py for selecting funds worth following 
+Usually only need to CHANGE
+    season = '2013'
+    fundname = 'TOP10 ACTIVE'
+    SYSTEMLIST =TOP10ACTIVE
+for each fund
+'''
 
 class Command( BaseCommand ):
     help = 'Import data'
@@ -74,7 +90,7 @@ class Command( BaseCommand ):
     # managementfee = f1.managementfee
     # performancefee = f1.performancefee
     # performancethreshold = f1.performancethreshold
-    TOP_10ACTIVE = [
+    TOP10ACTIVE = [
     '2016-S-04A',
     '2016-S-05A',
     '2016-S-06A',
@@ -121,12 +137,14 @@ class Command( BaseCommand ):
     top 3
     S-T-J-MI .3.4.2.1
     '''
-    season = '2013'
-    fundname = 'TOP10 ALL'
-    SYSTEMLIST =TOP10ALL
-    description = season + ' '+ "500 Unlimited 5%"
+    ##CHANGE FIELDS
+    season = '2016'
+    fundname = 'TOP10 ACTIVE'
+    SYSTEMLIST =TOP10ACTIVE
+    description = season + " 1000 Unlimited 5%"
+    ##########
     bettingratio  = 0.05
-    openingbank = D('500.00')
+    openingbank = D('1000.00')
     managementfee = D('0.05')
     bailoutfee = D('0.2')
     performancefee = D('0.10')
