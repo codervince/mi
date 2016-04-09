@@ -46,7 +46,8 @@ INSTALLED_APPS = [
     'guardian',
     'investment_accounts',
     'systems',
-    'funds'
+    'funds',
+    'bets',
 ]
 #remove investments
 

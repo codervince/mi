@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-from systems.models import System, SystemSnapshot, Runner, RPRunner
+from systems.models import System, SystemSnapshot, Runner
 # Register your models here.
 
 class RunnerAdmin(admin.ModelAdmin):
