@@ -104,19 +104,29 @@ def subscribe( request, fund ):
         pass
         #output message to user SOrry no more shaers available
     else:
-        #do transfer
-        amount = requested_amount
-        description = "Purchase of " + share + "shares in fund" + ' '+ fund.fundname
-       #transfer = Transfer.objects.create(source=investor_account, destination=fund_account, amount=amount, user=admin, username=admin.username, description= description)
+        if investor_account.balance < requested_amount:
+            pass
+            #output message to user Sorry no balance available
+        else:
+            #do transfer
+            amount = requested_amount
+            description = "Purchase of " + share + "shares in fund" + ' '+ fund.fundname
+            transfer = Transfer.objects.create(source=investor_account, destination=fund_account, amount=amount, user=admin, username=admin.username, description= description)
 
-        #update transaction table
-        # the debit from the source account NEGATIVE
-        #teh credit to the destination account POSITIVE
-       #tdebit = Transaction.objects.create(transfer=transfer, account=investor_account, amount= amount*Decimal('-1.0'))
-       #tcredit = Transaction.objects.create(transfer=transfer, account=fund_account, amount= amount*Decimal('1.0'))
+            investor_account.balance -= amount
+            fund_account.balance     += amount
+            
+            investor_account.save()
+            fund_account.save()
 
-        ## ASSIGN permission for user to view detail page of this particular fund!
-        assign_perm( 'view_fund', investor, fund )
+            #update transaction table
+            # the debit from the source account NEGATIVE
+            #teh credit to the destination account POSITIVE
+            tdebit = Transaction.objects.create(transfer=transfer, account=investor_account, amount= amount*Decimal('-1.0'))
+            tcredit = Transaction.objects.create(transfer=transfer, account=fund_account, amount= amount*Decimal('1.0'))
+
+            ## ASSIGN permission for user to view detail page of this particular fund!
+            assign_perm( 'view_fund', investor, fund )
 
         #rudimentary testing##
         logger.info(fund.openingbank)
