@@ -75,6 +75,7 @@ Usually only need to CHANGE
     fundname = 'TOP10 ACTIVE'
     SYSTEMLIST =TOP10ACTIVE
 for each fund
+
 '''
 
 class Command( BaseCommand ):
@@ -336,9 +337,9 @@ class Command( BaseCommand ):
             stakescap = self.stakescap, description=self.description,
             currency='GBP', nosystems=self.NOSYSTEMS, jratio= self.JRATIO, tratio=self.TRATIO, miratio=self.MIRATIO, sratio=self.SRATIO,
             initialbalance=self.openingbank, seasonstart=startdate, seasonend=enddate,
-            fundname = self.fundname, year = startdate.year
+            fundname = self.fundname, year = startdate.year)
 
-            )
+
         fundaccount.startdate = startdate
         fundaccount.enddate = enddate
         fundaccount.systems = thesystems

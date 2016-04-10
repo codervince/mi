@@ -238,7 +238,7 @@ class RPRunner(models.Model):
         return '%s- %d' % (self.racedate, self.horse_id)
     #snapshotid runnerid--> system_runner table
     class Meta:
-        unique_together = ('racedate', 'horsename',)
+        unique_together = ('racedate', 'horse_id',)
         ordering = ('-racedatetime','racecourse', 'horsename')
 
 class Bookmaker(models.Model):
@@ -321,7 +321,8 @@ class Bet(models.Model):
 		super(Bet, self).save( *args, **kwargs)
 
 	def __str__(self):
-		return '%s - %s %s: %4.2f at %4.2f on %s' % (self.system.systemname, self.racecourse.racecoursename, datetime.strftime(self.racedatetime, '%Y%m%d %X'), self.betamount, self.oddsacheived, self.horsename)
+		return '%s - %s %s: %4.2f at %4.2f on %s' % (self.system.systemname, self.racecourse.racecoursename, datetime.strftime(self.racedatetime, '%Y%m%d %X'), 
+			self.winnings, self.profit, self.horsename)
 	#snapshotid runnerid--> system_runner table
 	class Meta:
 		unique_together = ('system', 'horsename','bookmaker')

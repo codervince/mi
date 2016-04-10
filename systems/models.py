@@ -9,7 +9,7 @@ from django.utils.translation import ugettext_lazy as _
 from datetime import datetime
 
 
-
+## Adapted to allow for RPRaces input
 class Runner(models.Model):
     # objects = models.Manager()
     # live = LiveManager()
@@ -23,6 +23,7 @@ class Runner(models.Model):
     #unique identifiers
     runtype = models.CharField(max_length=20, help_text=_('live_or_historical'), choices=RUNTYPE, default='HISTORICAL')
     racedate = models.DateField(help_text=_('race date'),)
+    racedatetime = models.DateTimeField(null=True)
     racecoursename = models.CharField(help_text=_('racecourse'), max_length=35)
     racecourseid = models.IntegerField(help_text=_('racecourseid'),blank=True)
     racename = models.CharField(help_text=_('race name'), max_length=250)
@@ -30,42 +31,46 @@ class Runner(models.Model):
     racetypeconditions = models.CharField(help_text=_('entry conditions'),max_length=35)
     racetypehs= models.CharField(help_text=_('handicap or stakes'),max_length=35)
     ages = models.CharField(help_text=_('entry type ages'),max_length=35)
-    oldraceclass = models.CharField(help_text=_('old raceclass'),max_length=35)
+    oldraceclass = models.CharField(help_text=_('old raceclass'),max_length=35, null=True)
     newraceclass = models.CharField(help_text=_('new raceclass'),max_length=35, blank=True)
-    distance = models.FloatField(help_text=_('distance furlongs')) ##convert
-    going = models.CharField(help_text=_('going'),max_length=35) #convert?
+    distance = models.FloatField(help_text=_('distance furlongs'))
+    going = models.CharField(help_text=_('going'),max_length=35) 
+    rpgoing = models.CharField(help_text=_('going'),max_length=35, null=True)
     norunners = models.SmallIntegerField(help_text=_('number of runners'),)
     horsename = models.CharField(help_text=_('horse name'),max_length=250)
     horseid = models.IntegerField(help_text=_('Horse id'),blank=True,default=None)
-    sirename = models.CharField(help_text=_('sire name'),max_length=250)
-    sireid = models.IntegerField(help_text=_('Sire id'),blank=True,default=None)
+    sirename = models.CharField(help_text=_('sire name'),max_length=250,null=True)
+    sireid = models.IntegerField(help_text=_('Sire id'),blank=True,default=None, null=True)
     trainername = models.CharField(help_text=_('trainer'),max_length=250)
-    trainerid = models.IntegerField(help_text=_('Trainerid'),blank=True,default=None)
-    jockeyname = models.CharField(help_text=_('jockey'),max_length=250)
-    jockeyid = models.IntegerField(help_text=_('Jockey id'),blank=True,default=None)
-    allowance = models.SmallIntegerField(help_text=_('jockey allowance'))
+    trainerid = models.IntegerField(help_text=_('Trainerid'),blank=True,default=None,null=True)
+    jockeyname = models.CharField(help_text=_('jockey'),max_length=250,null=True)
+    jockeyid = models.IntegerField(help_text=_('Jockey id'),blank=True,default=None,null=True)
+    allowance = models.SmallIntegerField(help_text=_('jockey allowance'), default=0)
     finalpos = models.CharField(help_text=_('Final position'),max_length=5)
-    lbw = models.FloatField(help_text=_('Beaten by L'),)
-    winsp = models.FloatField(help_text=_('final starting price win'),) #may need to be converted
-    winsppos = models.SmallIntegerField(help_text=_('rank final starting price'),)
+    lbw = models.FloatField(help_text=_('Beaten by L'),null=True)
+    winsp = models.FloatField(help_text=_('final starting price win'),null=True) #may need to be converted
+    winsppos = models.SmallIntegerField(help_text=_('rank final starting price'),null=True)
     bfsp = models.DecimalField(help_text=_('Betfair SP win'),max_digits=6, decimal_places=2)
     bfpsp = models.DecimalField(help_text=_('Betfair SP place'),max_digits=6, decimal_places=2)
-    fsratingrank = models.SmallIntegerField(help_text=_('FS Rating rank'),)
-    fsrating = models.FloatField(help_text=_('FS Rating'),)
-    fsraceno = models.CharField(help_text=_('distance'),max_length=250, unique=True)
-    draw = models.SmallIntegerField(help_text=_('barrier'),)
-    damname = models.CharField(help_text=_('Dam\'s name'),max_length=250)
-    damid = models.IntegerField(help_text=_('Dam id'),blank=True,default=None)
-    damsirename  = models.CharField(help_text=_('Dam\'s sire name'),max_length=250)
-    damsireid = models.IntegerField(help_text=_('Dam sire id'),blank=True, default=None)
-    ownerid = models.IntegerField(help_text=_('Owner id'),blank=True,default=None)
+    fsratingrank = models.SmallIntegerField(help_text=_('FS Rating rank'),null=True)
+    fsrating = models.FloatField(help_text=_('FS Rating'),null=True)
+    fsraceno = models.CharField(help_text=_('distance'),max_length=250, unique=True,null=True)
+    draw = models.SmallIntegerField(help_text=_('barrier'),null=True)
+    damname = models.CharField(help_text=_('Dam\'s name'),max_length=250, null=True)
+    damid = models.IntegerField(help_text=_('Dam id'),blank=True,default=None, null=True)
+    damsirename  = models.CharField(help_text=_('Dam\'s sire name'),max_length=250, null=True)
+    damsireid = models.IntegerField(help_text=_('Dam sire id'),blank=True, default=None, null=True)
+    ownerid = models.IntegerField(help_text=_('Owner id'),blank=True,default=None, null=True)
+    ownername = models.CharField(help_text=_('Owner\'s name'),max_length=250, null=True)
     racetime  = models.CharField(help_text=_('Race off time'),max_length=250)
     totalruns =  models.SmallIntegerField(help_text=_('total runs horse'))
-    isplaced = models.BooleanField(help_text=_('Placed?'),)
-    isbfplaced= models.BooleanField(help_text=_('is Placed on Betfair?'))
-    stats = JSONField(blank=True,default={}) #aggregate trainerstats etc
+    totalwins =  models.FloatField(help_text=_('total wins horse'), null=True)
+    isplaced = models.BooleanField(help_text=_('Placed?'),null=True)
+    isbfplaced= models.BooleanField(help_text=_('is Placed on Betfair?'), null=True)
+    stats = JSONField(blank=True,default={}) #remove
+    
     def __str__(self):
-        return self.fsraceno
+        return 'racedate: %s, racecourseid %d, horsename %s norunners %s finished %s' % (datetime.strftime(self.racedate, '%Y%m%d'), self.racecourseid, self.horsename. self.norunners, self.finalpos)
     #snapshotid runnerid--> system_runner table
     class Meta:
         unique_together = ('racedate', 'horsename',)
