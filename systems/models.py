@@ -64,9 +64,9 @@ class Runner(models.Model):
     ownername = models.CharField(help_text=_('Owner\'s name'),max_length=250, null=True)
     racetime  = models.CharField(help_text=_('Race off time'),max_length=250)
     totalruns =  models.SmallIntegerField(help_text=_('total runs horse'))
-    totalwins =  models.FloatField(help_text=_('total wins horse'), null=True)
-    isplaced = models.BooleanField(help_text=_('Placed?'),null=True)
-    isbfplaced= models.BooleanField(help_text=_('is Placed on Betfair?'), null=True)
+    totalwins =  models.FloatField(help_text=_('total wins horse'))
+    isplaced = models.NullBooleanField(help_text=_('Placed?'))
+    isbfplaced= models.NullBooleanField(help_text=_('is Placed on Betfair?'))
     stats = JSONField(blank=True,default={}) #remove
     
     def __str__(self):
