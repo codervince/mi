@@ -112,7 +112,7 @@ def subscribe( request, fund ):
             amount = requested_amount
             description = "Purchase of " + share + "shares in fund" + ' '+ fund.fundname
             transfer = Transfer.objects.create(source=investor_account, destination=fund_account, amount=amount, user=admin, username=admin.username, description= description)
-
+            logger.info(amount)
             investor_account.balance -= amount
             fund_account.balance     += amount
             
@@ -130,7 +130,7 @@ def subscribe( request, fund ):
 
         #rudimentary testing##
         logger.info(fund.openingbank)
-        logger.info(amount)
+        logger.info(requested_amount)
         logger.info(chosencurrency)
        #logger.info(transfer)
        #logger.info(tdebit)
