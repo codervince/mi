@@ -101,12 +101,10 @@ def subscribe( request, fund ):
     amount_available = fund.openingbank - fund_account.balance
 
     if requested_amount > amount_available:
-        pass
-        #output message to user SOrry no more shaers available
+        return 'Sorry, no more shares available'
     else:
         if investor_account.balance < requested_amount:
-            pass
-            #output message to user Sorry no balance available
+            return 'Sorry, insufficient balance'
         else:
             #do transfer
             amount = requested_amount
@@ -127,6 +125,8 @@ def subscribe( request, fund ):
 
             ## ASSIGN permission for user to view detail page of this particular fund!
             assign_perm( 'view_fund', investor, fund )
+
+            message = 'Sucessfully subscribed'
 
         #rudimentary testing##
         logger.info(fund.openingbank)
@@ -155,7 +155,7 @@ def fundaccount_detail(request, slug):
     '''
     f = get_object_or_404(Fund, slug=slug)
 
-    subscribe( request, f )
+    message = subscribe( request, f )
 
 
     l_stats = ["bettingratio", "bfbalance", "openingbank", "totalinvested", "nobets", "nowinners", "nolosers","uniquewinners",
@@ -264,6 +264,7 @@ def fundaccount_detail(request, slug):
 
     return render(request,'funds/fund.html',
         {
+        'message': message,
         'fund': f,
         'statslist': statslist_d,
         'startdate': startdate,
