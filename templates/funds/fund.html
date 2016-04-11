@@ -194,8 +194,18 @@ ul
 			<h1>{{ fund.fundname }}</h1>
 	</div>
 	<div class="row">
+			<div class="col-sm-12">
+				
+					{% if messages %}
+					<ul>
+					    {% for message in messages %}
+					    <li>{{ message }}</li>
+					    {% endfor %}
+					</ul>
+					{% endif %}
 
-			  <div class="col-sm-8">
+			</div>
+			  <div class="col-sm-6">
 
 					<h2> 2016 Season Performance </h2>
 							The fund began on {{startdate}}<br/>
@@ -203,27 +213,55 @@ ul
 							First report to follow after a sufficient sample of results have been gathered.
 						No runs yet.
 								For the latest results please check back soon
-
 				</div>
 
-				<div class="col-sm-4">
-					Size of fund: {{fund.openingbank}}
-					You are {{ user }}
-						<form action="" method="post">
-						 {% csrf_token %}
-						 <td>
-								 <button type="submit" class="btn btn-primary">Invest</button>
-						 </td>
-						 <td>
-							<input name="share" value="%">
-							<select name="currency">
-								<option value="gbp">GBP</option>
-								<option value="aud">AUD</option>
-							</select>
-						 </td>
-						 </form>
-                                                 <div style="color:red">{{ message }}</div>
-					 </div>
+				<div class="col-sm-6">
+
+				{% if fund.isInvestible %}
+
+					Available: {{ fund_account.balance }}
+					You are {{ user }} 
+					You have the following balances
+					user.investmentaccount.filter(currency='AUD').balance
+					user.investmentaccount.filter(currency='GBP').balance
+					<table>
+						<tr>
+							<form action="" method="post">
+						 	{% csrf_token %}
+						 	<td>
+						 	<div id="fundbalance"> {{ fund_account.balance }} </div>
+						 		<select name="share">
+									<option value="5%">5%</option>
+									<option value="10%">10%</option>
+									<option value="10%">20%</option>
+									<option value="10%">50%</option>
+									<option value="10%">100%</option>
+								</select>
+								<select name="currency">
+									<option value="gbp">GBP</option>
+									<option value="aud">AUD</option>
+								</select>
+								<div id='userbalance'>account_balance GBP</div>
+								<div id='userbalance'>account_balance AUD</div>
+						 	</td>
+
+						 	<td>
+						 	<div class="padded" style="padding: 5px 10px;">
+								<button padding="5px;" type="submit" class="btn btn-primary">Invest in this Fund</button>
+						 	</div>
+						 	</td>
+						 	</form>
+						 
+						</tr>
+						<tr>
+							<td>
+                      		<div style="color:red">{{ message }}</div>
+                 			</td>
+                 		</tr>
+                 	</table>
+                 	{% endif %}
+
+				</div>
 	</div> <!-- row -->
 
          {% get_obj_perms user for fund as "fund_perms" %}

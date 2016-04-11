@@ -83,6 +83,8 @@ TEMPLATES = [
 WSGI_APPLICATION = 'investment.wsgi.application'
 
 
+
+
 # Database
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
 
@@ -170,3 +172,5 @@ MEDIA_URL = '/media/'
 LOGIN_REDIRECT_URL = '/'
 
 SESSION_COOKIE_AGE = 2592000 # One month
+
+

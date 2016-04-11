@@ -63,8 +63,8 @@ class Runner(models.Model):
     ownerid = models.IntegerField(help_text=_('Owner id'),blank=True,default=None, null=True)
     ownername = models.CharField(help_text=_('Owner\'s name'),max_length=250, null=True)
     racetime  = models.CharField(help_text=_('Race off time'),max_length=250)
-    totalruns =  models.SmallIntegerField(help_text=_('total runs horse'))
-    totalwins =  models.FloatField(help_text=_('total wins horse'))
+    totalruns =  models.SmallIntegerField(help_text=_('total runs horse'), default=None, null=True)
+    totalwins =  models.FloatField(help_text=_('total wins horse'),default=None,null=True)
     isplaced = models.NullBooleanField(help_text=_('Placed?'))
     isbfplaced= models.NullBooleanField(help_text=_('is Placed on Betfair?'))
     stats = JSONField(blank=True,default={}) #remove
@@ -128,6 +128,8 @@ class System(models.Model):
     isLayPlace = models.BooleanField(default=False)
     oddsconditions = JSONField(null=True,blank=True)
 
+    premium  = models.FloatField(default=1.0)   ##will update later based on performance
+
     runners = models.ManyToManyField(Runner,blank=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True, blank=True)
@@ -139,6 +141,7 @@ class System(models.Model):
 
     def __str__(self):
         return self.systemname
+
 
     class Meta:
         permissions = (  ('view_system', 'View system'),        )

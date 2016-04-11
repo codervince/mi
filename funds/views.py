@@ -15,6 +15,7 @@ import logging
 import json
 import ast
 from datetime import datetime
+from django.utils.translation import ugettext_lazy as _
 
 
 ##todo zip lists to get racedate- data
@@ -62,11 +63,15 @@ def funds_myindex(request):
     #locals() would also include request
     return render_to_response('funds/myfunds.html', {'funds': funds, 'now':now})
 
+'''
+TODO: Subscribe is not only making an investment but also suscribing to a 'view' for a certain period of time
 
+'''
 
 def subscribe( request, fund ):
 
-    #ex top10all-500-unlimited-5
+    #ex top10-active-2013-1000-unlimited-5/
+    #TODO: SHOW FORM If fund.isInvestible is True
 
     if 'share' not in request.POST or 'currency' not in request.POST:
         return
@@ -102,14 +107,17 @@ def subscribe( request, fund ):
 
     if requested_amount > amount_available:
         return 'Sorry, no more shares available'
+        investor.message_set.create(message=_("Sorry- no more shares available!"))
     else:
         if investor_account.balance < requested_amount:
             return 'Sorry, insufficient balance'
+            investor.message_set.create(message=_("Sorry: insufficient balance. Please transfer funds"))
         else:
             #do transfer
             amount = requested_amount
-            description = "Purchase of " + share + "shares in fund" + ' '+ fund.fundname
-            transfer = Transfer.objects.create(source=investor_account, destination=fund_account, amount=amount, user=admin, username=admin.username, description= description)
+            description = "Purchase of " + share + " shares in fund" + ' '+ fund.fundname
+            transfer = Transfer.objects.create(source=investor_account, destination=fund_account, amount=amount, user=admin, 
+                username=admin.username, description= description)
             logger.info(amount)
             investor_account.balance -= amount
             fund_account.balance     += amount
@@ -125,8 +133,8 @@ def subscribe( request, fund ):
 
             ## ASSIGN permission for user to view detail page of this particular fund!
             assign_perm( 'view_fund', investor, fund )
-
-            message = 'Sucessfully subscribed'
+            investor.message_set.create(message=_("Successfully placed your investment."))
+            message = 'Sucessfully subscribed' #test
 
         #rudimentary testing##
         logger.info(fund.openingbank)

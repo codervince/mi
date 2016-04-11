@@ -73,7 +73,7 @@ class Fund( models.Model ):
     bfenddaybalances    = JSONField(default=list())
     places              = JSONField(default=list())
     systems             = models.ManyToManyField(System)
-
+    isInvestible        = models.BooleanField(default=True)
 
     class Meta:
         permissions = (  ('view_fund', 'View fund'),        )
