@@ -1,12 +1,30 @@
-from django.shortcuts import render
+import logging
+from collections import defaultdict
+from datetime import timedelta
+
+from datetime import datetime
+from django.contrib.auth.models import User
+from django.http import HttpResponse
+from django.shortcuts import render, get_object_or_404
 from decimal import Decimal as D
 
+from django.utils.translation import ugettext_lazy as _
+
+from guardian.shortcuts import assign_perm
+
+from investment_accounts.models import InvestmentAccount, SystemAccount, UserSubscription, Subscription, \
+    _recurrence_unit_days, Transfer, Transaction
+from systems.models import System
+
+logger = logging.getLogger(__name__)
+
+
 def _getbasicystemprice(curr,recurrence_unit, recurrence_period):
-    #ALLOWED COMBINATION? SEE template ASSUME ALLOWED
+    # ALLOWED COMBINATION? SEE template ASSUME ALLOWED
     SYSTEM_SUBSCRIPTION_PRICES = defaultdict(dict)
-    SYSTEM_SUBSCRIPTION_PRICES['AUD'] = { 'D': , 'W': None, 'M': 3, 'S': 50, 'Y': 100}
-    SYSTEM_SUBSCRIPTION_PRICES['GBP'] = { 'D': round(5.00/3.0),2), 'W': None, 'M': round(50.00/3.0,2), 'S': 50, 'Y': 100}
-    return D(SYSTEM_SUBSCRIPTION_PRICES[str(crr)][str(recurrence_period)] * float(recurrence_unit))
+    SYSTEM_SUBSCRIPTION_PRICES['AUD'] = { 'D': 1, 'W': 0, 'M': 3, 'S': 50, 'Y': 100}
+    SYSTEM_SUBSCRIPTION_PRICES['GBP'] = { 'D': round(5.00/3.0,2), 'W': 0, 'M': round(50.00/3.0,2), 'S': 50, 'Y': 100}
+    return D(SYSTEM_SUBSCRIPTION_PRICES[str(curr)][str(recurrence_unit)] * float(recurrence_period))
 
 def systems_detail(request, systemname):
     '''
@@ -15,6 +33,7 @@ def systems_detail(request, systemname):
     includes a button for subscribing to the system
     '''
     pass
+
 
 def systems_mylist(request):
     '''
@@ -35,8 +54,12 @@ def subscribe(request, system):
 
 
     '''
+    if request.method != 'POST':
+        return HttpResponse("Method not allowed ", status=405)
+
     if 'recurrence_period' not in request.POST or 'recurrence_unit' not in request.POST or 'currency' not in request.POST:
-        return
+        return HttpResponse("Bad Request", status=400)
+
     #subscription needs name, description
     recurrence_unit            = request.POST[ 'recurrence_unit'    ]
     recurrence_period          = request.POST[ 'recurrence_period'    ]
@@ -48,11 +71,11 @@ def subscribe(request, system):
         return
     
     #given recurrence_unit and price, get price from dictionary
-    if not SUBSCRIPTION_PRICES['GBP'][str(currency)][str(recurrence_period)]:
-        request.user.message_set.create(message=_("Sorry this subscription period is not available"))
+    # if not SUBSCRIPTION_PRICES['GBP'][str(currency)][str(recurrence_period)]:
+    #     request.user.message_set.create(message=_("Sorry this subscription period is not available"))
 
     system = get_object_or_404(System, systemname=system)
-    premium = system.premium
+    premium = D(system.premium)
 
     #WHATS THE PRICE?
     price = D(_getbasicystemprice(currency, recurrence_unit, recurrence_period) * premium)
@@ -61,7 +84,7 @@ def subscribe(request, system):
 
     #SOURCE
     investor         = request.user
-    investor_account = InvestmentAccount.objects.get(user=investor,currency=currency)
+    investor_account = InvestmentAccount.objects.get(user=investor, currency=currency)
 
     #DESTINATION
     system_account    =  SystemAccount.objects.filter(system=system, currency=currency)
@@ -69,10 +92,10 @@ def subscribe(request, system):
     if system_account.count() != 1:
         pass
 
-    system_account = system_account[0]
+    system_account = system_account.first()
 
     #AUTHORIZED BY
-    admin  = User.objects.get(is_superuser= True,username='superadmin' )
+    admin  = User.objects.get(is_superuser=True, username='superadmin')
    
     #THERE IS A LIMIT TO THE NUMBER OF SYSTEMS AVAULABLE see Subscription.clean
 
@@ -80,25 +103,49 @@ def subscribe(request, system):
     #CAN USER AFFORD IT?
     if investor_account.balance < price:
             # return 'Sorry, insufficient balance'
-            investor.message_set.create(message=_("Sorry: insufficient balance. Please transfer funds"))
+            # investor.message_set.create(message=_("Sorry: insufficient balance. Please transfer funds"))
+        #TODO add message
+        pass
+
+
     else:
         #create subscription
         ##Subscription CREATE PERMISSION and ADD TO DATABASE
         # permission = Permission.objects.create(codename='can_view',name='Can View This SYSTEM',content_type=content_type)
-        assign_perm( 'view_fund', investor, fund )
+        assign_perm( 'view_system', investor, system )
 
         #create UserSubscription with this investor
+        subscription = Subscription.objects.filter(system=system).first()
+        if not subscription:
+            # TODO handle correctly
+            raise Exception
+
+        # Calculate initial expire date based on subscription
+        days_to_add = 0
+        if subscription.trial_period > 0:
+            days_to_multiply = _recurrence_unit_days[subscription.trial_unit]
+            days_to_add = subscription.trial_period*days_to_multiply
+        elif subscription.recurrence_period > 0:
+            days_to_multiply = _recurrence_unit_days[subscription.recurrence_unit]
+            days_to_add = subscription.recurrence_period * days_to_multiply
+        delta = timedelta(days=days_to_add)
+
+        expires = datetime.now() + delta
+        user_subscription = UserSubscription(subscription=subscription, user=investor, expires=expires)
+
 
         subscription = 1
-        us = usersubscription
+        us = user_subscription
 
         #TRANSFER
-        description = investor.username + "subscribed to" + us.ubscription + "until" + us.expires
-        transfer = Transfer.objects.create(source=investor_account, destination=system_account, amount=price, user=admin, 
+        # description = investor.username + "subscribed to" + us.subscription + "until" + us.expires
+        description = "%s subscribed to %s until %s " % (investor.username, us.subscription, us.expires)
+        transfer = Transfer.objects.create(source=investor_account, destination=system_account, amount=price, user=admin,
             username=admin.username, description= description)
+        amount = transfer.amount
         logger.info(amount)
         investor_account.balance -= amount
-        system_account.balance     += amount
+        system_account.balance   += amount
         
         investor_account.save()
         system_account.save()
@@ -107,10 +154,10 @@ def subscribe(request, system):
         #update transaction table
         # the debit from the source account NEGATIVE
         #teh credit to the destination account POSITIVE
-        tdebit = Transaction.objects.create(transfer=transfer, account=investor_account, amount= amount*Decimal('-1.0'))
-        tcredit = Transaction.objects.create(transfer=transfer, account=fund_account, amount= amount*Decimal('1.0'))
-
+        tdebit = Transaction.objects.create(transfer=transfer, account=investor_account, amount=amount*D('-1.0'))
+        tcredit = Transaction.objects.create(transfer=transfer, account=system_account, amount=amount*D('1.0'))
 
         #CONFIRM! 
-        investor.message_set.create(message=_("Successfully placed your investment."))
-       
+        # investor.message_set.create(message=_("Successfully placed your investment."))
+        # TODO add message
+        return HttpResponse("Subscribed", status=200)
