@@ -52,28 +52,20 @@ class TestSystemSubscribe(TestCase):
         self.factory = RequestFactory()
 
         User.objects.get_or_create(is_superuser=True, username='superadmin')
-        system = System.objects.get(systemname='2016-S-01T')
-        SystemAccount.objects.get_or_create(system=system, currency='AUD')
+        self.system = System.objects.get(systemname='2016-S-01T')
+        SystemAccount.objects.get_or_create(system=self.system, currency='AUD')
 
-        Subscription.objects.get_or_create(name="First", recurrence_period='5', recurrence_unit='W', system=system, price=10)
-
+        Subscription.objects.get_or_create(name="First", recurrence_period='5', recurrence_unit='W', system=self.system, price=10)
 
     def testFixtures(self):
         system = System.objects.all().count()
         self.assertEquals(2, system)
 
-    def testSubscribe(self):
-        data = {
-            'recurrence_period': 2,
-            'recurrence_unit': 'D',
-            'currency': 'AUD'
-        }
-
-        client = Client()
-        response = client.post(reverse('subscribe_system', args=['2016-S-01T']), data)
-        self.assertEquals(200, response.status_code)
-
     def testSubscribeWithFactory(self):
+
+        # Check that User don't have permission for System initially
+        self.assertFalse(self.user.has_perm('view_system', self.system))
+
         data = {
             'recurrence_period': 2,
             'recurrence_unit': 'D',
@@ -84,3 +76,6 @@ class TestSystemSubscribe(TestCase):
 
         response = subscribe(request, '2016-S-01T')
         self.assertEqual(response.status_code, 200)
+
+        # Check that now user has permission on system
+        self.assertTrue(self.user.has_perm('view_system', self.system))
