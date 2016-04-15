@@ -22,7 +22,7 @@ class SystemPermissionsTestCase( TestCase ):
 
         # Set permissions on User for System
         assign_perm( 'view_system', user, system )
-
+        
         # Check that User have permission for System
         self.assertTrue( user.has_perm( 'view_system', system ) )
 

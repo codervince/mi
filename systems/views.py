@@ -25,18 +25,22 @@ from systems.models import System
 logger = logging.getLogger(__name__)
 
 
-def _getbasicystemprice(curr,recurrence_unit, recurrence_period):
-    # ALLOWED COMBINATION? SEE template ASSUME ALLOWED
-    SYSTEM_SUBSCRIPTION_PRICES = defaultdict(dict)
-<<<<<<< HEAD
-    SYSTEM_SUBSCRIPTION_PRICES['AUD'] = { 'D': 1, 'W': None, 'M': 3, 'S': 50, 'Y': 100}
-    SYSTEM_SUBSCRIPTION_PRICES['GBP'] = { 'D': round(5.00/3.0,2), 'W': None, 'M': round(50.00/3.0,2), 'S': 50, 'Y': 100}
-    return D(SYSTEM_SUBSCRIPTION_PRICES[str(crr)][str(recurrence_period)] * float(recurrence_unit))
-=======
-    SYSTEM_SUBSCRIPTION_PRICES['AUD'] = { 'D': 1, 'W': 0, 'M': 3, 'S': 50, 'Y': 100}
-    SYSTEM_SUBSCRIPTION_PRICES['GBP'] = { 'D': round(5.00/3.0,2), 'W': 0, 'M': round(50.00/3.0,2), 'S': 50, 'Y': 100}
-    return D(SYSTEM_SUBSCRIPTION_PRICES[str(curr)][str(recurrence_unit)] * float(recurrence_period))
->>>>>>> d523fdd6c2b7ae480ff71f89e5646389b440a584
+def _get_unit_price_system(currency,recurrence_unit, recurrence_period):
+    '''
+    Lookup function: input currency, recurrence_unit(period), no of periods
+    output: price 
+    '''
+    SSP = {
+    'aud' : { 'D' : 1, 'W': 0, 'M': 3, 'S' : 50, 'Y': 100},
+    'gbp':  { 'D' : round(5.00/3.0,2), 'W': 0, 'M':round(50.00/3.0,2), 'S' : 50, 'Y': 100},
+    }
+    if currency.upper() in SSP:
+        p = SSP.get(str(recurrence_unit).upper(), None)
+    if not p or p == 0:
+        return D('0')
+    else:
+        return D(p)* float(recurrence_period)
+
 
 def system_detail(request, systemname):
     '''
@@ -75,15 +79,9 @@ def system_detail(request, systemname):
 
 
 
-<<<<<<< HEAD
-    data = {'system': system, 'historical_snapshot': historical_snapshot}
 
-    return render(request,'systems/system.html', data)
-
-def system_mylist(request):
-=======
 def systems_mylist(request):
->>>>>>> d523fdd6c2b7ae480ff71f89e5646389b440a584
+
     '''
     systems/mysystems
     returns a list of links to systems pages of systems - ordered by
@@ -119,20 +117,15 @@ def subscribe(request, system):
         return
     
     #given recurrence_unit and price, get price from dictionary
-<<<<<<< HEAD
-    if not SUBSCRIPTION_PRICES['GBP'][str(currency)][str(recurrence_period)]:
-        messages.error(request, "Sorry this subscription period is not available!")
-
-=======
     # if not SUBSCRIPTION_PRICES['GBP'][str(currency)][str(recurrence_period)]:
     #     request.user.message_set.create(message=_("Sorry this subscription period is not available"))
->>>>>>> d523fdd6c2b7ae480ff71f89e5646389b440a584
+
 
     system = get_object_or_404(System, systemname=system)
     premium = D(system.premium)
 
     #WHATS THE PRICE?
-    price = D(_getbasicystemprice(currency, recurrence_unit, recurrence_period) * premium)
+    price = D(_get_unit_price_system(currency, recurrence_unit, recurrence_period) * premium)
 
     #WHOS INVESTING? AND WHATS THE DESTINATION - FOR TRANSACTION/TRANSFER
 
@@ -156,16 +149,10 @@ def subscribe(request, system):
 
     #CAN USER AFFORD IT?
     if investor_account.balance < price:
-            # return 'Sorry, insufficient balance'
-<<<<<<< HEAD
-            messages.error(request, "Sorry: insufficient balance. Please transfer funds!")
-=======
-            # investor.message_set.create(message=_("Sorry: insufficient balance. Please transfer funds"))
-        #TODO add message
+        # investor.message_set.create(message=_("Sorry: insufficient balance. Please transfer funds"))
+
         pass
 
-
->>>>>>> d523fdd6c2b7ae480ff71f89e5646389b440a584
     else:
         #create subscription
         ##Subscription CREATE PERMISSION and ADD TO DATABASE
@@ -215,12 +202,7 @@ def subscribe(request, system):
         tdebit = Transaction.objects.create(transfer=transfer, account=investor_account, amount=amount*D('-1.0'))
         tcredit = Transaction.objects.create(transfer=transfer, account=system_account, amount=amount*D('1.0'))
 
-        #CONFIRM! 
-<<<<<<< HEAD
-        messages.success(request, "Successfully subscribed!")
-       
-=======
+
         # investor.message_set.create(message=_("Successfully placed your investment."))
         # TODO add message
         return HttpResponse("Subscribed", status=200)
->>>>>>> d523fdd6c2b7ae480ff71f89e5646389b440a584
