@@ -1,13 +1,15 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 import hmac #hashing
+
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.auth.models import Permission
 from django.contrib import messages
 from django.db.models import Sum
-from django.utils.translation import get_language_info
+from django.utils.translation import get_language_info, ungettext
 from django.utils.translation import ugettext_lazy as _
 from django.core.signals import request_finished
 from django.dispatch import receiver
@@ -59,157 +61,159 @@ _TIME_UNIT_CHOICES = (
     )
 
 
-# class Subscription(models.Model):
-#     '''A Subscription model registers start date proposed end date of a subscription and price paid 
-#     LIMIT NUMBER of subscriptions to 100 for each systemname
+class Subscription(models.Model):
+    '''A Subscription model registers start date proposed end date of a subscription and price paid
+    LIMIT NUMBER of subscriptions to 100 for each systemname
 
-#     '''
-#     name = models.CharField(max_length=100, unique=True, null=False)
-#     description = models.TextField(blank=True)
-#     price = models.DecimalField(max_digits=64, decimal_places=2)
-#     trial_period = models.PositiveIntegerField(null=True, blank=True)
-#     trial_unit = models.CharField(max_length=1, null=True, choices=_TIME_UNIT_CHOICES)
-#     recurrence_period = models.PositiveIntegerField(null=True, blank=True)
-#     recurrence_unit = models.CharField(max_length=1, null=True,
-#                                        choices=((None, _("No recurrence")),)
-#                                        + _TIME_UNIT_CHOICES)
-#     ##regulates view access to SYSTEM
-#     # group = models.ForeignKey(auth.models.Group, null=False, blank=False, unique=False)
-#     #or permissions permission = Permission.objects.create(codename='can_publish',name='Can Publish Posts',content_type=content_type)
-#     permission = models.ForeignKey(Permission, null=False, blank=False, unique=False)
+    '''
+    name = models.CharField(max_length=100, unique=True, null=False)
+    description = models.TextField(blank=True)
+    price = models.DecimalField(max_digits=64, decimal_places=2)
+    trial_period = models.PositiveIntegerField(null=True, blank=True)
+    trial_unit = models.CharField(max_length=1, null=True, choices=_TIME_UNIT_CHOICES)
+    recurrence_period = models.PositiveIntegerField(null=True, blank=True)
+    recurrence_unit = models.CharField(max_length=1, null=True,
+                                       choices=((None, _("No recurrence")),)
+                                       + _TIME_UNIT_CHOICES)
+    system = models.OneToOneField(System)
+    ##regulates view access to SYSTEM
+    # group = models.ForeignKey(auth.models.Group, null=False, blank=False, unique=False)
+    #or permissions permission = Permission.objects.create(codename='can_publish',name='Can Publish Posts',content_type=content_type)
+    # permission = models.ForeignKey(Permission, null=False, blank=False, unique=False)
 
-#     def clean(self):
-#         model = self.__class__
-#         if (model.objects.filter(systemname=self.systemname).count() == 99 and
-#                 self.id != model.objects.get().id):
-#             raise ValidationError(
-#                 "No more suscbriptions for system %s." % self.systemname)
-#     class Meta:
-#         ordering = ('price', '-recurrence_period')
+    def clean(self):
+        model = self.__class__
+        if (model.objects.filter(system=self.system).count() == 99 and
+                self.id != model.objects.get().id):
+            raise ValidationError(
+                "No more suscbriptions for system %s." % self.systemname)
 
-#     def __str__(self):
-#         return self.name
+    class Meta:
+        ordering = ('price', '-recurrence_period')
 
-#     def get_pricing_display(self):
-#         if not self.price:
-#             return u'Free'
-#         elif self.recurrence_period:
-#             return ungettext('%(price).02f / %(unit)s',
-#                              '%(price).02f / %(period)d %(unit_plural)s',
-#                              self.recurrence_period) % {
-#                 'price': self.price,
-#                 'unit': self.get_recurrence_unit_display(),
-#                 'unit_plural': _(self._PLURAL_UNITS[self.recurrence_unit],),
-#                 'period': self.recurrence_period,
-#                 }
-#         else:
-#             return _('%(price).02f one-time fee') % {'price': self.price}
+    def __str__(self):
+        return self.name
 
-#     def get_trial_display(self):
-#         if self.trial_period:
-#             return ungettext('One %(unit)s',
-#                              '%(period)d %(unit_plural)s',
-#                              self.trial_period) % {
-#                 'unit': self.get_trial_unit_display().lower(),
-#                 'unit_plural': _(self._PLURAL_UNITS[self.trial_unit],),
-#                 'period': self.trial_period,
-#             }
-#         else:
-#             return _("No trial")
+    def get_pricing_display(self):
+        if not self.price:
+            return u'Free'
+        elif self.recurrence_period:
+            return ungettext('%(price).02f / %(unit)s',
+                             '%(price).02f / %(period)d %(unit_plural)s',
+                             self.recurrence_period) % {
+                'price': self.price,
+                'unit': self.get_recurrence_unit_display(),
+                'unit_plural': _(self._PLURAL_UNITS[self.recurrence_unit],),
+                'period': self.recurrence_period,
+                }
+        else:
+            return _('%(price).02f one-time fee') % {'price': self.price}
 
-#     def save(self, *args, **kwargs):
-#         """
-#         Set trial period to 0 if the trial unit is 0
-#         """
-#         if self.trial_unit == "0":
-#             self.trial_period = 0
+    def get_trial_display(self):
+        if self.trial_period:
+            return ungettext('One %(unit)s',
+                             '%(period)d %(unit_plural)s',
+                             self.trial_period) % {
+                'unit': self.get_trial_unit_display().lower(),
+                'unit_plural': _(self._PLURAL_UNITS[self.trial_unit],),
+                'period': self.trial_period,
+            }
+        else:
+            return _("No trial")
 
-#         super(Subscription, self).save(*args, **kwargs)
+    def save(self, *args, **kwargs):
+        """
+        Set trial period to 0 if the trial unit is 0
+        """
+        if self.trial_unit == "0":
+            self.trial_period = 0
 
-# class UserSubscription(models.Model):
-#     user = models.ForeignKey(auth.models.User)
-#     subscription = models.ForeignKey(Subscription)
-#     expires = models.DateField(null=True, default=datetime.date.today) #why today?
-#     active = models.BooleanField(default=True)
-#     cancelled = models.BooleanField(default=True)
-
-#     objects = models.Manager()
+        super(Subscription, self).save(*args, **kwargs)
 
 
-#     class Meta:
-#         unique_together = (('user', 'subscription'), )
+class UserSubscription(models.Model):
+    user = models.ForeignKey(User)
+    subscription = models.ForeignKey(Subscription)
+    expires = models.DateField(null=True, default=datetime.now()) #why today?
+    active = models.BooleanField(default=True)
+    cancelled = models.BooleanField(default=True)
 
-#     def user_is_group_member(self):
-#         "Returns True is user is member of subscription's group"
-#         return self.subscription.group in self.user.groups.all()
+    objects = models.Manager()
+
+    class Meta:
+        unique_together = (('user', 'subscription'), )
+
+    def user_is_group_member(self):
+        """Returns True is user is member of subscription's group"""
+        return self.subscription.group in self.user.groups.all()
     
-#     user_is_group_member.boolean = True
+    user_is_group_member.boolean = True
 
-#     def expired(self):
-#         """Returns true if there is more than SUBSCRIPTION_GRACE_PERIOD
-#         days after expiration date."""
-#         return self.expires is not None and (
-#             self.expires < datetime.date.today())
+    def expired(self):
+        """Returns true if there is more than SUBSCRIPTION_GRACE_PERIOD
+        days after expiration date."""
+        return self.expires is not None and (
+            self.expires < datetime.now().date())
     
-#     expired.boolean = True
+    expired.boolean = True
 
-#     def valid(self):
-#         """Validate group membership.
-#         Returns True if not expired and user is in group, or expired
-#         and user is not in group."""
-#         if self.expired() or not self.active:
-#             return not self.user_is_group_member()
-#         else:
-#             return self.user_is_group_member()
+    def valid(self):
+        """Validate group membership.
+        Returns True if not expired and user is in group, or expired
+        and user is not in group."""
+        if self.expired() or not self.active:
+            return not self.user_is_group_member()
+        else:
+            return self.user_is_group_member()
     
-#     valid.boolean = True
+    valid.boolean = True
 
-#     def unsubscribe(self):
-#         """Unsubscribe user."""
-#         #remove permissions
-#         # self.user.groups.remove(self.subscription.group)
-#         # self.user.save()
+    def unsubscribe(self):
+        """Unsubscribe user."""
+        #remove permissions
+        # self.user.groups.remove(self.subscription.group)
+        # self.user.save()
 
-#     def subscribe(self):
-#         """Subscribe user."""
-#         #create permission and add to user.permissions
-#         # self.user.groups.add(self.subscription.group)
-#         # self.user.save()
+    def subscribe(self):
+        """Subscribe user."""
+        #create permission and add to user.permissions
+        # self.user.groups.add(self.subscription.group)
+        # self.user.save()
 
-#     def fix(self):
-#         """Fix group membership if not valid()."""
-#         if not self.valid():
-#             if self.expired() or not self.active:
-#                 self.unsubscribe()
-#                 if self.cancelled:
-#                     self.delete()
-#             else:
-#                 self.subscribe()
+    def fix(self):
+        """Fix group membership if not valid()."""
+        if not self.valid():
+            if self.expired() or not self.active:
+                self.unsubscribe()
+                if self.cancelled:
+                    self.delete()
+            else:
+                self.subscribe()
 
-#     def extend(self, timedelta=None):
-#         """Extend subscription by `timedelta' or by subscription's
-#         recurrence period."""
-#         if timedelta is not None:
-#             self.expires += timedelta
-#         else:
-#             if self.subscription.recurrence_unit:
-#                 self.expires = utils.extend_date_by(
-#                     self.expires,
-#                     self.subscription.recurrence_period,
-#                     self.subscription.recurrence_unit)
-#             else:
-#                 self.expires = None
+    def extend(self, timedelta=None):
+        """Extend subscription by `timedelta' or by subscription's
+        recurrence period."""
+        if timedelta is not None:
+            self.expires += timedelta
+        else:
+            if self.subscription.recurrence_unit:
+                self.expires = utils.extend_date_by(
+                    self.expires,
+                    self.subscription.recurrence_period,
+                    self.subscription.recurrence_unit)
+            else:
+                self.expires = None
 
 
-#     # @models.permalink
-#     # def get_absolute_url(self):
-#     #     return ('subscription_usersubscription_detail', (), dict(object_id=str(self.id)))
+    # @models.permalink
+    # def get_absolute_url(self):
+    #     return ('subscription_usersubscription_detail', (), dict(object_id=str(self.id)))
 
-#     def __str__(self):
-#         rv = u"%s's %s" % (self.user, self.subscription)
-#         if self.expired():
-#             rv += u' (expired)'
-#         return rv
+    def __str__(self):
+        rv = u"%s's %s" % (self.user, self.subscription)
+        if self.expired():
+            rv += u' (expired)'
+        return rv
 
 
 # def unsubscribe_expired():

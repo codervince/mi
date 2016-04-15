@@ -1,0 +1,17 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Translations
+*.mo
+*.pot
+
+# Django stuff:
+investment/local_settings.py
+
+#IDE
+.idea/*
+
+#Other
+._.DS_Store
