@@ -1,6 +1,7 @@
 from django.core.management.base import BaseCommand, CommandError
-from ...models import System, SystemSnapshot
+from systems.models import System, SystemSnapshot
 from investment_accounts.models import SystemAccount
+from bets.models import Racecourse
 from django.contrib.auth.models import User
 import json
 import os

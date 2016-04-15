@@ -84,9 +84,10 @@ class RPRunner(models.Model):
     ('TRIANGLE', 'TRIANGLE'),
     )
     SPEED = (
-         ('GALLOPING', 'GALLOPING'),
+    ('GALLOPING', 'GALLOPING'),
     ('STIFF', 'STIFF'),
     ('TIGHT', 'TIGHT'),
+     ('TESTING', 'TESTING'),
         )   
     SURFACE = (
          ('UNDULATING', 'UNDULATING'),
@@ -242,7 +243,7 @@ class RPRunner(models.Model):
         ordering = ('-racedatetime','racecourse', 'horsename')
 
 class Bookmaker(models.Model):
-	BOOKMAKERS= (
+    BOOKMAKERS= (
     ('BETFAIR-GB', 'BF-GB'),
     ('BETDAQ-GB', 'BD-GB'),
     ('LADBROKES-AU', 'LAD-AU'),
@@ -250,80 +251,82 @@ class Bookmaker(models.Model):
     ('TAB-AU', 'TAB-AU'),
     ('CORAL-GB', 'CORAL'),
     )
-	name = models.CharField(choices=BOOKMAKERS, max_length=50)
-	currency = models.CharField( max_length = 25, choices = settings.CURRENCIES)
+    name = models.CharField(choices=BOOKMAKERS, max_length=50)
+    currency = models.CharField( max_length = 25, choices = settings.CURRENCIES)
 
-	def __str__(self):
-		return '%s %s' % (self.name, self.currency)
-	class Meta:
-		unique_together = ('name', 'currency',)
+    def __str__(self):
+        return '%s %s' % (self.name, self.currency)
+    class Meta:
+        unique_together = ('name', 'currency',)
 
 class Bet(models.Model):
-	'''
-	includes todays candidates
-	with horsename and racedate, racetime, racecoursename should be able to look up results and raceid
-	from results database
-	'''
-	racedatetime = models.DateTimeField(help_text=_('race date time - LOCAL!'),)
-	horsename = models.CharField(help_text=_('horse name'),max_length=250)
-	bookmaker = models.ForeignKey(Bookmaker, related_name='bookmakerbet', null=True)
-	system = models.ForeignKey(System, related_name='systembet')
-	racecourse = models.ForeignKey(Racecourse, related_name='racecoursebet')
-	stake = models.DecimalField(max_digits=6, decimal_places=2)
-	avgodds = models.DecimalField(max_digits=6, decimal_places=2)
-	isWinMarket = models.BooleanField(default=True)
-	isBack = models.BooleanField(default=True) #else lay
-	finalpos = models.CharField(max_length=2,null=True)
-	winnings = models.DecimalField(max_digits=6, decimal_places=2, null=True)
-	profit = models.DecimalField(max_digits=6, decimal_places=2, null=True)
-	didWin = models.NullBooleanField()
-	isPlaced = models.NullBooleanField()
-	created = models.DateTimeField(auto_now_add=True)
-
-	def _didWin(self):
-		"if back and (isWIn or isnotWinMarket) finalpos ==1 OR is back and not isWinMarket and isPlaced "
-		"if lay and isWinMarket and finalpos !=1  OR if is not WinMarket and not isPlaced"
-		if self.isBack and self.isWinMarket and self.finalpos == '1':
-			return True
-		if self.isBack and not self.isWinMarket and isPlaced:
-			return True
-		if not self.isBack and self.isWinMarket and self.finalpos != '1':
-			return True
-		if not self.isBack and not self.isWinMarket and not self.isPlaced:
-			return True
-		return False
-
-	def _getProfit(self):
-		"""returns profit which is for Back: Winnings - Stake, for lay its the Stake less any BF/BD fees"""
-		if self.didWin and self.isBack:
-			return self.winnings -self.stake
-		if self.didWin and not self.isBack:
-			return self.stake
-		return D('0.0')
+    '''
+    includes todays candidates
+    with horsename and racedate, racetime, racecoursename should be able to look up results and raceid
+    from results database
+    '''
+    racedatetime = models.DateTimeField(help_text=_('race date time - LOCAL!'),)
+    horsename = models.CharField(help_text=_('horse name'),max_length=250)
+    bookmaker = models.ForeignKey(Bookmaker, related_name='bookmakerbet', null=True)
+    system = models.ForeignKey(System, related_name='systembet')
+    racecourse = models.ForeignKey(Racecourse, related_name='racecoursebet')
+    stake = models.DecimalField(max_digits=6, decimal_places=2)
+    avgodds = models.DecimalField(max_digits=6, decimal_places=2)
+    isWinMarket = models.BooleanField(default=True)
+    isBack = models.BooleanField(default=True) #else lay
+    finalpos = models.CharField(max_length=2,null=True)
+    winnings = models.DecimalField(max_digits=6, decimal_places=2, null=True)
+    profit = models.DecimalField(max_digits=6, decimal_places=2, null=True)
+    didWin = models.NullBooleanField()
+    isPlaced = models.NullBooleanField()
+    created = models.DateTimeField(auto_now_add=True)
+    isScratched = models.BooleanField(default=False)
 
 
-	def _Winnings(self):
-		"deductions?"
-		"if finalpos is IN and WinningWinBet or - WInningPlaceBet return betamount * oddsacheived"
-		if self.didWin and self.isBack:
-			return self.stake*self.avgodds
-		if self.didWin and not self.isBack:
-			return self.stake
-		return D('0.0')
+    def _didWin(self):
+        "if back and (isWIn or isnotWinMarket) finalpos ==1 OR is back and not isWinMarket and isPlaced "
+        "if lay and isWinMarket and finalpos !=1  OR if is not WinMarket and not isPlaced"
+        if self.isBack and self.isWinMarket and self.finalpos == '1':
+            return True
+        if self.isBack and not self.isWinMarket and isPlaced:
+            return True
+        if not self.isBack and self.isWinMarket and self.finalpos != '1':
+            return True
+        if not self.isBack and not self.isWinMarket and not self.isPlaced:
+            return True
+        return False
 
-	twinnings = property(_Winnings)
-	tprofit = property(_getProfit)
-	tdidWin = property(_didWin)
-	def save(self, *args, **kwargs):
-		self.didWin = self.tdidWin
-		self.winnings = self.twinnings
-		self.profit =self.tprofit
-		super(Bet, self).save( *args, **kwargs)
+    def _getProfit(self):
+        """returns profit which is for Back: Winnings - Stake, for lay its the Stake less any BF/BD fees"""
+        if self.didWin and self.isBack:
+            return self.winnings -self.stake
+        if self.didWin and not self.isBack:
+            return self.stake
+        return D('0.0')
 
-	def __str__(self):
-		return '%s - %s %s: %4.2f at %4.2f on %s' % (self.system.systemname, self.racecourse.racecoursename, datetime.strftime(self.racedatetime, '%Y%m%d %X'), 
-			self.winnings, self.profit, self.horsename)
-	#snapshotid runnerid--> system_runner table
-	class Meta:
-		unique_together = ('system', 'horsename','bookmaker')
-		ordering = ('-racedatetime',)
+
+    def _Winnings(self):
+        "deductions?"
+        "if finalpos is IN and WinningWinBet or - WInningPlaceBet return betamount * oddsacheived"
+        if self.didWin and self.isBack:
+            return self.stake*self.avgodds
+        if self.didWin and not self.isBack:
+            return self.stake
+        return D('0.0')
+
+    twinnings = property(_Winnings)
+    tprofit = property(_getProfit)
+    tdidWin = property(_didWin)
+    def save(self, *args, **kwargs):
+        self.didWin = self.tdidWin
+        self.winnings = self.twinnings
+        self.profit =self.tprofit
+        super(Bet, self).save( *args, **kwargs)
+
+    def __str__(self):
+        return '%s - %s %s: %4.2f at %4.2f on %s' % (self.system.systemname, self.racecourse.racecoursename, datetime.strftime(self.racedatetime, '%Y%m%d %X'), 
+            self.winnings, self.profit, self.horsename)
+    #snapshotid runnerid--> system_runner table
+    class Meta:
+        unique_together = ('system', 'horsename','bookmaker')
+        ordering = ('-racedatetime',)

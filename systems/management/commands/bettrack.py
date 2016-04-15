@@ -66,28 +66,23 @@ wolv = RPRacecourses(racecoursename=u'Wolverhampton (AW)', racecoursecode='Wol',
     speed='TIGHT', surface='FLAT', location='MIDLANDS')
 donc = RPRacecourses(racecoursename=u'Doncaster', racecoursecode='Don', racecourseid=15, grade=2, straight=8, shape='PEAR', direction='LEFT', 
     speed='GALLOPING', surface='FLAT', location='NORTH')
+redc = RPRacecourses(racecoursename=u'Redcar', racecoursecode='Red', racecourseid= 47, grade=4, straight=8, shape='OVAL', direction='LEFT', 
+    speed='GALLOPING', surface='FLAT', location='NORTH')
+winds = RPRacecourses(racecoursename=u'Windsor', racecoursecode='Win', racecourseid=93, grade=3, straight=5, shape='PEAR', direction='RIGHT', 
+    speed='GALLOPING', surface='FLAT', location='SOUTH')
+exeter = RPRacecourses(racecoursename=u'Exeter', racecoursecode='Exe', racecourseid=14, grade=None, straight=None, shape='TRIANGLE', direction='RIGHT', 
+    speed='TESTING', surface='UNDULATING', location='SOUTH')
+newmjuly = RPRacecourses(racecoursename=u'Newmarket', racecoursecode='Nmk', racecourseid=174, grade=1, straight=8, shape='TRIANGLE', direction='RIGHT', 
+    speed='GALLOPING', surface='UNDULATING', location='MIDLANDS')
+newm = RPRacecourses(racecoursename=u'Newmarket', racecoursecode='Nmk', racecourseid=38, grade=1, straight=10, shape='TRIANGLE', direction='RIGHT', 
+    speed='GALLOPING', surface='UNDULATING', location='MIDLANDS')
+chelm = RPRacecourses(racecoursename=u'Chelmsford (AW)', racecoursecode='Cfd', racecourseid=103, grade=3, straight=None, shape='OVAL', direction='LEFT', 
+    speed='GALLOPING', surface='FLAT', location='MIDLANDS')
+#redcar windsor nott
 
 THERACECOURSES = list()
-THERACECOURSES.append(newton)
-THERACECOURSES.append(pont)
-THERACECOURSES.append(fairy)
-THERACECOURSES.append(ludl)
-THERACECOURSES.append(catt)
-THERACECOURSES.append(kemp)
-THERACECOURSES.append(leop)
-THERACECOURSES.append(ling)
-THERACECOURSES.append(nott)
-THERACECOURSES.append(aint)
-THERACECOURSES.append(chelm)
-THERACECOURSES.append(lim)
-THERACECOURSES.append(south)
-THERACECOURSES.append(taunt)
-THERACECOURSES.append(dund)
-THERACECOURSES.append(leic)
-THERACECOURSES.append(newc)
-THERACECOURSES.append(wex)
-THERACECOURSES.append(wolv)
-THERACECOURSES.append(donc)
+THERACECOURSES.extend([winds, redc, donc, wolv, wex, newc, leic, dund, taunt, south, lim, chelm, aint, nott, ling, leop, kemp, catt, ludl, fairy, pont,
+ newton, newmjuly, newm, exeter,chelm])
 
 BOOKMAKERS = [
 
@@ -151,6 +146,7 @@ class Command(BaseCommand):
             reader  = csv.reader( csvfile )
             row_num = 0
 
+
             for row in reader:
                 row_num += 1
                 if row_num == 1:
@@ -169,6 +165,9 @@ class Command(BaseCommand):
                 isBack = True if row[15] == '1' else False
                 finalpos = row[16]
                 isPlaced = True if row[17] == '1' else False
+                isScratched = False
+                if finalpos == 'S':
+                    isScratched = True
                 
                 try:
                     system         = System.objects.get( systemname = systemname )
@@ -182,7 +181,8 @@ class Command(BaseCommand):
                     localtz = timezone('Europe/London')
                     racedatetime = localtz.localize(racedatetime)
                     #timezone aware?
-                    data = {'racedatetime': racedatetime,
+                    data = {
+                        'racedatetime': racedatetime,
                         'bookmaker' : bookmaker,
                         'system' : system,
                         'racecourse' : racecourse,
@@ -193,6 +193,7 @@ class Command(BaseCommand):
                         'isBack' : isBack,
                         'finalpos' :finalpos,
                         'isPlaced' : isPlaced,
+                        'isScratched': isScratched,
                         }
                     b,created = Bet.objects.update_or_create( system=data['system'], horsename=data['horsename'], bookmaker=data['bookmaker'], defaults=data)
                     print(b.winnings, b.profit, b.didWin)

@@ -1,22 +1,61 @@
 from django.shortcuts import render
 from decimal import Decimal as D
+from django.contrib import messages
+from systems.models import System, SystemSnapshot
+from bets.models import Bet
+import logging
+
+logger = logging.getLogger(__name__)
 
 def _getbasicystemprice(curr,recurrence_unit, recurrence_period):
     #ALLOWED COMBINATION? SEE template ASSUME ALLOWED
     SYSTEM_SUBSCRIPTION_PRICES = defaultdict(dict)
-    SYSTEM_SUBSCRIPTION_PRICES['AUD'] = { 'D': , 'W': None, 'M': 3, 'S': 50, 'Y': 100}
-    SYSTEM_SUBSCRIPTION_PRICES['GBP'] = { 'D': round(5.00/3.0),2), 'W': None, 'M': round(50.00/3.0,2), 'S': 50, 'Y': 100}
+    SYSTEM_SUBSCRIPTION_PRICES['AUD'] = { 'D': 1, 'W': None, 'M': 3, 'S': 50, 'Y': 100}
+    SYSTEM_SUBSCRIPTION_PRICES['GBP'] = { 'D': round(5.00/3.0,2), 'W': None, 'M': round(50.00/3.0,2), 'S': 50, 'Y': 100}
     return D(SYSTEM_SUBSCRIPTION_PRICES[str(crr)][str(recurrence_period)] * float(recurrence_unit))
 
-def systems_detail(request, systemname):
+def system_detail(request, systemname):
     '''
-    systems/system/systemname
-    returns system data and latest snapshot for a specific systemname
-    includes a button for subscribing to the system
-    '''
-    pass
+        systems/system/systemname
+        _system.html
+        DIV 
+        if system isActive
+        systemname, 
+        [ exposure, isTurf, isLayWin, isLayPlace, oddsconditions, ] 
 
-def systems_mylist(request):
+        snapshot = HISTORICAL
+        bfwins, bfruns winsr, expectedwins, a_e, levelbspprofit, a_e_last50, archie_allruns, archie_last50, last50wins, last50str,
+        last28daysruns, profit_last50, longest_losing_streak, average_losing_streak,individualrunners, uniquewinners, validuptonotincluding
+
+        ## getSnapshot(systemid, startdate, enddate)
+        # get system, get snapshot 
+        #doesnt matter if its LIVE NEEDS RUNNERS
+
+        list ALL RUNNERS
+
+        Use this whatever the dates
+        for main page = default = LIVE i.e. startdate= startofseason, enddate = TODAY
+
+        ISSUE : Is Runners uptodate for live?
+        ''' 
+    #is system active? ex   2016-S-10A
+    logger.error("Systemname: %s", systemname)
+    system = System.objects.get(systemname=systemname)
+    # get historical information need to create snapshots for 2013,14,15,16 aka funds
+    
+    historical_snapshot = system.systemsnapshot.filter(snapshottype='HISTORICAL').values("bfwins", "bfruns", "winsr", 
+        "expectedwins", "a_e", "levelbspprofit", "a_e_last50", "archie_allruns", "archie_last50", "last50wins", "last50str",
+        "last28daysruns", "profit_last50", "longest_losing_streak", "average_losing_streak","individualrunners", "uniquewinners", "validuptonotincluding")
+    #LIVE SNAPSHOT from Bets
+    livebets = Bet.objects.filter(system=system)
+
+
+
+    data = {'system': system, 'historical_snapshot': historical_snapshot}
+
+    return render(request,'systems/system.html', data)
+
+def system_mylist(request):
     '''
     systems/mysystems
     returns a list of links to systems pages of systems - ordered by
@@ -49,7 +88,8 @@ def subscribe(request, system):
     
     #given recurrence_unit and price, get price from dictionary
     if not SUBSCRIPTION_PRICES['GBP'][str(currency)][str(recurrence_period)]:
-        request.user.message_set.create(message=_("Sorry this subscription period is not available"))
+        messages.error(request, "Sorry this subscription period is not available!")
+
 
     system = get_object_or_404(System, systemname=system)
     premium = system.premium
@@ -80,7 +120,7 @@ def subscribe(request, system):
     #CAN USER AFFORD IT?
     if investor_account.balance < price:
             # return 'Sorry, insufficient balance'
-            investor.message_set.create(message=_("Sorry: insufficient balance. Please transfer funds"))
+            messages.error(request, "Sorry: insufficient balance. Please transfer funds!")
     else:
         #create subscription
         ##Subscription CREATE PERMISSION and ADD TO DATABASE
@@ -112,5 +152,5 @@ def subscribe(request, system):
 
 
         #CONFIRM! 
-        investor.message_set.create(message=_("Successfully placed your investment."))
+        messages.success(request, "Successfully subscribed!")
        

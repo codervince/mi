@@ -16,6 +16,7 @@ import json
 import ast
 from datetime import datetime
 from django.utils.translation import ugettext_lazy as _
+from django.contrib import messages
 
 
 ##todo zip lists to get racedate- data
@@ -105,13 +106,16 @@ def subscribe( request, fund ):
     ## If requested_amount balance == openingbalance of fund then no more subscriptions
     amount_available = fund.openingbank - fund_account.balance
 
+    ## TODO resrtict theis based on number of subscriptions created for this FUND
     if requested_amount > amount_available:
         return 'Sorry, no more shares available'
-        investor.message_set.create(message=_("Sorry- no more shares available!"))
+        # investor.message_set.create(message=_("Sorry- no more shares available!"))
+        messages.error(request, "Sorry- no more shares available!")
     else:
         if investor_account.balance < requested_amount:
             return 'Sorry, insufficient balance'
-            investor.message_set.create(message=_("Sorry: insufficient balance. Please transfer funds"))
+            # investor.message_set.create(message=_("Sorry: insufficient balance. Please transfer funds"))
+            messages.error(request, "Sorry: insufficient balance. Please transfer funds")
         else:
             #do transfer
             amount = requested_amount
@@ -133,8 +137,9 @@ def subscribe( request, fund ):
 
             ## ASSIGN permission for user to view detail page of this particular fund!
             assign_perm( 'view_fund', investor, fund )
-            investor.message_set.create(message=_("Successfully placed your investment."))
-            message = 'Sucessfully subscribed' #test
+            # investor.message_set.create(message=_("Successfully placed your investment."))
+            messages.success(request, "Successfully placed your investment")
+
 
         #rudimentary testing##
         logger.info(fund.openingbank)

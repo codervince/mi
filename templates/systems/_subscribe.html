@@ -1,0 +1,49 @@
+<div>
+Your Balance: {{ current_balance_aud }}  AUD || Your Balance: {{ current_balance_gbp }}  GBP
+</div>
+<form action="" method="post">
+	{% csrf_token %}
+		<table width="50%" border="0" cellspacing="0" cellpadding="5">
+			
+			<tr>
+				<td width="41%" align="right" valign="middle">Category1 :</td>
+				<td width="59%" align="left" valign="middle">
+					<select name="category1" id="category1">
+			 		 	<option value="---">Please select an option</option>
+						<option value="D">Day(s)</option>
+						<option value="W">Week(s)</option>
+						<option value="M">Month(s)</option>
+						<option value="S">Season(s)</option>
+						<option value="Y">Year(s)</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td align="right" valign="middle">How many?:</td>
+				<td align="left" valign="middle">
+					<select disabled="disabled" id="category2" name="category2">
+						<option value>How many?</option>
+						<!-- Home Ware -->
+						<option rel="D" value="1">1</option>
+                        <option rel="D" value="3">3</option>
+
+						<option rel="M" value="1">1</option>
+						<option rel="M" value="2">2</option>
+						<option rel="M" value="3">3</option>
+						<option rel="M" value="4">4</option>
+						<option rel="M" value="5">5</option>
+						<option rel="M" value="6">6</option>
+
+						<option rel="S" value="1">1</option>
+						<option rel="Y" value="1">1</option>
+					</select>
+				</td>
+				<td>
+					<div id="price">PRICE GOES HERE</div>
+					<div class="padded" style="padding: 5px 10px;">
+						<button padding="5px;" type="submit" class="btn btn-primary">Subscribe to this System</button>
+ 					</div>
+				</td>
+			</tr>
+		</table>
+	</form>
