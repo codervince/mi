@@ -1,0 +1,23 @@
+    systemtype = models.CharField(choices=SYSTEMTYPES, default='tg',max_length=50)
+    systemname =  models.CharField(max_length=50,unique=True) #2016-T-21T unique=true?
+    snapshotid  = models.IntegerField()
+    description= models.TextField(null=True)
+    isActive = models.BooleanField()
+    isTurf = models.BooleanField()
+    exposure = ArrayField(models.CharField(max_length=500),)
+    query = JSONField()
+    rpquery = JSONField(null=True,blank=True)
+
+    isLayWin = models.BooleanField(default=False)
+    isLayPlace = models.BooleanField(default=False)
+    oddsconditions = JSONField(null=True,blank=True)
+
+    premium  = models.FloatField(default=1.0)   ##will update later based on performance
+
+    runners = models.ManyToManyField(Runner,blank=True)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True, blank=True)
+    
+    objects = models.Manager() #default
+    liverunners = LiveRunnersManager()
+    historicalrunners = HistoricalRunnersManager()

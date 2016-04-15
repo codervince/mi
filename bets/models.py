@@ -26,9 +26,10 @@ class Racecourse(models.Model):
     ('GALLOPING', 'GALLOPING'),
     ('STIFF', 'STIFF'),
     ('TIGHT', 'TIGHT'),
+    ('SHARP', 'SHARP'),
         )   
     SURFACE = (
-         ('UNDULATING', 'UNDULAT xxxING'),
+    ('UNDULATING', 'UNDULAT xxxING'),
     ('UPHILL', 'UPHILL'),
     ('FLAT', 'FLAT'),
         )  

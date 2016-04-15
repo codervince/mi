@@ -1,6 +1,9 @@
 import logging
 from collections import defaultdict
 from datetime import timedelta
+from django.shortcuts import render_to_response
+from django.views.generic import ListView, DetailView, UpdateView 
+from django.core.urlresolvers import reverse
 
 from datetime import datetime
 from django.contrib.auth.models import User
@@ -42,11 +45,23 @@ def _get_unit_price_system(currency,recurrence_unit, recurrence_period):
         return D(p)* float(recurrence_period)
 
 
-def system_detail(request, systemname):
+#
+
+def systems_detail(request, systemname):
     '''
-        systems/system/systemname
-        _system.html
-        DIV 
+        Display: 
+        template 1 specific system data  _system.html
+
+        template 2 latest results (2016) _system_2016.html
+        T3      latest charts 
+
+        2015 charts and data _system_2015.html
+        2014 
+        2013  
+    
+        Subscribe button
+        
+
         if system isActive
         systemname, 
         [ exposure, isTurf, isLayWin, isLayPlace, oddsconditions, ] 
@@ -68,15 +83,20 @@ def system_detail(request, systemname):
         ''' 
     #is system active? ex   2016-S-10A
     logger.error("Systemname: %s", systemname)
-    system = System.objects.get(systemname=systemname)
+    s = get_object_or_404(System, systemname=systemname)
+    
+
+
+
     # get historical information need to create snapshots for 2013,14,15,16 aka funds
     
-    historical_snapshot = system.systemsnapshot.filter(snapshottype='HISTORICAL').values("bfwins", "bfruns", "winsr", 
+    historical_snapshot = s.systemsnapshot.filter(snapshottype='HISTORICAL').values("bfwins", "bfruns", "winsr", 
         "expectedwins", "a_e", "levelbspprofit", "a_e_last50", "archie_allruns", "archie_last50", "last50wins", "last50str",
         "last28daysruns", "profit_last50", "longest_losing_streak", "average_losing_streak","individualrunners", "uniquewinners", "validuptonotincluding")
     #LIVE SNAPSHOT from Bets
-    livebets = Bet.objects.filter(system=system)
-
+    livebets = Bet.objects.filter(system=s)
+    # return HttpResponse("Subscribed", status=200)
+    return render_to_response('systems/system.html')
 
 
 

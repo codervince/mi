@@ -44,5 +44,5 @@ urlpatterns = [
     url(r'^account/reset/done/$', auth_views.password_reset_complete,{'template_name': 'investment/account/password-reset-complete.html'} ),
     url(r'^account/', include('django.contrib.auth.urls')),
     url(r'^funds/', include('funds.urls')),
-    url(r'^systems/', include('systems.urls')),
+    url(r'^systems/', include('systems.urls', namespace='systems')),
 ]
