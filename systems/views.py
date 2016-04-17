@@ -40,11 +40,23 @@ def _get_unit_price_system(currency,recurrence_unit, recurrence_period):
         return D(p) * D(recurrence_period)
 
 
-def system_detail(request, systemname):
+#
+
+def systems_detail(request, systemname):
     '''
-        systems/system/systemname
-        _system.html
-        DIV 
+        Display: 
+        template 1 specific system data  _system.html
+
+        template 2 latest results (2016) _system_2016.html
+        T3      latest charts 
+
+        2015 charts and data _system_2015.html
+        2014 
+        2013  
+    
+        Subscribe button
+        
+
         if system isActive
         systemname, 
         [ exposure, isTurf, isLayWin, isLayPlace, oddsconditions, ] 
@@ -73,7 +85,7 @@ def system_detail(request, systemname):
     context['system'] = system
     # get historical information need to create snapshots for 2013,14,15,16 aka funds
     
-    historical_snapshot = system.systemsnapshot.filter(snapshottype='HISTORICAL').values("bfwins", "bfruns", "winsr", 
+    historical_snapshot = system.systemsnapshot.filter(snapshottype='HISTORICAL').values("bfwins", "bfruns", "winsr",
         "expectedwins", "a_e", "levelbspprofit", "a_e_last50", "archie_allruns", "archie_last50", "last50wins", "last50str",
         "last28daysruns", "profit_last50", "longest_losing_streak", "average_losing_streak","individualrunners", "uniquewinners", "validuptonotincluding")
     #LIVE SNAPSHOT from Bets
@@ -88,7 +100,6 @@ def system_detail(request, systemname):
     context['current_balance_gbp'] = current_balance_gbp.balance
 
     return TemplateResponse(request, 'systems/system.html', context)
-
 
 
 
@@ -115,12 +126,12 @@ def subscribe(request, system):
     if request.method != 'POST':
         return HttpResponse("Method not allowed ", status=405)
 
-    if 'recurrence_period' not in request.POST or 'recurrence_unit' not in request.POST or 'currency' not in request.POST:
+    if 'recurrence' not in request.POST or 'currency' not in request.POST:
         return HttpResponse("Bad Request", status=400)
 
     #subscription needs name, description
-    recurrence_unit            = request.POST[ 'recurrence_unit'    ]
-    recurrence_period          = request.POST[ 'recurrence_period'    ]
+    recurrence_unit            = request.POST[ 'recurrence'    ].split('-')[0]
+    recurrence_period          = request.POST[ 'recurrence'    ].split('-')[1]
     
     currency = request.POST[ 'currency' ].upper().strip()
 

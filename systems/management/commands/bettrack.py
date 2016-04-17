@@ -78,11 +78,23 @@ newm = RPRacecourses(racecoursename=u'Newmarket', racecoursecode='Nmk', racecour
     speed='GALLOPING', surface='UNDULATING', location='MIDLANDS')
 chelm = RPRacecourses(racecoursename=u'Chelmsford (AW)', racecoursecode='Cfd', racecourseid=103, grade=3, straight=None, shape='OVAL', direction='LEFT', 
     speed='GALLOPING', surface='FLAT', location='MIDLANDS')
-#redcar windsor nott
+###
+air= RPRacecourses(racecoursename=u'Air', racecoursecode='Air', racecourseid=3, grade=2, straight=6, shape='OVAL', direction='LEFT', 
+    speed='GALLOPING', surface='FLAT', location='SCOTLAND')
+bath = RPRacecourses(racecoursename=u'Bath', racecoursecode='Bth', racecourseid=5, grade=4, straight=None, shape='OVAL', direction='LEFT', 
+    speed='GALLOPING', surface='FLAT', location='SOUTH')
+newb = RPRacecourses(racecoursename=u'Newbury', racecoursecode='New', racecourseid=36, grade=2, straight=8, shape='OVAL', direction='LEFT', 
+    speed='GALLOPING', surface='FLAT', location='SOUTH')
+ballin = RPRacecourses(racecoursename=u'Ballinrobe (IRE)', racecoursecode='Bal', racecourseid=175, grade=None, straight=None, shape='OVAL', direction='RIGHT', 
+    speed='SHARP', surface='FLAT', location='IRE')
+font = RPRacecourses(racecoursename=u'Fontwell', racecoursecode='Fon', racecourseid=20, grade=None, straight=None, shape='OVAL', direction='LEFT', 
+    speed='SHARP', surface='FLAT', location='SOUTH')
+rip = RPRacecourses(racecoursename=u'Ripon', racecoursecode='Rip', racecourseid=49, grade=3, straight=6, shape='OVAL', direction='RIGHT', 
+    speed='TIGHT', surface='UNDULATING', location='NORTH')
 
 THERACECOURSES = list()
 THERACECOURSES.extend([winds, redc, donc, wolv, wex, newc, leic, dund, taunt, south, lim, chelm, aint, nott, ling, leop, kemp, catt, ludl, fairy, pont,
- newton, newmjuly, newm, exeter,chelm])
+ newton, newmjuly, newm, exeter,chelm, air, bath, newb, ballin, font, rip])
 
 BOOKMAKERS = [
 
@@ -140,7 +152,7 @@ class Command(BaseCommand):
         #rp runners for today from JSON
         # bets history from csv
 
-        bets_url = '/Users/vmac/PY/DJANGOSITES/DATA/BETS/2016bets.csv'
+        bets_url = '/Users/vmac/PY/DJANGOSITES/DATA/BETS/2016bets_3.csv'
         with open( bets_url) as csvfile:
             result  = {}
             reader  = csv.reader( csvfile )

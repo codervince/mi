@@ -25,8 +25,6 @@ $(function(){
     var $cat = $("#category1"),
         $subcat = $("#category2");
 
-    console.log("hello");
-
     $cat.on("change",function(){
         var _rel = $(this).val();
         $subcat.find("option").attr("style","");
@@ -38,7 +36,6 @@ $(function(){
 
 });
     $(document).ready(function(){
-        console.log('{% url 'subscribe_system' system.systemname %}');
         $("#id_subscribe_form").attr("action", '{% url 'subscribe_system' system.systemname %}');
     });
 
@@ -84,8 +81,14 @@ $(function(){
     </div>
 
 
+{% include 'systems/2016.html' %}
+
+{#  commented because file not found  #}
+{#{% include 'systems/pastperformance.html' %}#}
+
 	<div class="basic">
-	{% include 'systems/_subscribe.html' %}   
+	{% include 'systems/_subscribe.html' %}  
+
 	</div>
 
 {% endblock %}

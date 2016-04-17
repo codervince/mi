@@ -1,59 +1,48 @@
 <div>
 Your Balance: {{ current_balance_aud }}  AUD || Your Balance: {{ current_balance_gbp }}  GBP
 </div>
+
+{##this is too complicated#}
+{#have a finite number of options: 1 day, 1 week, 3 months, 1 season, 1 calendar year #}
+{#Prices in currency#}
+
+
+{#Choose a currency#}
+
+
 <form id="id_subscribe_form" action="" method="post">
-	{% csrf_token %}
+    {% csrf_token %}
     <input type="hidden" name="currency" value="">
-		<table width="50%" border="0" cellspacing="0" cellpadding="5">
-			
-			<tr>
-				<td width="41%" align="right" valign="middle">Category1 :</td>
-				<td width="59%" align="left" valign="middle">
-					<select name="recurrence_unit" id="category1">
-			 		 	<option value="---">Please select an option</option>
-						<option value="D">Day(s)</option>
-						<option value="W">Week(s)</option>
-						<option value="M">Month(s)</option>
-						<option value="S">Season(s)</option>
-						<option value="Y">Year(s)</option>
-					</select>
-				</td>
-			</tr>
-			<tr>
-				<td align="right" valign="middle">How many?:</td>
-				<td align="left" valign="middle">
-					<select disabled="disabled" id="category2" name="recurrence_period">
-						<option value="---">How many?</option>
-						<!-- Home Ware -->
-						<option rel="D" value="1">1</option>
-                        <option rel="D" value="3">3</option>
-
-						<option rel="M" value="1">1</option>
-						<option rel="M" value="2">2</option>
-						<option rel="M" value="3">3</option>
-						<option rel="M" value="4">4</option>
-						<option rel="M" value="5">5</option>
-						<option rel="M" value="6">6</option>
-
-						<option rel="S" value="1">1</option>
-						<option rel="Y" value="1">1</option>
-					</select>
-				</td>
-                <td valign="middle">
-                    <select name="currency">
-						<option value>Currency</option>
-						<!-- Home Ware -->
-						{% for cur in currency %}
-                            <option value="{{ cur.0 }}">{{ cur.0 }}</option>
-                        {% endfor %}
-					</select>
-                </td>
-				<td>
-					<div id="price">PRICE GOES HERE</div>
-					<div class="padded" style="padding: 5px 10px;">
-						<button padding="5px;" type="submit" class="btn btn-primary">Subscribe to this System</button>
- 					</div>
-				</td>
-			</tr>
-		</table>
-	</form>
+    <table width="50%" border="0" cellspacing="0" cellpadding="5">
+        <tr>
+            <td width="41%" align="right" valign="middle">Choose a Subscription:</td>
+            <td width="59%" align="left" valign="middle">
+                <select name="recurrence" id="category1">
+                    <option value="---">Please select an option</option>
+                    <option value="D-1">1 day</option>
+                    <option value="W-1">1 week</option>
+                    <option value="M-3">3 months</option>
+                    <option value="S-1">Season</option>
+                    <option value="Y-1">Calendar year</option>
+                </select>
+            </td>
+        </tr>
+        <td width="41%" align="right" valign="middle">Choose a Currency:</td>
+        <td width="59%" align="left" valign="middle">
+            <select name="currency">
+                <option value>Currency</option>
+                <!-- Home Ware -->
+                {% for cur in currency %}
+                    <option value="{{ cur.0 }}">{{ cur.0 }}</option>
+                {% endfor %}
+            </select>
+        </td>
+        <td>
+            <div id="price">PRICE GOES HERE</div>
+            <div class="padded" style="padding: 5px 10px;">
+                <button padding="5px;" type="submit" class="btn btn-primary">Subscribe to this System</button>
+            </div>
+        </td>
+        </tr>
+    </table>
+</form>
