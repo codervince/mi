@@ -44,11 +44,27 @@ def _get_unit_price_system(currency,recurrence_unit, recurrence_period):
     else:
         return D(p)* float(recurrence_period)
 
+def getracedatetime(racedate, racetime):
+
+    _rt = datetime.strptime(racetime,'%I:%M %p').time()
+    racedatetime = datetime.combine(racedate, _rt)
+    localtz = timezone('Europe/London')
+    racedatetime = localtz.localize(racedatetime)
+    return racedatetime
 
 #
 
 def systems_detail(request, systemname):
+    # for systemname
+
     '''
+    System: systemname, description , isActive, isTurf, exposure, 
+    # isLayWin, isLawPlace, oddsconditions, 
+    runners 
+    #Snapshots: 
+    1 x LIVE 1/1/2016 -> LATEST LIVE
+    1 x HISTORICAL 
+    
         Display: 
         template 1 specific system data  _system.html
 
@@ -82,21 +98,46 @@ def systems_detail(request, systemname):
         ISSUE : Is Runners uptodate for live?
         ''' 
     #is system active? ex   2016-S-10A
-    logger.error("Systemname: %s", systemname)
     s = get_object_or_404(System, systemname=systemname)
+    #RUNNERS?
+
+    #WHAT BASIC FIELDS from snapshot? bfwins, 
+    snap_basic_fields = []
+    system_basic_fields.update()
+    #HISTORICAL IS startdate 01-01-13
+    ss_2016_start = getracedatetime(datetime.strptime("20160101", "%Y%m%d").date(), '12:00 AM')
+    ss_season2016_start = getracedatetime(datetime.strptime("20160402", "%Y%m%d").date(), '12:00 AM')
+    ss_hist_start = getracedatetime(datetime.strptime("20130101", "%Y%m%d").date(), '12:00 AM')
+    hist_131415 = SystemSnapshot.objects.filter(system=s1, snapshottype='HISTORICAL', validfrom__lt=ss_hist_start) #all fields
+    live_season2016 = SystemSnapshot.objects.filter(system=s1, snapshottype='HISTORICAL', validfrom__lt=ss_season2016_start).only('runners', 'bfwins', 'bfruns', 'winsr', 'a_e',
+        'levelbspprofit', 'levelbsprofitpc', 'a_e_last50', 'archie_allruns', 'archie_last50', 'last50str', 'last28daysruns', 'longest_losing_streak',
+        'average_losing_streak', 'individualrunners', 'uniquewinners')
+    live_2016 = SystemSnapshot.objects.filter(system=s1, snapshottype='HISTORICAL', validfrom__lt=ss_2016_start).only('runners', 'bfwins', 'bfruns', 'winsr', 'a_e',
+        'levelbspprofit', 'levelbsprofitpc', 'a_e_last50', 'archie_allruns', 'archie_last50', 'last50str', 'last28daysruns', 'longest_losing_streak',
+        'average_losing_streak', 'individualrunners', 'uniquewinners')
     
+    #get runners in snapshot! snapshotrunners works?
+
+
+# for el in live_2016.values():
+#     snap_basic_fields.append(
+#         dict(
+#             el= live_2016.el
+#             )
+#         )
 
 
 
-    # get historical information need to create snapshots for 2013,14,15,16 aka funds
-    
-    historical_snapshot = s.systemsnapshot.filter(snapshottype='HISTORICAL').values("bfwins", "bfruns", "winsr", 
-        "expectedwins", "a_e", "levelbspprofit", "a_e_last50", "archie_allruns", "archie_last50", "last50wins", "last50str",
-        "last28daysruns", "profit_last50", "longest_losing_streak", "average_losing_streak","individualrunners", "uniquewinners", "validuptonotincluding")
-    #LIVE SNAPSHOT from Bets
-    livebets = Bet.objects.filter(system=s)
+
+    context = {
+    'system': system_basic_fields,
+    'historical': hist_131415, 
+    'liveseason': live_season2016,
+    'live_2016': live_2016,
+    }
+
     # return HttpResponse("Subscribed", status=200)
-    return render_to_response('systems/system.html')
+    return render(request, 'systems/system.html', context)
 
 
 
@@ -108,16 +149,27 @@ def systems_mylist(request):
     systems subscribed to by user followed by unsubscribed systems.
     each link goes to systems_detail page
 
+    start with all systems 
     '''
-    pass
+    #I am request.user what systems am I subscribed to?
+    #TABLE System: systemname, description , isActive, isTurf, exposure, 
+    # isLayWin, isLawPlace, oddsconditions, 
+
+    # SYSTEMSNAPSHOT  
+    #link to details page which will display based on perms
 
 
 def subscribe(request, system):
     '''
     
     currency_balance (InvestmentAccount - this user, this currency)
-
-
+    if requets method POST 
+        for = Form(request.POST, instance=subscription?)
+        if form.isvalid()
+           form.save()
+           return HttpResponse
+        else
+        form = Form(instance=article)
 
     '''
     if request.method != 'POST':

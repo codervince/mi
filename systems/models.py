@@ -130,7 +130,7 @@ class System(models.Model):
 
     premium  = models.FloatField(default=1.0)   ##will update later based on performance
 
-    runners = models.ManyToManyField(Runner,blank=True)
+    runners = models.ManyToManyField(Runner,related_name='runners')
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True, blank=True)
     
@@ -158,7 +158,7 @@ class SystemSnapshot(models.Model):
     )
     snapshottype = models.CharField(help_text=_('initial(historical/live) '),choices=SNAPSHOTTYPES, default='HISTORICAL',max_length=15)
     system = models.ForeignKey(System, related_name='systemsnapshot')
-    runners = models.ManyToManyField(Runner)
+    runners = models.ManyToManyField(Runner, 'snapshotrunners')
     #HISTORICAL ONLY FIELDS
     bluerows = JSONField(default={})
     greenrows = JSONField(default={})
@@ -209,8 +209,10 @@ class SystemSnapshot(models.Model):
     updated = models.DateTimeField(auto_now=True, blank=True)#currently adding local not UTC time!
     
     def __str__(self):
-        return '%s - %s - %s- A/E: %6.2f -WINSR: %6.2f -LVLPROF: %6.2f' % (self.system.systemname,self.snapshottype, 
-            datetime.strftime(self.validuptonotincluding, "%Y%m%d"), (self.a_e or 0.0), (self.winsr or 0.0), (self.levelbspprofit or 0.0))
+        return '%s - %s - %s- A/E: %6.2f -WINSR: %6.2f -LVLPROF: %6.2f' % (
+            self.system.systemname, self.snapshottype, 
+            datetime.strftime(self.validuptonotincluding, "%Y%m%d"), 
+            (self.a_e or 0.0), (self.winsr or 0.0), (self.levelbspprofit or 0.0))
 
     class Meta:
         unique_together = ('system', 'validfrom', 'validuptonotincluding',)
