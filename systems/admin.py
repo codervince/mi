@@ -1,6 +1,8 @@
 from django.contrib import admin
 
 # Register your models here.
+from guardian.admin import GuardedModelAdmin
+
 from systems.models import System, SystemSnapshot, Runner
 # Register your models here.
 
@@ -9,7 +11,7 @@ class RunnerAdmin(admin.ModelAdmin):
     search_fields = ['sirename', 'jockeyname']
     #filter by'horsename', 'trainername', 'damsirename',
 
-class SystemAdmin(admin.ModelAdmin):
+class SystemAdmin(GuardedModelAdmin):
     list_filter = ("systemname",'created')
 
 class SystemSnapshotAdmin(admin.ModelAdmin):
@@ -20,3 +22,5 @@ class SystemSnapshotAdmin(admin.ModelAdmin):
 admin.site.register(System, SystemAdmin)
 admin.site.register(SystemSnapshot)
 admin.site.register(Runner, RunnerAdmin)
+
+
