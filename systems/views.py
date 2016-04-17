@@ -80,7 +80,7 @@ def systems_detail(request, systemname):
     logger.error("Systemname: %s", systemname)
     context = {}
 
-    system = System.objects.get(systemname=systemname, isActive=True)
+    system = get_object_or_404(System, systemname=systemname, isActive=True)
 
     context['system'] = system
     # get historical information need to create snapshots for 2013,14,15,16 aka funds
