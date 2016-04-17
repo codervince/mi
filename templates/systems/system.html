@@ -2,8 +2,9 @@
 
 {% block navbar-funds-active %}class=active{% endblock %}
 {% load staticfiles %}
+{% load guardian_tags %}
 
-{% block headerextension %}
+{% block extendedheader %}
 
 <style>
 #category2 option{
@@ -20,10 +21,10 @@
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
 $(function(){
-    
+
     var $cat = $("#category1"),
         $subcat = $("#category2");
-    
+
     console.log("hello");
 
     $cat.on("change",function(){
@@ -34,15 +35,54 @@ $(function(){
         $subcat.find("[rel="+_rel+"]").show();
         $subcat.prop("disabled",false);
     });
-    
+
 });
+    $(document).ready(function(){
+        console.log('{% url 'subscribe_system' system.systemname %}');
+        $("#id_subscribe_form").attr("action", '{% url 'subscribe_system' system.systemname %}');
+    });
+
 </script>
 
 {% endblock %}
 
 {% block content %}
 
-{{ system.systemname }}
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    {% get_obj_perms request.user for system as "system_perms" %}
+
+    {% if "view_system" in system_perms %}
+        <a href="#">permission specific data</a>
+    {% endif %}
+
+
+
+    <h1>{{ system.systemname }} - {{ system.systemtype }} </h1>
+
+    <p> {{ system.description }} </p>
+
+
+    <p>{{ system.exposure }}</p>
+    <p>{{ system.query }}</p>
+    <p>{{ system.rpquery }}</p>
+    <p>{{ system.isLayWin }}</p>
+    <p>{{ system.isLayPlace }}</p>
+    <p>{{ system.oddsconditions }}</p>
+    <p>{{ system.premium }}</p>
+    <div>
+    {% for runner in system.runners.all %}
+        <p>{{ runner.runtype }}</p>
+        <p>{{ runner.racename }}</p>
+    {% endfor %}
+    </div>
+
 
 	<div class="basic">
 	{% include 'systems/_subscribe.html' %}   

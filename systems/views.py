@@ -1,20 +1,18 @@
 import logging
-from collections import defaultdict
-from datetime import timedelta
-
 from datetime import datetime
+from datetime import timedelta
+from decimal import Decimal as D
+
+from django.conf import settings
+from django.contrib import messages
 from django.contrib.auth.models import User
 from django.http import HttpResponse
-from django.shortcuts import render, get_object_or_404
-from decimal import Decimal as D
-from django.contrib import messages
-from systems.models import System, SystemSnapshot
+from django.shortcuts import get_object_or_404, redirect
+from django.template.response import TemplateResponse
+
 from bets.models import Bet
-import logging
 
 logger = logging.getLogger(__name__)
-
-from django.utils.translation import ugettext_lazy as _
 
 from guardian.shortcuts import assign_perm
 
@@ -31,15 +29,15 @@ def _get_unit_price_system(currency,recurrence_unit, recurrence_period):
     output: price 
     '''
     SSP = {
-    'aud' : { 'D' : 1, 'W': 0, 'M': 3, 'S' : 50, 'Y': 100},
-    'gbp':  { 'D' : round(5.00/3.0,2), 'W': 0, 'M':round(50.00/3.0,2), 'S' : 50, 'Y': 100},
+    'AUD' : { 'D' : 1, 'W': 0, 'M': 3, 'S' : 50, 'Y': 100},
+    'GBP':  { 'D' : round(5.00/3.0,2), 'W': 0, 'M':round(50.00/3.0,2), 'S' : 50, 'Y': 100},
     }
     if currency.upper() in SSP:
-        p = SSP.get(str(recurrence_unit).upper(), None)
+        p = SSP[currency].get(str(recurrence_unit).upper(), None)
     if not p or p == 0:
         return D('0')
     else:
-        return D(p)* float(recurrence_period)
+        return D(p) * D(recurrence_period)
 
 
 def system_detail(request, systemname):
@@ -68,7 +66,11 @@ def system_detail(request, systemname):
         ''' 
     #is system active? ex   2016-S-10A
     logger.error("Systemname: %s", systemname)
-    system = System.objects.get(systemname=systemname)
+    context = {}
+
+    system = System.objects.get(systemname=systemname, isActive=True)
+
+    context['system'] = system
     # get historical information need to create snapshots for 2013,14,15,16 aka funds
     
     historical_snapshot = system.systemsnapshot.filter(snapshottype='HISTORICAL').values("bfwins", "bfruns", "winsr", 
@@ -76,6 +78,16 @@ def system_detail(request, systemname):
         "last28daysruns", "profit_last50", "longest_losing_streak", "average_losing_streak","individualrunners", "uniquewinners", "validuptonotincluding")
     #LIVE SNAPSHOT from Bets
     livebets = Bet.objects.filter(system=system)
+
+    context['currency'] = settings.CURRENCIES
+
+    investor_account_aud = InvestmentAccount.objects.get(user=request.user, currency='AUD')
+    current_balance_gbp = InvestmentAccount.objects.get(user=request.user, currency='GBP')
+
+    context['current_balance_aud'] = investor_account_aud.balance
+    context['current_balance_gbp'] = current_balance_gbp.balance
+
+    return TemplateResponse(request, 'systems/system.html', context)
 
 
 
@@ -150,9 +162,7 @@ def subscribe(request, system):
     #CAN USER AFFORD IT?
     if investor_account.balance < price:
         # investor.message_set.create(message=_("Sorry: insufficient balance. Please transfer funds"))
-
-        pass
-
+        messages.add_message(request, messages.ERROR, 'Sorry: insufficient balance. Please transfer funds.')
     else:
         #create subscription
         ##Subscription CREATE PERMISSION and ADD TO DATABASE
@@ -162,8 +172,14 @@ def subscribe(request, system):
         #create UserSubscription with this investor
         subscription = Subscription.objects.filter(system=system).first()
         if not subscription:
-            # TODO handle correctly
-            raise Exception
+            messages.add_message(request, messages.ERROR, 'Subscription not found.')
+            return redirect("systems_detail", systemname=system)
+        # check if user is already subscribed
+        existing_subscription = UserSubscription.objects.filter(subscription=subscription, user=investor, expires__gte=datetime.now().date()).order_by('expires')
+
+        if len(existing_subscription) > 0:
+            messages.add_message(request, messages.INFO, 'Already Subscribed, expires st %s ' % existing_subscription.first().expires)
+            return redirect("systems_detail", systemname=system)
 
         # Calculate initial expire date based on subscription
         days_to_add = 0
@@ -176,7 +192,7 @@ def subscribe(request, system):
         delta = timedelta(days=days_to_add)
 
         expires = datetime.now() + delta
-        user_subscription = UserSubscription(subscription=subscription, user=investor, expires=expires)
+        user_subscription = UserSubscription.objects.create(subscription=subscription, user=investor, expires=expires)
 
 
         subscription = 1
@@ -202,7 +218,6 @@ def subscribe(request, system):
         tdebit = Transaction.objects.create(transfer=transfer, account=investor_account, amount=amount*D('-1.0'))
         tcredit = Transaction.objects.create(transfer=transfer, account=system_account, amount=amount*D('1.0'))
 
+        messages.add_message(request, messages.SUCCESS, 'Successfully placed your investment.')
 
-        # investor.message_set.create(message=_("Successfully placed your investment."))
-        # TODO add message
-        return HttpResponse("Subscribed", status=200)
+    return redirect("systems_detail", systemname=system)

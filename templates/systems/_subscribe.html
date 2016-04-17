@@ -1,14 +1,15 @@
 <div>
 Your Balance: {{ current_balance_aud }}  AUD || Your Balance: {{ current_balance_gbp }}  GBP
 </div>
-<form action="" method="post">
+<form id="id_subscribe_form" action="" method="post">
 	{% csrf_token %}
+    <input type="hidden" name="currency" value="">
 		<table width="50%" border="0" cellspacing="0" cellpadding="5">
 			
 			<tr>
 				<td width="41%" align="right" valign="middle">Category1 :</td>
 				<td width="59%" align="left" valign="middle">
-					<select name="category1" id="category1">
+					<select name="recurrence_unit" id="category1">
 			 		 	<option value="---">Please select an option</option>
 						<option value="D">Day(s)</option>
 						<option value="W">Week(s)</option>
@@ -21,8 +22,8 @@ Your Balance: {{ current_balance_aud }}  AUD || Your Balance: {{ current_balance
 			<tr>
 				<td align="right" valign="middle">How many?:</td>
 				<td align="left" valign="middle">
-					<select disabled="disabled" id="category2" name="category2">
-						<option value>How many?</option>
+					<select disabled="disabled" id="category2" name="recurrence_period">
+						<option value="---">How many?</option>
 						<!-- Home Ware -->
 						<option rel="D" value="1">1</option>
                         <option rel="D" value="3">3</option>
@@ -38,6 +39,15 @@ Your Balance: {{ current_balance_aud }}  AUD || Your Balance: {{ current_balance
 						<option rel="Y" value="1">1</option>
 					</select>
 				</td>
+                <td valign="middle">
+                    <select name="currency">
+						<option value>Currency</option>
+						<!-- Home Ware -->
+						{% for cur in currency %}
+                            <option value="{{ cur.0 }}">{{ cur.0 }}</option>
+                        {% endfor %}
+					</select>
+                </td>
 				<td>
 					<div id="price">PRICE GOES HERE</div>
 					<div class="padded" style="padding: 5px 10px;">
