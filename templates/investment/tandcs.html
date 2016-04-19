@@ -1,18 +1,27 @@
 {% extends "investment/systembase.html" %}
-{% block content %}
   {% load staticfiles %}
 
+{% block content %}
+
+
 <div class="inner">
-	<h2>Caveat emptor</h2><p>
+	<h2>Caveat emptor</h2>
+	<p>
 	Investments are obviously not guarantees! Past performance does not necessarily reflect future outcomes.
 	</p>
-	<h2>Fee structure</h2><p>
-	Passive investors subscribe to the information service at GBP <span id="subscriptionfeegbp"> 20</span>/AUD<span id="subscriptionfeeaud"> 40</span> or USD <span class="subscriptionfeeusd"> 30 </span> per month (28 days). The season runs for 7 calendar months. 
-        Each fund has its own structure but initially the basic settings are as follows:
-	The management fee is the equivalent to the subscription fee above. It is linked to fund performance as a % of profit. Currently, it is <span class="defaultmanagefee"> 5% </span>
+	
+	<h2>Fee structure</h2>
+	<p>
+	Passive investors subscribe to the information service at GBP<span id="subscriptionfeegbp">20</span>
+	AUD<span id="subscriptionfeeaud">40</span> or 
+	USD<span class="subscriptionfeeusd">30</span> per month (28 days). 
+	The season runs for 7 calendar months. 
+    Each fund has its own structure but initially the basic settings are as follows:
+	The management fee is the equivalent to the subscription fee above. It is linked to fund performance as a % of profit. Currently, it is 
+	<span class="defaultmanagefee"> 5% </span>
 	There is also a performance fee for any excess profits beyond a threshold. This is standard practice in investment funds.
 	Dividend-based funds are either priced higher or incur a dividend fee on profits, typically 5%.
-	The current figures are <span class="defaultperformancefee"> 5 </span> % for investments over <span class="defaultperformancethreshold> 150% </span>.
+	The current figures are <span class="defaultperformancefee">5</span> % for investments over <span class="defaultperformancethreshold" 150% </span>.
 	When you use your funds to make an investment, these figures will be included in the investment agreement.
 	Using a percentage simplifies matters since the funds are in principal currency-agnostic.
 	</p>

@@ -134,7 +134,7 @@ class Subscription(models.Model):
 class UserSubscription(models.Model):
     user = models.ForeignKey(User)
     subscription = models.ForeignKey(Subscription)
-    expires = models.DateField(null=True, default=datetime.now()) #why today?
+    expires = models.DateField(null=True) #why today?
     active = models.BooleanField(default=True)
     cancelled = models.BooleanField(default=True)
 

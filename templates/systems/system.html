@@ -3,6 +3,7 @@
 {% block navbar-funds-active %}class=active{% endblock %}
 {% load staticfiles %}
 {% load guardian_tags %}
+{% load humanize %}
 
 {% block extendedheader %}
 
@@ -22,6 +23,8 @@
     <script type="text/javascript">
 $(function(){
 
+    var price = $("#price");
+
     var $cat = $("#category1"),
         $subcat = $("#category2");
 
@@ -36,7 +39,7 @@ $(function(){
 
 });
     $(document).ready(function(){
-        $("#id_subscribe_form").attr("action", '{% url 'subscribe_system' system.systemname %}');
+        $("#id_subscribe_form").attr("action", '{% url 'systems:subscribe_system' system.systemname %}');
     });
 
 </script>
@@ -56,7 +59,17 @@ $(function(){
     {% get_obj_perms request.user for system as "system_perms" %}
 
     {% if "view_system" in system_perms %}
+
+        {{ live_season2016 }}
+        <div>
+            DATA TABLES first Get the Data to Systems and filter by systemsnapshot dates - remove from systemsnapshot?
+            {% for runner in system.runners.all %}
+                <p>{{ runner.runtype }}</p>
+                <p>{{ runner.racename }}</p>
+            {% endfor %}
+        </div>
         <a href="#">permission specific data</a>
+        }
     {% endif %}
 
 
@@ -73,12 +86,7 @@ $(function(){
     <p>{{ system.isLayPlace }}</p>
     <p>{{ system.oddsconditions }}</p>
     <p>{{ system.premium }}</p>
-    <div>
-    {% for runner in system.runners.all %}
-        <p>{{ runner.runtype }}</p>
-        <p>{{ runner.racename }}</p>
-    {% endfor %}
-    </div>
+
 
 
 {% include 'systems/2016.html' %}

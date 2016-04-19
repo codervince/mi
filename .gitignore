@@ -14,4 +14,4 @@ investment/local_settings.py
 .idea/*
 
 #Other
-._.DS_Store
+._.DS_Store.env
