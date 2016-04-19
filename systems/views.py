@@ -69,11 +69,12 @@ def getracedatetime(racedate, racetime):
     return racedatetime
 
 def runners_list(request, systemname):
-    system =get_object_or_404(System, systemname=systemname)
-    table = SystemTable(system.runners.all())
-    # table = SystemTable(System.objects.all())
-    RequestConfig(request).configure(table)
-    return render(request, 'systems/systemrunners.html', {'table': table, 'system': system})
+    if request.method == 'GET':
+        system =get_object_or_404(System, systemname=systemname)
+        table = SystemTable(system.runners.all())
+        # table = SystemTable(System.objects.all())
+        RequestConfig(request).configure(table)
+        return render(request, 'systems/systemrunners.html', {'table': table, 'system': system})
 
 #'Custom' generic view
 # class RunnersList(ListView):
@@ -163,6 +164,7 @@ def systems_detail(request, systemname):
         'levelbspprofit', 'levelbsprofitpc', 'a_e_last50', 'archie_allruns', 'archie_last50', 'last50str', 'last28daysruns', 'longest_losing_streak',
         'average_losing_streak', 'individualrunners', 'uniquewinners')
 
+    ##why runners here?
     context['runners_count'] = system.runners.values().count()
     context['runners'] = system.runners.values() #list of runners , was the first one placed? s1.runners.values()[0]['isplaced']
     #LIVE SNAPSHOT from Bets
@@ -173,15 +175,15 @@ def systems_detail(request, systemname):
     context['hist_131415'] = hist_131415
     context['prices'] = get_prices_for_system(system)
 
+    ### IF USER IS ANON DO NOT SHOW SUSCRIPTION FORM!
+    if request.user.is_authenticated():
+        context['currency'] = settings.CURRENCIES
+        ##THIS DOES NOT WORL FOR ANONYMOUS USERS
+        investor_account_aud = InvestmentAccount.objects.get(user=request.user, currency='AUD')
+        current_balance_gbp = InvestmentAccount.objects.get(user=request.user, currency='GBP')
 
-
-    context['currency'] = settings.CURRENCIES
-
-    investor_account_aud = InvestmentAccount.objects.get(user=request.user, currency='AUD')
-    current_balance_gbp = InvestmentAccount.objects.get(user=request.user, currency='GBP')
-
-    context['current_balance_aud'] = investor_account_aud.balance
-    context['current_balance_gbp'] = current_balance_gbp.balance
+        context['current_balance_aud'] = investor_account_aud.balance
+        context['current_balance_gbp'] = current_balance_gbp.balance
 
     return TemplateResponse(request, 'systems/system.html', context)
 
@@ -333,5 +335,5 @@ def subscribe(request, system):
 
         messages.add_message(request, messages.SUCCESS, 'Successfully placed your investment.')
 
-    # return redirect("systems:systems_detail", systemname=system)
-    return HttpResponseRedirect("systems:systems_detail", systemname=system) #or use reverse? return to same page
+    return redirect("systems:systems_detail", systemname=system)
+    # return HttpResponseRedirect("systems:systems_detail", systemname=system) #or use reverse? return to same page
