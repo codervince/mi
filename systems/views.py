@@ -11,6 +11,7 @@ from django.shortcuts import get_object_or_404, redirect
 from django.template.response import TemplateResponse
 
 from bets.models import Bet
+from investment_accounts.balance import get_investment_balance
 
 logger = logging.getLogger(__name__)
 
@@ -93,11 +94,9 @@ def systems_detail(request, systemname):
 
     context['currency'] = settings.CURRENCIES
 
-    investor_account_aud = InvestmentAccount.objects.get(user=request.user, currency='AUD')
-    current_balance_gbp = InvestmentAccount.objects.get(user=request.user, currency='GBP')
-
-    context['current_balance_aud'] = investor_account_aud.balance
-    context['current_balance_gbp'] = current_balance_gbp.balance
+    investment_balances = get_investment_balance(request.user)
+    context['current_balance_aud'] = investment_balances['AUD']
+    context['current_balance_gbp'] = investment_balances['GBP']
 
     return TemplateResponse(request, 'systems/system.html', context)
 

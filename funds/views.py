@@ -1,5 +1,6 @@
 from django.conf                import settings
 from django.http                import HttpResponseRedirect
+from django.template.response import TemplateResponse
 from django.views               import generic
 from django.utils.decorators    import method_decorator
 from django.core.urlresolvers   import reverse
@@ -7,10 +8,12 @@ from django.contrib.auth.models import User
 from guardian.shortcuts         import assign_perm
 from guardian.shortcuts         import remove_perm
 from decimal                    import Decimal
+
+from investment_accounts.balance import get_investment_balance
 from .models                    import Fund
 from investment_accounts.models import InvestmentAccount,Transfer, Transaction, FundAccount
 # from investors.models 			import Investor
-from django.shortcuts           import (get_object_or_404,redirect, render)
+from django.shortcuts           import (get_object_or_404, redirect, render, render_to_response)
 import logging
 import json
 import ast
@@ -48,10 +51,14 @@ def funds_myindex(request):
     displays runners list incl candidates for these funds -
     color coded by fund orderd by date
     '''
+    context = {}
     now = datetime.now()
     current_user = request.user
     #for user get investor, get investments get fundaccountid
     #return Funds for fundaccountid
+    # SOURCE
+    fund_accounts = FundAccount.objects.filter(user=request.user)
+    context['funds'] = fund_accounts
     #display by roi.
     #also get last 50 runs?
     ## if use 2016 get latest runners stats off the bat
@@ -62,7 +69,10 @@ def funds_myindex(request):
     #latest runners system. latest systemsnapshot runners
 
     #locals() would also include request
-    return render_to_response('funds/myfunds.html', {'funds': funds, 'now':now})
+    balances = get_investment_balance(request.user)
+    context['GBPbalance'] = balances['GBP']
+    context['AUDbalance'] = balances['AUD']
+    return TemplateResponse(request, 'funds/funds.html', context)
 
 '''
 TODO: Subscribe is not only making an investment but also suscribing to a 'view' for a certain period of time

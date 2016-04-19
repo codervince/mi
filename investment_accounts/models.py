@@ -342,8 +342,11 @@ class FundAccount(Account):
     fund = models.ForeignKey(Fund, related_name="fundaccounts",null=True, blank=True,on_delete=models.SET_NULL)
     user = models.ForeignKey(User, related_name="fundaccounts",null=True, blank=True,on_delete=models.SET_NULL)
     currency = models.CharField( max_length = 25, choices = settings.CURRENCIES )
+
     class Meta:
         unique_together= ('user', 'fund', 'currency',)
+        permissions = (('view_fund_account', 'View Fund Account'),)
+
 
 class SystemAccount(Account):
     system = models.ForeignKey(System, related_name="systemaccounts",null=True, blank=True,on_delete=models.SET_NULL)

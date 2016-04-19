@@ -1,4 +1,4 @@
-{% extends "app/base.html" %}
+{% extends "investment/systembase.html" %}
 {% load guardian_tags %}
 
 {% block navbar-funds-active %}class=active{% endblock %}
@@ -15,25 +15,27 @@
       <th>Share</th>
    </thead>
    <tbody>
-      {% for f in object_list %}
+      {% for f in funds %}
       <tr>
-         {% get_obj_perms user for f as "fundacount_perms" %}
+         {% get_obj_perms request.user for f as "fundacount_perms" %}
 
-         {% if "view_task" in fundacount_perms %}
-         <td><a href="{% url 'funds:fundaccount_detail' f.slug %}">{{ f.fundname }}</td>
+         {% if "view_fund_account" in fundacount_perms %}
+         <td><a href="{% url 'funds:fundaccount_detail' f.slug %}">{{ f.fund.fundname }}</a></td>
          <td>{{ f.currency }}</td>
          <td>True</td>
          <td>
-            <form action="{% url 'funds:unsubscribe' f.id %}">
+            <form action="#">
+{#                {% url 'funds:unsubscribe' f.id %}#}
                <button type="submit" class="btn btn-primary">Unsubscribe</button>
             </form>
          </td>
          <td></td>
          {% else %}
-         <td>{{ f.fundname }}</td>
+         <td>{{ f.fund.fundname }}</td>
          <td>{{ f.currency }}</td>
          <td>False</td>
-         <form action="{% url 'funds:subscribe' f.id %}" method="post">
+         <form action="#" method="post">
+{#         {% url 'funds:subscribe' f.id %}#}
          {% csrf_token %}
          <td>
              <button type="submit" class="btn btn-primary">Subscribe</button>
@@ -48,7 +50,7 @@
 
 <br/>
 <br/>
-<div>I am Mr: {{ username }}</div>
+<div>I am Mr: {{ request.user.username }}</div>
 <div>GBP balance: {{ GBPbalance }}</div>
 <div>AUD balance: {{ AUDbalance }}</div>
 
