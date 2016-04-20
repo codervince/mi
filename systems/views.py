@@ -7,11 +7,14 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.http import HttpResponse
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect, render
 from django.template.response import TemplateResponse
+from django_tables2   import RequestConfig
+from pytz import timezone
 
 from bets.models import Bet
 from investment_accounts.balance import get_investment_balance
+from systems.tables import SystemTable
 
 logger = logging.getLogger(__name__)
 
@@ -24,15 +27,31 @@ from systems.models import System
 logger = logging.getLogger(__name__)
 
 
+def get_prices_for_system(system):
+    '''returns the prices dictionary for all currencies. '''
+    ''' FS prices:  3 days 5GBP, 1 month:35, 3 months 85, 1 season 150? '''
+    premium = system.premium
+    basic_prices = { 'AUD': 
+                {'M1': 20, 'M3': 60, 'S1': 150, 'Y1': 360 }, 
+                    'GBP': 
+                { 'M1': 10, 'M3': 30, 'S1': 75, 'Y1': 180 }
+        }
+    if system.premium and system.premium != 1.0:
+        tmp = dict(premium*v for k,v in basic_prices.iteritems())
+        basic_prices.update(tmp)
+    return basic_prices
+
+
 def _get_unit_price_system(currency,recurrence_unit, recurrence_period):
     '''
     Lookup function: input currency, recurrence_unit(period), no of periods
-    output: price 
+    output: price PREMIUM?
     '''
     SSP = {
     'AUD' : { 'D' : 1, 'W': 0, 'M': 3, 'S' : 50, 'Y': 100},
     'GBP':  { 'D' : round(5.00/3.0,2), 'W': 0, 'M':round(50.00/3.0,2), 'S' : 50, 'Y': 100},
     }
+    p = 0.0
     if currency.upper() in SSP:
         p = SSP[currency].get(str(recurrence_unit).upper(), None)
     if not p or p == 0:
@@ -40,11 +59,56 @@ def _get_unit_price_system(currency,recurrence_unit, recurrence_period):
     else:
         return D(p) * D(recurrence_period)
 
+def getracedatetime(racedate, racetime):
 
-#
+    _rt = datetime.strptime(racetime,'%I:%M %p').time()
+    racedatetime = datetime.combine(racedate, _rt)
+    localtz = timezone('Europe/London')
+    racedatetime = localtz.localize(racedatetime)
+    return racedatetime
+
+def runners_list(request, systemname):
+    if request.method == 'GET':
+        system =get_object_or_404(System, systemname=systemname)
+        table = SystemTable(system.runners.all())
+        # table = SystemTable(System.objects.all())
+        RequestConfig(request).configure(table)
+        return render(request, 'systems/systemrunners.html', {'table': table, 'system': system})
+
+#'Custom' generic view
+# class RunnersList(ListView):
+#     template_name = 'systems/systemrunners.html'
+#     allow_empty = True
+
+#     def get_queryset(self):
+#         self.system = get_object_or_404(System, systemname=self.args[0])
+#         table = SystemTable(System.objects.all())
+#         RequestConfig(request).configure(table)
+#         return render(request, 'people.html', {'table': table})
+
+#         # return Runner.objects.all()
+#         # return self.system.runners.order_by('-racedatetime')
+#         # return System.objects.filter(systemname=self.system).runners.order_by('-racedatetime')
+#         # return Runner.objects.filter(systemname=self.system).order_by('-racedatetime')
+
+#     def get_context_data(self, **kwargs):
+#         # Call the base implementation first to get a context
+#         context = super(RunnersList, self).get_context_data(**kwargs)
+#         # Add in a QuerySet of all the books
+#         context['system'] = self.system
+#         return context
 
 def systems_detail(request, systemname):
+    # for systemname
+
     '''
+    System: systemname, description , isActive, isTurf, exposure, 
+    # isLayWin, isLawPlace, oddsconditions, 
+    runners 
+    #Snapshots: 
+    1 x LIVE 1/1/2016 -> LATEST LIVE
+    1 x HISTORICAL 
+    
         Display: 
         template 1 specific system data  _system.html
 
@@ -78,6 +142,7 @@ def systems_detail(request, systemname):
         ISSUE : Is Runners uptodate for live?
         ''' 
     #is system active? ex   2016-S-10A
+
     logger.error("Systemname: %s", systemname)
     context = {}
 
@@ -86,19 +151,40 @@ def systems_detail(request, systemname):
     context['system'] = system
     # get historical information need to create snapshots for 2013,14,15,16 aka funds
     
-    historical_snapshot = system.systemsnapshot.filter(snapshottype='HISTORICAL').values("bfwins", "bfruns", "winsr",
-        "expectedwins", "a_e", "levelbspprofit", "a_e_last50", "archie_allruns", "archie_last50", "last50wins", "last50str",
-        "last28daysruns", "profit_last50", "longest_losing_streak", "average_losing_streak","individualrunners", "uniquewinners", "validuptonotincluding")
+    ss_2016_start = getracedatetime(datetime.strptime("20160101", "%Y%m%d").date(), '12:00 AM')
+    ss_season2016_start = getracedatetime(datetime.strptime("20160402", "%Y%m%d").date(), '12:00 AM')
+    ss_hist_start = getracedatetime(datetime.strptime("20130101", "%Y%m%d").date(), '12:00 AM')
+    
+    hist_131415 = system.systemsnapshot.filter(snapshottype='HISTORICAL', validfrom__date__lt=ss_hist_start)
+    live_season2016 = system.systemsnapshot.filter(validfrom__date__lt=ss_season2016_start).only('runners', 'bfwins', 'bfruns', 'winsr', 'a_e',
+        'levelbspprofit', 'levelbsprofitpc', 'a_e_last50', 'archie_allruns', 'archie_last50', 'last50str', 'last28daysruns', 'longest_losing_streak',
+        'average_losing_streak', 'individualrunners', 'uniquewinners')
+    live_2016 = system.systemsnapshot.filter(validfrom__date__lt=ss_2016_start).only('runners', 'bfwins', 'bfruns', 'winsr', 'a_e',
+        'levelbspprofit', 'levelbsprofitpc', 'a_e_last50', 'archie_allruns', 'archie_last50', 'last50str', 'last28daysruns', 'longest_losing_streak',
+        'average_losing_streak', 'individualrunners', 'uniquewinners')
+
+    ##why runners here?
+    context['runners_count'] = system.runners.values().count()
+    context['runners'] = system.runners.values() #list of runners , was the first one placed? s1.runners.values()[0]['isplaced']
     #LIVE SNAPSHOT from Bets
     livebets = Bet.objects.filter(system=system)
 
-    context['currency'] = settings.CURRENCIES
+     
+    context['live_season2016'] = live_season2016
+    context['hist_131415'] = hist_131415
+    context['prices'] = get_prices_for_system(system)
 
-    investment_balances = get_investment_balance(request.user)
-    context['current_balance_aud'] = investment_balances['AUD']
-    context['current_balance_gbp'] = investment_balances['GBP']
+    ### IF USER IS ANON DO NOT SHOW SUSCRIPTION FORM!
+    if request.user.is_authenticated():
+        context['currency'] = settings.CURRENCIES
+        ##THIS DOES NOT WORL FOR ANONYMOUS USERS
+        investment_balances = get_investment_balance(request.user)
+
+        context['current_balance_aud'] = investment_balances['AUD']
+        context['current_balance_gbp'] = investment_balances['GBP']
 
     return TemplateResponse(request, 'systems/system.html', context)
+
 
 
 
@@ -110,18 +196,30 @@ def systems_mylist(request):
     systems subscribed to by user followed by unsubscribed systems.
     each link goes to systems_detail page
 
+    start with all systems 
     '''
-    pass
+    #I am request.user what systems am I subscribed to?
+    #TABLE System: systemname, description , isActive, isTurf, exposure, 
+    # isLayWin, isLawPlace, oddsconditions, 
+
+    # SYSTEMSNAPSHOT  
+    #link to details page which will display based on perms
 
 
 def subscribe(request, system):
     '''
     
     currency_balance (InvestmentAccount - this user, this currency)
-
-
+    if requets method POST 
+        for = Form(request.POST, instance=subscription?)
+        if form.isvalid()
+           form.save()
+           return HttpResponse
+        else
+        form = Form(instance=article)
 
     '''
+
     if request.method != 'POST':
         return HttpResponse("Method not allowed ", status=405)
 
@@ -152,8 +250,13 @@ def subscribe(request, system):
     #WHOS INVESTING? AND WHATS THE DESTINATION - FOR TRANSACTION/TRANSFER
 
     #SOURCE
-    investor         = request.user
-    investor_account = InvestmentAccount.objects.get(user=investor, currency=currency)
+    try:
+        investor         = request.user
+        investor_account = InvestmentAccount.objects.get(user=investor, currency=currency)
+    except InvestmentAccount.DoesNotExist:
+        #redisplay the form
+        return redirect("systems:systems_detail", systemname=system.systemname)
+
 
     #DESTINATION
     system_account    =  SystemAccount.objects.filter(system=system, currency=currency)
@@ -183,13 +286,13 @@ def subscribe(request, system):
         subscription = Subscription.objects.filter(system=system, subscription_type='SYSTEM').first()
         if not subscription:
             messages.add_message(request, messages.ERROR, 'Subscription not found.')
-            return redirect("systems_detail", systemname=system)
+            return redirect("systems:systems_detail", systemname=system)
         # check if user is already subscribed
         existing_subscription = UserSubscription.objects.filter(subscription=subscription, user=investor, expires__gte=datetime.now().date()).order_by('expires')
 
         if len(existing_subscription) > 0:
             messages.add_message(request, messages.INFO, 'Already Subscribed, expires st %s ' % existing_subscription.first().expires)
-            return redirect("systems_detail", systemname=system)
+            return redirect("systems:systems_detail", systemname=system)
 
         # Calculate initial expire date based on subscription
         days_to_add = 0
@@ -230,4 +333,5 @@ def subscribe(request, system):
 
         messages.add_message(request, messages.SUCCESS, 'Successfully placed your investment.')
 
-    return redirect("systems_detail", systemname=system)
+    return redirect("systems:systems_detail", systemname=system)
+    # return HttpResponseRedirect("systems:systems_detail", systemname=system) #or use reverse? return to same page

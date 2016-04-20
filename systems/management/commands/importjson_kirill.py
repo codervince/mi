@@ -6,18 +6,31 @@ from django.contrib.auth.models import User
 import json
 import os
 from datetime import datetime
-import pytz 
+import pytz
+from pytz import timezone
+
 '''
+
+
+###################################
 Imports data from SYSTEM/SNAPSHOT JSON
 /Users/vmac/PY/DJANGOSITES/SERVER/mi
 Directory:
 /Users/vmac/PY/DJANGOSITES/DATA/SYSTEMS/test
 python manage.py importjson_kirill '/Users/vmac/PY/DJANGOSITES/DATA/SYSTEMS/EXTRA2'
+
+#######################
 Need more systems?
 flatstats2 offline from HTML to JSON
 
 '''
+def getracedatetime(racedate, racetime):
 
+    _rt = datetime.strptime(racetime,'%I:%M %p').time()
+    racedatetime = datetime.combine(racedate, _rt)
+    localtz = timezone('Europe/London')
+    racedatetime = localtz.localize(racedatetime)
+    return racedatetime
 
 def get_all_field_names(model):
     fields = model._meta.get_fields()
@@ -85,22 +98,28 @@ class Command(BaseCommand):
                     #test
                     print(system.pk, systemaccount.pk)
 
+            ##THESE HISTORICAL 
             #additional fields not in JSON
             # cutoff = datetime.utc.now()
             # cutoff = datetime.strptime('20160328', '%Y%m%d')
-            cutoff = datetime(2016, 3, 28, 0, 00, 0, 0, pytz.UTC)
+            valid_from = getracedatetime(datetime.strptime("20130101", "%Y%m%d").date(), '12:00 AM')
+            valid_to = getracedatetime(datetime.strptime("20151129", "%Y%m%d").date(), '12:00 AM')
             print(systemsnapshot_fields)
             data = {
                 'stats': {},
                 'average_winning_streak': 0.0,
-                'validuptonotincluding': cutoff
+                'validfrom': valid_from,
+                'validuptonotincluding': valid_to
             }
             for field_name in systemsnapshot_fields:
                 if field_name in json_data:
-                    data[field_name] = json_data[field_name]
+                    if field_name in ['a_e', 'winsr', 'levelbspprofit'] and type(json_data[field_name]) != type(0.0):
+                        data[field_name] = 0.0
+                    else:
+                        data[field_name] = json_data[field_name]
 
             print(data)
 
-            system, created = SystemSnapshot.objects.update_or_create(
+            SystemSnapshot.objects.update_or_create(
                 system=system, defaults=data)
-            print(system, created)
+            

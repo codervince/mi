@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from systems.models import System, SystemSnapshot, Fund, FundSnapshot
+from guardian.shortcuts import get_objects_for_user
 # A System is a fund with 1 member!
 
 #use links to system/fund detail
@@ -29,13 +30,40 @@ ISSUE : Is Runners uptodate for live?
 ''' 
 #choose FUND, SYSTEM radio button
 
+#GET CANDIDATES button
+#runs queries for systems for which user is subscribed against RPRaceday tables
+
 
 
 #summarize per system/fund
 
+#view 1 
 
+#http://django-tables2.readthedocs.org/en/latest/?
 
-#data tables displays all bets
+def alerts_to_csv(request):
+    pass
+
+def alerts(request):
+    ''' 
+    display latest bets for systems  (and funds) to which loggedin user is subscribed PLUS last 50 runners for systems/funds fo which user is subscribed
+    fill subtemplate to be added to table django-tables2?? and included in LOGGED IN REDIRECT SCREEN (user dash)
+     '''
+    #what are MY systems- what systems am I subscribed to?
+    systems = get_objects_for_user(request.user, 'systems.view_system')
+    #systems are funds cleverer way to combine?
+    funds = get_objects_for_user(request.user, 'funds.view_fund')
+    #what are the systems for this fund?
+    fundbets = Fund.objects.filter(fund_id__in=funds) #check this
+    systembets = Bet.objects.filter(system__in=systems)
+
+    return render(request, "_myalerts.html", {"systembets": systembets, 'fundbets': fundbets})
+
+#if user is not logged in or has not subscribed displat latest bets + last 50 runners for TOP 3 MOST PROFITABLE SYSTEMS - how?
+
+#Use data tables displays all bets + runners single table
+
+#narrow down fields!
 
 
 snapshottype = models.CharField(help_text=_('initial(historical/live) '),choices=SNAPSHOTTYPES, default='HISTORICAL',max_length=15)

@@ -1,7 +1,8 @@
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
-
+from django.dispatch import receiver
+from django.db.models.signals import post_save
 from django.contrib.postgres.fields import JSONField
 from django.contrib.postgres.fields import ArrayField
 from django.core.urlresolvers import reverse
@@ -76,6 +77,8 @@ class Runner(models.Model):
         unique_together = ('racedate', 'horsename',)
         ordering = ('-racedate',)
 
+    def __str__(self):
+        return '%s %s %s %s %6.2f' % (datetime.strftime(self.racedate, "%Y%m%d"), self.racecoursename, self.horsename, self.finalpos, self.bfsp)
     # timeformrating = models.FloatField(help_text=_('Timeform Rating'),)
     # officialrating= models.FloatField(help_text=_('OR Rating'),)
     # timeformratingrank= models.SmallIntegerField(help_text=_('Timeform Rating rank'),)
@@ -87,15 +90,15 @@ class Runner(models.Model):
 #enter manually initially or via CSV each day
 # racecourseid horseid including outcome as per rpraceday/races
 
-class LiveRunnersManager(models.Manager):
-    ''' Returns the most recent snapshot of runners since the system began'''
-    def get_query_set(self):
-        return super(LiveRunnersManager, self).get_query_set().systemsnapshot.filter(snapshottype='LIVE').latest().runners
+# class LiveRunnersManager(models.Manager):
+#     ''' Returns the most recent snapshot of runners since the system began'''
+#     def get_query_set(self):
+#         return super(LiveRunnersManager, self).get_query_set().systemsnapshot.filter(snapshottype='LIVE').latest().runners
 
-class HistoricalRunnersManager(models.Manager):
-    '''Use: System.liverunners.filter(systemname = systemname) '''
-    def get_query_set(self):
-        return super(HistoricalRunnersManager, self).get_query_set().systemsnapshot.filter(snapshottype='HISTORICAL').latest().runners
+# class HistoricalRunnersManager(models.Manager):
+#     '''Use: System.liverunners.filter(systemname = systemname) '''
+#     def get_query_set(self):
+#         return super(HistoricalRunnersManager, self).get_query_set().systemsnapshot.filter(snapshottype='HISTORICAL').latest().runners
 
 '''
 Permissions: if a user is subscribed to a System, can TRACK that system
@@ -130,13 +133,15 @@ class System(models.Model):
 
     premium  = models.FloatField(default=1.0)   ##will update later based on performance
 
-    runners = models.ManyToManyField(Runner,blank=True)
+    runners = models.ManyToManyField(Runner)
+
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True, blank=True)
     
     objects = models.Manager() #default
-    liverunners = LiveRunnersManager()
-    historicalrunners = HistoricalRunnersManager()
+    # liverunners = LiveRunnersManager()
+    # historicalrunners = HistoricalRunnersManager()
+
 
 
     def __str__(self):
@@ -158,7 +163,7 @@ class SystemSnapshot(models.Model):
     )
     snapshottype = models.CharField(help_text=_('initial(historical/live) '),choices=SNAPSHOTTYPES, default='HISTORICAL',max_length=15)
     system = models.ForeignKey(System, related_name='systemsnapshot')
-    runners = models.ManyToManyField(Runner)
+    runners = models.ManyToManyField(Runner, 'snapshotrunners')
     #HISTORICAL ONLY FIELDS
     bluerows = JSONField(default={})
     greenrows = JSONField(default={})
@@ -209,11 +214,23 @@ class SystemSnapshot(models.Model):
     updated = models.DateTimeField(auto_now=True, blank=True)#currently adding local not UTC time!
     
     def __str__(self):
-        return '%s - %s - %s- A/E: %6.2f -WINSR: %6.2f -LVLPROF: %6.2f' % (self.system.systemname,self.snapshottype, 
-            datetime.strftime(self.validuptonotincluding, "%Y%m%d"), (self.a_e or 0.0), (self.winsr or 0.0), (self.levelbspprofit or 0.0))
+        return '%s - %s - %s- A/E: %6.2f -WINSR: %6.2f -LVLPROF: %6.2f' % (
+            self.system.systemname, self.snapshottype, 
+            datetime.strftime(self.validuptonotincluding, "%Y%m%d"), 
+            (self.a_e or 0.0), (self.winsr or 0.0), (self.levelbspprofit or 0.0))
 
     class Meta:
         unique_together = ('system', 'validfrom', 'validuptonotincluding',)
         default_permissions = ('view', 'add', 'change', 'delete')
         ordering = ('-levelbsprofitpc',)
         get_latest_by = 'created'
+
+#when snapshot changes need to update premium in System based on levelbspprofitpc 
+@receiver(post_save, sender=SystemSnapshot)
+def update_premium(sender, **kwargs):
+    '''Assumption: levelbsprofitpc is > 100 i.e. a percentage '''
+    '''If premium is > 120 price new premium is 1.2 etc- if not created (ie not new runners) do nothing'''
+    if kwargs.get('created', False):
+        if kwargs.get('system'):
+            new_premium = float(kwargs.get('system').premium) * (float(kwargs.get('levelbspprofitpc', 100.0))/100.0)
+            System.objects.filter(kwargs.get('system')).update(premium=new_premium)

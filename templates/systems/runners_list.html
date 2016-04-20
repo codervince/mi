@@ -1,0 +1,8 @@
+{% block content %}
+    <h2>Runners</h2>
+    <ul>
+        {% for runner in object_list %}
+            <li>{{ runner.horsename }}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

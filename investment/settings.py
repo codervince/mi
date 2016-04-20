@@ -11,7 +11,11 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 """
 
 import os
+import re
 
+env = os.environ.copy()
+# export DJANGO_SETTINGS_MODULE=mi.investment.settings TRTING TO GET django-admin to work
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "investment.settings")
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -48,6 +52,10 @@ INSTALLED_APPS = [
     'systems',
     'funds',
     'bets',
+    'django.contrib.humanize',
+    'django.contrib.sites',
+    'django.contrib.flatpages',
+    'django_tables2',
 ]
 #remove investments
 
@@ -60,6 +68,7 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
 ]
 
 ROOT_URLCONF = 'investment.urls'
@@ -75,6 +84,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.core.context_processors.request',
+
             ],
         },
     },
@@ -89,28 +100,29 @@ WSGI_APPLICATION = 'investment.wsgi.application'
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
 
 #local
-DATABASES = {
-   'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'lucky10',
-        'USER': 'vmac',
-        'PASSWORD': '',
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
+if DEBUG == True:
+    DATABASES = {
+       'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'lucky10',
+            'USER': 'vmac',
+            'PASSWORD': '',
+            'HOST': '127.0.0.1',
+            'PORT': '5432',
+        }
     }
-}
-
-#remote
-# DATABASES = {
-#    'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': 'lucky78',
-#         'USER': 'devdb',
-#         'PASSWORD': '1devdb6',
-#         'HOST': '127.0.0.1',
-#         'PORT': '5432',
-#     }
-# }
+else:
+    #remote
+    DATABASES = {
+       'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'lucky78',
+            'USER': 'devdb',
+            'PASSWORD': '1devdb6',
+            'HOST': '127.0.0.1',
+            'PORT': '5432',
+        }
+    }
 
 
 # Password validation
@@ -173,4 +185,10 @@ LOGIN_REDIRECT_URL = '/'
 
 SESSION_COOKIE_AGE = 2592000 # One month
 
+SITE_ID = 1
 
+
+DISALLOWED_USER_AGENTS = (
+    re.compile(r'^OmniExplorer_Bot'),
+    re.compile(r'^Googlebot'),
+    )

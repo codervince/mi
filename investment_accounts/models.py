@@ -3,7 +3,7 @@
 import hmac #hashing
 
 from django.core.exceptions import ValidationError
-from django.db import models
+from django.db import models, utils
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.auth.models import Permission
@@ -74,7 +74,7 @@ class Subscription(models.Model):
     LIMIT NUMBER of subscriptions to 100 for each systemname
 
     '''
-    name = models.CharField(max_length=100, unique=True, null=False)
+    name = models.CharField(max_length=100, null=False)
     description = models.TextField(blank=True)
     price = models.DecimalField(max_digits=64, decimal_places=2)
     trial_period = models.PositiveIntegerField(null=True, blank=True)
@@ -98,9 +98,10 @@ class Subscription(models.Model):
         if (model.objects.filter(system=self.system).count() == 99 and
                 self.id != model.objects.get().id):
             raise ValidationError(
-                "No more suscbriptions for system %s." % self.systemname)
+                "No more subscriptions for system %s." % self.systemname)
 
     class Meta:
+        unique_together = (('system', 'recurrence_period', 'recurrence_unit'), )
         ordering = ('price', '-recurrence_period')
 
     def __str__(self):
@@ -149,7 +150,7 @@ class UserSubscription(models.Model):
     # For Funds: has a default subscription period end of the year
     expires = models.DateField(null=True, default=datetime.now()) #why today?
     active = models.BooleanField(default=True)
-    cancelled = models.BooleanField(default=True)
+    cancelled = models.BooleanField(default=False)
 
     # currency = models.CharField(max_length=128)
 

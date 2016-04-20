@@ -1,0 +1,21 @@
+{% extends "investment/systembase.html" %}
+
+
+{% load staticfiles %}
+{% load render_table from django_tables2 %}
+{% block extendedheader  %}
+ <link rel="stylesheet" href="{% static 'django_tables2/themes/paleblue/css/screen.css'%}" rel="stylesheet", media="screen">
+ {% endblock %}
+{% block content %}
+<a href="{% url 'systems:systems_detail' system.systemname %}">{{ system.systemname }} </a>
+
+Season Results
+
+    <h2>System Runners</h2>
+    <ul>
+	{% render_table table %}
+    </ul>
+{% endblock %}
+
+For historical results:
+
