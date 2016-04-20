@@ -1,24 +1,20 @@
-from django.conf                import settings
-from django.http                import HttpResponseRedirect
-from django.template.response import TemplateResponse
-from django.views               import generic
-from django.utils.decorators    import method_decorator
-from django.core.urlresolvers   import reverse
-from django.contrib.auth.models import User
-from guardian.shortcuts         import assign_perm
-from guardian.shortcuts         import remove_perm
 from decimal                    import Decimal
 
+from django.contrib.auth.models import User
+from django.template.response import TemplateResponse
+from guardian.shortcuts         import assign_perm
+
 from investment_accounts.balance import get_investment_balance
+from investment_accounts.models import InvestmentAccount,Transfer, Transaction, FundAccount, Subscription, \
+    UserSubscription
 from .models                    import Fund
-from investment_accounts.models import InvestmentAccount,Transfer, Transaction, FundAccount
+
 # from investors.models 			import Investor
-from django.shortcuts           import (get_object_or_404, redirect, render, render_to_response)
+from django.shortcuts           import (get_object_or_404, redirect, render)
 import logging
 import json
 import ast
 from datetime import datetime
-from django.utils.translation import ugettext_lazy as _
 from django.contrib import messages
 
 
@@ -56,8 +52,9 @@ def funds_myindex(request):
     current_user = request.user
     #for user get investor, get investments get fundaccountid
     #return Funds for fundaccountid
-    # SOURCE
-    fund_accounts = FundAccount.objects.filter(user=request.user)
+
+    # Show only investible funds for user
+    fund_accounts = FundAccount.objects.filter(user=request.user, fund__isInvestible=True).order_by('pk')
     context['funds'] = fund_accounts
     #display by roi.
     #also get last 50 runs?
@@ -79,16 +76,17 @@ TODO: Subscribe is not only making an investment but also suscribing to a 'view'
 
 '''
 
-def subscribe( request, fund ):
-
-    #ex top10-active-2013-1000-unlimited-5/
-    #TODO: SHOW FORM If fund.isInvestible is True
+def subscribe( request, fund_pk ):
 
     if 'share' not in request.POST or 'currency' not in request.POST:
         return
 
     share          = request.POST[ 'share'    ].replace('%', '').strip()
     chosencurrency = request.POST[ 'currency' ].upper().strip()
+
+    if share == '':
+        messages.add_message(request, messages.ERROR, 'Share is Required for fund')
+        return redirect("funds_myindex")
 
     if share == '' or chosencurrency == '':
         return
@@ -98,7 +96,7 @@ def subscribe( request, fund ):
     investor_account = InvestmentAccount.objects.get(user=investor,currency=chosencurrency)
 
     #DESTINATION
-    fund_account    =  FundAccount.objects.filter(fund=fund, currency=chosencurrency)
+    fund_account    =  FundAccount.objects.filter(fund__pk=fund_pk, currency=chosencurrency)
 
     if fund_account.count() != 1:
         pass
@@ -106,6 +104,8 @@ def subscribe( request, fund ):
         #redirect to form
 
     fund_account = fund_account[0]
+
+    fund = fund_account.fund
 
     #AUTHORIZED BY
     admin  = User.objects.get(is_superuser= True,username='superadmin' )
@@ -118,14 +118,12 @@ def subscribe( request, fund ):
 
     ## TODO resrtict theis based on number of subscriptions created for this FUND
     if requested_amount > amount_available:
-        return 'Sorry, no more shares available'
-        # investor.message_set.create(message=_("Sorry- no more shares available!"))
-        messages.error(request, "Sorry- no more shares available!")
+        messages.add_message(request, messages.INFO, 'Sorry, no more shares available')
+        return redirect("funds_myindex")
     else:
         if investor_account.balance < requested_amount:
-            return 'Sorry, insufficient balance'
-            # investor.message_set.create(message=_("Sorry: insufficient balance. Please transfer funds"))
-            messages.error(request, "Sorry: insufficient balance. Please transfer funds")
+            messages.add_message(request, messages.INFO, 'Sorry, insufficient balance')
+            return redirect("funds_myindex")
         else:
             #do transfer
             amount = requested_amount
@@ -145,10 +143,33 @@ def subscribe( request, fund ):
             tdebit = Transaction.objects.create(transfer=transfer, account=investor_account, amount= amount*Decimal('-1.0'))
             tcredit = Transaction.objects.create(transfer=transfer, account=fund_account, amount= amount*Decimal('1.0'))
 
+            subscription = Subscription.objects.filter(fund=fund, subscription_type='FUND').first()
+
+            if not subscription:
+                messages.add_message(request, messages.ERROR, 'Fund Subscription not found.')
+                return redirect("funds_myindex")
+            # check if user is already subscribed
+            existing_subscription = UserSubscription.objects.filter(subscription=subscription, user=investor,
+                                                                    expires__gte=datetime.now().date()).order_by('expires')
+
+            if len(existing_subscription) > 0:
+                messages.add_message(request, messages.INFO,
+                                     'Already Subscribed, expires st %s ' % existing_subscription.first().expires)
+                return redirect("funds_myindex")
+
+            # Expire by the end of the year
+
+            from datetime import date
+            expire_date = date(date.today().year+1, 1, 1)
+
+            user_subscription = UserSubscription.objects.create(subscription=subscription, user=investor,
+                                                                expires=expire_date)
+
             ## ASSIGN permission for user to view detail page of this particular fund!
-            assign_perm( 'view_fund', investor, fund )
-            # investor.message_set.create(message=_("Successfully placed your investment."))
-            messages.success(request, "Successfully placed your investment")
+            assign_perm('view_fund_account', investor, fund_account)
+            messages.add_message(request, messages.SUCCESS, "Successfully placed your investment")
+
+
 
 
         #rudimentary testing##
@@ -165,6 +186,8 @@ def subscribe( request, fund ):
         #     transaction = logic.transfer( investor, admin, amount, fundaccount.currency )
         #     Investment.objects.create( transaction = transaction, fundaccount = fundaccount )
         #     assign_perm( 'view_task', request.user, fundaccount )
+
+        return redirect("funds_myindex")
 
 
 def fundaccount_detail(request, slug):

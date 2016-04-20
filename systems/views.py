@@ -180,7 +180,7 @@ def subscribe(request, system):
         assign_perm( 'view_system', investor, system )
 
         #create UserSubscription with this investor
-        subscription = Subscription.objects.filter(system=system).first()
+        subscription = Subscription.objects.filter(system=system, subscription_type='SYSTEM').first()
         if not subscription:
             messages.add_message(request, messages.ERROR, 'Subscription not found.')
             return redirect("systems_detail", systemname=system)

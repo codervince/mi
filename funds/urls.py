@@ -1,12 +1,16 @@
-from django.conf.urls  import patterns
 from django.conf.urls  import url
-from funds.views       import fundaccount_detail,funds_myindex
+
+from funds.views       import fundaccount_detail,funds_myindex, subscribe
+
 #SubscribeView, UnsubscribeView,FundsView
 
 urlpatterns = [
 
    url(r'^fund/(?P<slug>[\w\-]+)/$',fundaccount_detail,name='fundaccount_detail'),
    url(r'^myfunds/$',funds_myindex,name='funds_myindex'),
+   url( r'^subscribe/?P<fund>(.+)/$', subscribe, name='subscribe_fund'),
+
+
    # url(r'^myfunds/$',fundaccount_detail,name='funds_myindex'),
 #  url( r'^fundrunners/$',              views.FundRunnersView.as_view(),       name = 'fundrunners'       ),
    # url( r'^fundaccounts/$',             FundsView.as_view(),      name = 'fundaccounts'      ),
