@@ -2,19 +2,21 @@ import logging
 from datetime import datetime
 from datetime import timedelta
 from decimal import Decimal as D
-from django.views.generic import ListView
+
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.models import User
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template.response import TemplateResponse
 from django_tables2   import RequestConfig
-import pytz
 from pytz import timezone
+
 from bets.models import Bet
+
 from systems.models import System, Runner
-from systems.tables import SystemTable, RunnerTable
+from investment_accounts.balance import get_investment_balance
+from systems.tables import SystemTable
 
 
 logger = logging.getLogger(__name__)
@@ -23,7 +25,7 @@ from guardian.shortcuts import assign_perm
 
 from investment_accounts.models import InvestmentAccount, SystemAccount, UserSubscription, Subscription, \
     _recurrence_unit_days, Transfer, Transaction
-from systems.models import System,SystemSnapshot
+from systems.models import System
 
 logger = logging.getLogger(__name__)
 
@@ -179,11 +181,10 @@ def systems_detail(request, systemname):
     if request.user.is_authenticated():
         context['currency'] = settings.CURRENCIES
         ##THIS DOES NOT WORL FOR ANONYMOUS USERS
-        investor_account_aud = InvestmentAccount.objects.get(user=request.user, currency='AUD')
-        current_balance_gbp = InvestmentAccount.objects.get(user=request.user, currency='GBP')
+        investment_balances = get_investment_balance(request.user)
 
-        context['current_balance_aud'] = investor_account_aud.balance
-        context['current_balance_gbp'] = current_balance_gbp.balance
+        context['current_balance_aud'] = investment_balances['AUD']
+        context['current_balance_gbp'] = investment_balances['GBP']
 
     return TemplateResponse(request, 'systems/system.html', context)
 
@@ -297,7 +298,7 @@ def subscribe(request, system):
         assign_perm( 'view_system', investor, system )
 
         #create UserSubscription with this investor
-        subscription = Subscription.objects.filter(system=system).first()
+        subscription = Subscription.objects.filter(system=system, subscription_type='SYSTEM').first()
         if not subscription:
             messages.add_message(request, messages.ERROR, 'Subscription not found.')
             return redirect("systems:systems_detail", systemname=system)

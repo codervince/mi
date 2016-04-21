@@ -3,7 +3,7 @@
 import hmac #hashing
 
 from django.core.exceptions import ValidationError
-from django.db import models
+from django.db import models, utils
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.auth.models import Permission
@@ -60,6 +60,14 @@ _TIME_UNIT_CHOICES = (
     ('Y', _('Year')),
     )
 
+SUBSCRIPTION_TYPES = (
+    ('SYSTEM', _('System')),
+    ('FUND', _('Fund')),
+)
+
+
+
+
 
 class Subscription(models.Model):
     '''A Subscription model registers start date proposed end date of a subscription and price paid
@@ -75,7 +83,11 @@ class Subscription(models.Model):
     recurrence_unit = models.CharField(max_length=1, null=True,
                                        choices=((None, _("No recurrence")),)
                                        + _TIME_UNIT_CHOICES)
-    system = models.OneToOneField(System)
+    system = models.OneToOneField(System, null=True, blank=True)
+    fund = models.OneToOneField(Fund, null=True, blank=True)
+    # fund_account = models.OneToOneField(FundAccount, null=True, blank=True)
+    subscription_type = models.CharField(choices=SUBSCRIPTION_TYPES, max_length=128)
+
     ##regulates view access to SYSTEM
     # group = models.ForeignKey(auth.models.Group, null=False, blank=False, unique=False)
     #or permissions permission = Permission.objects.create(codename='can_publish',name='Can Publish Posts',content_type=content_type)
@@ -135,9 +147,12 @@ class Subscription(models.Model):
 class UserSubscription(models.Model):
     user = models.ForeignKey(User)
     subscription = models.ForeignKey(Subscription)
-    expires = models.DateField(null=True) #why today?
+    # For Funds: has a default subscription period end of the year
+    expires = models.DateField(null=True, default=datetime.now()) #why today?
     active = models.BooleanField(default=True)
     cancelled = models.BooleanField(default=False)
+
+    # currency = models.CharField(max_length=128)
 
     objects = models.Manager()
 
@@ -147,7 +162,7 @@ class UserSubscription(models.Model):
     def user_is_group_member(self):
         """Returns True is user is member of subscription's group"""
         return self.subscription.group in self.user.groups.all()
-    
+
     user_is_group_member.boolean = True
 
     def expired(self):
@@ -155,7 +170,7 @@ class UserSubscription(models.Model):
         days after expiration date."""
         return self.expires is not None and (
             self.expires < datetime.now().date())
-    
+
     expired.boolean = True
 
     def valid(self):
@@ -166,7 +181,7 @@ class UserSubscription(models.Model):
             return not self.user_is_group_member()
         else:
             return self.user_is_group_member()
-    
+
     valid.boolean = True
 
     def unsubscribe(self):
@@ -224,8 +239,6 @@ class UserSubscription(models.Model):
 #     membership."""
 #     for us in UserSubscription.objects.get(expires__lt=datetime.date.today()):
 #         us.fix()
-
-
 
 class Account(models.Model):
     '''An account is linked to a user (investor) normally, though each fund and system has an account in each currency in which
@@ -343,8 +356,14 @@ class FundAccount(Account):
     fund = models.ForeignKey(Fund, related_name="fundaccounts",null=True, blank=True,on_delete=models.SET_NULL)
     user = models.ForeignKey(User, related_name="fundaccounts",null=True, blank=True,on_delete=models.SET_NULL)
     currency = models.CharField( max_length = 25, choices = settings.CURRENCIES )
+
+    def __str__(self):
+        return "%s - %s - %s " % (self.fund.fundname, self.currency, self.user.username)
+
     class Meta:
         unique_together= ('user', 'fund', 'currency',)
+        permissions = (('view_fund_account', 'View Fund Account'),)
+
 
 class SystemAccount(Account):
     system = models.ForeignKey(System, related_name="systemaccounts",null=True, blank=True,on_delete=models.SET_NULL)

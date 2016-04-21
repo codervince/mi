@@ -1,9 +1,18 @@
-{% extends "app/base.html" %}
+{% extends "investment/systembase.html" %}
 {% load guardian_tags %}
 
 {% block navbar-funds-active %}class=active{% endblock %}
 
 {% block content %}
+
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
 <h2> The Funds </h2>
 
 <table class="table">
@@ -15,30 +24,32 @@
       <th>Share</th>
    </thead>
    <tbody>
-      {% for f in object_list %}
+      {% for f in funds %}
       <tr>
-         {% get_obj_perms user for f as "fundacount_perms" %}
+         {% get_obj_perms request.user for f as "fundacount_perms" %}
 
-         {% if "view_task" in fundacount_perms %}
-         <td><a href="{% url 'funds:fundaccount_detail' f.slug %}">{{ f.fundname }}</td>
+         {% if "view_fund_account" in fundacount_perms %}
+         <td><a href="#">{{ f.fund.fundname }}</a></td>
          <td>{{ f.currency }}</td>
          <td>True</td>
          <td>
-            <form action="{% url 'funds:unsubscribe' f.id %}">
+            <form action="#">
+{#                {% url 'funds:unsubscribe' f.id %}#}
                <button type="submit" class="btn btn-primary">Unsubscribe</button>
             </form>
          </td>
          <td></td>
          {% else %}
-         <td>{{ f.fundname }}</td>
+         <td>{{ f.fund.fundname }}</td>
          <td>{{ f.currency }}</td>
          <td>False</td>
-         <form action="{% url 'funds:subscribe' f.id %}" method="post">
+         <form action="{% url 'subscribe_fund' f.fund.pk %}" method="post">
          {% csrf_token %}
+             <input name="currency" value="{{ f.currency }}" hidden="hidden">
          <td>
              <button type="submit" class="btn btn-primary">Subscribe</button>
          </td>
-         <td><input name="share"></td>
+         <td><input name="share" required></td>
          </form>
          {% endif %}
       </tr>
@@ -48,7 +59,7 @@
 
 <br/>
 <br/>
-<div>I am Mr: {{ username }}</div>
+<div>I am Mr: {{ request.user.username }}</div>
 <div>GBP balance: {{ GBPbalance }}</div>
 <div>AUD balance: {{ AUDbalance }}</div>
 
