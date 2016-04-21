@@ -10,6 +10,15 @@ from django.utils.translation import ugettext_lazy as _
 from datetime import datetime
 
 
+def getracedatetime(racedate, racetime):
+
+    _rt = datetime.strptime(racetime,'%I:%M %p').time()
+    racedatetime = datetime.combine(racedate, _rt)
+    localtz = timezone('Europe/London')
+    racedatetime = localtz.localize(racedatetime)
+    return racedatetime
+
+
 ## Adapted to allow for RPRaces input
 class Runner(models.Model):
     # objects = models.Manager()
@@ -90,6 +99,18 @@ class Runner(models.Model):
 #enter manually initially or via CSV each day
 # racecourseid horseid including outcome as per rpraceday/races
 
+class SnapshotManager2016(models.Manager):
+    ''' Returns the most recent snapshot ??'''
+    def get_query_set(self):
+
+        ss_2016_start = getracedatetime(datetime.strptime("20160101", "%Y%m%d").date(), '12:00 AM')
+        ss_season2016_start = getracedatetime(datetime.strptime("20160402", "%Y%m%d").date(), '12:00 AM')
+        ss_hist_start = getracedatetime(datetime.strptime("20130101", "%Y%m%d").date(), '12:00 AM')
+        return super(SnapshotManager2016, self).get_query_set().\
+                systemsnapshots.filter(validfrom__date__lt = ss_2016_start).latest()
+
+
+
 # class LiveRunnersManager(models.Manager):
 #     ''' Returns the most recent snapshot of runners since the system began'''
 #     def get_query_set(self):
@@ -111,6 +132,7 @@ class System(models.Model):
     # def get_absolute_url(self):
     #     return reverse('systems:detail', args=[self.systemname])
     ##_systemtype = fs, custom, id
+    #to display called s.get_systemtypes_display()
     SYSTEMTYPES = (
     ('tg', 'Trainglot'),
     ('mi', 'Metainvest'),
@@ -118,20 +140,20 @@ class System(models.Model):
     ('other', 'Other'),
     )
     systemtype = models.CharField(choices=SYSTEMTYPES, default='tg',max_length=50)
-    systemname =  models.CharField(max_length=50,unique=True) #2016-T-21T unique=true?
+    systemname =  models.CharField("system name", max_length=50,unique=True) #2016-T-21T unique=true?
     snapshotid  = models.IntegerField()
     description= models.TextField(null=True)
-    isActive = models.BooleanField()
-    isTurf = models.BooleanField()
+    isActive = models.BooleanField("is active")
+    isTurf = models.BooleanField("is turf only")
     exposure = ArrayField(models.CharField(max_length=500),)
     query = JSONField()
     rpquery = JSONField(null=True,blank=True)
 
-    isLayWin = models.BooleanField(default=False)
-    isLayPlace = models.BooleanField(default=False)
-    oddsconditions = JSONField(null=True,blank=True)
+    isLayWin = models.BooleanField("LAY TO WIN", default=False)
+    isLayPlace = models.BooleanField("PLACE LAY", default=False)
+    oddsconditions = JSONField("Odds must be", null=True,blank=True)
 
-    premium  = models.FloatField(default=1.0)   ##will update later based on performance
+    premium  = models.FloatField("System price premium over base", default=1.0)   ##will update later based on performance
 
     runners = models.ManyToManyField(Runner)
 
@@ -139,6 +161,7 @@ class System(models.Model):
     updated = models.DateTimeField(auto_now=True, blank=True)
     
     objects = models.Manager() #default
+    snapshot2016 = SnapshotManager2016()
     # liverunners = LiveRunnersManager()
     # historicalrunners = HistoricalRunnersManager()
 
@@ -156,14 +179,15 @@ class System(models.Model):
 
 #base model variation for Simple, Advanced also Fund, System
 #unique on time created
+## Many to One Relationship Between System and its SystemSnapshots ##
 class SystemSnapshot(models.Model):
     SNAPSHOTTYPES = (
     ('LIVE', 'LIVE'),
     ('HISTORICAL', 'HISTORICAL'),
     )
     snapshottype = models.CharField(help_text=_('initial(historical/live) '),choices=SNAPSHOTTYPES, default='HISTORICAL',max_length=15)
-    system = models.ForeignKey(System, related_name='systemsnapshot')
-    runners = models.ManyToManyField(Runner, 'snapshotrunners')
+    system = models.ForeignKey(System, on_delete=models.CASCADE, related_name='systemsnapshots')
+    runners = models.ManyToManyField(Runner, related_name='snapshotrunners', verbose_name="Runners for this Snapshot")
     #HISTORICAL ONLY FIELDS
     bluerows = JSONField(default={})
     greenrows = JSONField(default={})
@@ -183,27 +207,27 @@ class SystemSnapshot(models.Model):
     totalbackyears = models.SmallIntegerField(default=None, null=True)
 
     #CORE FIELDS ALL SOURCES
-    bfwins = models.SmallIntegerField(default=None, null=True)
-    bfruns = models.SmallIntegerField(default=None, null=True)
-    winsr = models.FloatField(default=None, null=True)
-    expectedwins= models.FloatField(default=None, null=True)
-    a_e = models.FloatField(default=None, null=True)
-    levelbspprofit= models.DecimalField(max_digits=10, decimal_places=2,default=None, null=True)
+    bfwins = models.SmallIntegerField("No of Wins (BF)", default=None, null=True)
+    bfruns = models.SmallIntegerField("No of Runs (BF)", default=None, null=True)
+    winsr = models.FloatField("WIN Strike Rate", default=None, null=True)
+    expectedwins= models.FloatField("Expected Wins", default=None, null=True)
+    a_e = models.FloatField("Actual vs. Expected wins", default=None, null=True)
+    levelbspprofit= models.DecimalField("BF Profit at Level Stakes", max_digits=10, decimal_places=2,default=None, null=True)
     levelbsprofitpc= models.FloatField(default=None, null=True)
-    a_e_last50 = models.FloatField(default=None, null=True)
-    archie_allruns= models.FloatField(default=None, null=True)
+    a_e_last50 = models.FloatField("Actual vs. Expected, Last 50 Runs", default=None, null=True)
+    archie_allruns= models.FloatField("Chi Squared All Runs", default=None, null=True)
     expected_last50= models.FloatField(default=None, null=True)
-    archie_last50= models.FloatField(default=None, null=True)
+    archie_last50= models.FloatField("Chi Squared Last 50 Runs", default=None, null=True)
     last50wins= models.SmallIntegerField(default=None, null=True)
     last50pc= models.FloatField(default=None, null=True)
-    last50str= models.CharField(max_length=250,default=None, null=True)
-    last28daysruns=  models.SmallIntegerField(default=None, null=True)
+    last50str= models.CharField("Last 50 Results", max_length=250,default=None, null=True)
+    last28daysruns=  models.SmallIntegerField("Last 28 Days Sumamry", default=None, null=True)
     profit_last50= models.DecimalField(max_digits=10, decimal_places=2,default=None, null=True)
     longest_losing_streak=models.SmallIntegerField(default=None, null=True)
     average_losing_streak=models.FloatField(default=None, null=True)
     average_winning_streak=models.FloatField(default=None, null=True)
-    individualrunners=  models.FloatField(default=None, null=True)
-    uniquewinners=  models.FloatField(default=None, null=True)
+    individualrunners=  models.FloatField("No. Individual Runners", default=None, null=True)
+    uniquewinners=  models.FloatField("No. Unique Winners", default=None, null=True)
     uniquewinnerstorunnerspc= models.FloatField(default=None, null=True)
 
     validuptonotincluding = models.DateTimeField() #real tracker for HISTORICAL will be MAR 15 2016

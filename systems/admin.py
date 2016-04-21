@@ -23,4 +23,3 @@ admin.site.register(System, SystemAdmin)
 admin.site.register(SystemSnapshot)
 admin.site.register(Runner, RunnerAdmin)
 
-

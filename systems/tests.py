@@ -3,13 +3,20 @@ from django.test                import TestCase, client
 from django.contrib.auth.models import User, AnonymousUser
 from guardian.shortcuts         import assign_perm
 from guardian.shortcuts         import remove_perm
-
+from django.http    import HttpRequest
 from investment_accounts.models import SystemAccount, Subscription
 from systems.models             import System
-from systems.views import subscribe
+from systems.views import subscribe, systems_index
 from django.conf import settings
+from systems.test_utilities import MyHTMLLinkParser
+from django.template.loader import render_to_string
+from django.test import Client
+from datetime import datetime
+import pytz
+from pytz import timezone
 
 
+#Should inherit from TransactionTestCase (DB) and SimpleTestCase
 class SystemPermissionsTestCase( TestCase ):
 
     def test_system_permissions( self ):
@@ -80,6 +87,8 @@ class TestSystemSubscribe(TestCase):
         ##THIS FAILS ON INTEGGRITY ERROR - WHY? 
         # Subscription.objects.get_or_create(name="Bad", recurrence_period='5', recurrence_unit='W', system=self.system, price=100)
         # Subscription.objects.get_or_create(name="Not Displayed", recurrence_period='5', recurrence_unit='D', system=self.system, price=0)
+
+
 
     def testFixtures(self):
         system = System.objects.all().count()

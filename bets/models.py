@@ -7,6 +7,9 @@ from decimal import Decimal as D
 #TODO: Import racecourses, alerts so far
 ## display ROI by system and by fund
 
+#TODO: add Horse, Jockey, Owner, Sire, DamSire, Dam Trainer tables
+
+
 '''A 'private model for tracking bets ie no ROUTES ADMIN ONLY'''
 
 class Racecourse(models.Model):
@@ -330,4 +333,6 @@ class Bet(models.Model):
     #snapshotid runnerid--> system_runner table
     class Meta:
         unique_together = ('system', 'horsename','bookmaker')
-        ordering = ('-racedatetime',)
+        index_together = ['system', 'horsename', 'bookmaker']
+        ordering = ['-racedatetime','system']
+        get_latest_by = "racedatetime" #for latest() and earliest()

@@ -83,7 +83,7 @@ class Command( BaseCommand ):
     def handle( self, *args, **options ):
         from operator import itemgetter
         lay_url = '/Users/vmac/PY/DJANGOSITES/DATA/RUNNERS/LAYINGSYSTEMS.csv'
-        # runner_url = '/Users/vmac/PY/DJANGOSITES/DATA/RUNNERS/fullrunners_2.csv'
+        # runner_url = '/Users/vmac/PY/DJANGOSITES/DATA/RUNNERS/fullrunners_2.csv' #elsewhere
         live_url = '/Users/vmac/PY/DJANGOSITES/DATA/RUNNERS/LIVE/ALERTS-RES_2016.csv'
         f_path = live_url
         rlist = list()
@@ -124,12 +124,15 @@ class Command( BaseCommand ):
             racedatetime = getracedatetime(date, racetime)
             racecoursename = get_standard_rc_name(row['COURSE'].strip())
             print(racecoursename)
-            try:
-                racecourseid  = Racecourse.objects.get( racecoursename = racecoursename ).pk
-            except ObjectDoesNotExist:
-                racecourseid = None
-            horsename = row['HORSE'].strip()
+            if racecoursename.upper() == 'NEWMARKET':
+                racecourse_id = Racecourse.objects.get(racecourse_id=38).racecourse_id
+            else:
+                try:
+                    racecourse_id= Racecourse.objects.get( racecoursename = racecoursename ).racecourse_id
+                except ObjectDoesNotExist:
+                    racecourse_id = None
 
+            horsename = row['HORSE'].strip()
             finalpos = row['POS'].strip()
             norunners = int(row['RAN'].strip())
             isplaced = True if row['SP_PLACED'] == '1' else False
@@ -141,7 +144,7 @@ class Command( BaseCommand ):
                 'horsename': horsename,
                 'racedate': date,
                 'racedatetime': racedatetime,
-                'racecourseid': racecourseid,
+                'racecourseid': racecourse_id,
                 'norunners': norunners,
                 'finalpos': finalpos,
                 'winsp': winsp,

@@ -14,7 +14,7 @@ import pytz
 from pytz import timezone
 from bets.models import Bet
 from systems.models import System, Runner
-from systems.tables import SystemTable
+from systems.tables import SystemTable, RunnerTable
 
 
 logger = logging.getLogger(__name__)
@@ -71,7 +71,7 @@ def getracedatetime(racedate, racetime):
 def runners_list(request, systemname):
     if request.method == 'GET':
         system =get_object_or_404(System, systemname=systemname)
-        table = SystemTable(system.runners.all())
+        table = RunnerTable(system.runners.all())
         # table = SystemTable(System.objects.all())
         RequestConfig(request).configure(table)
         return render(request, 'systems/systemrunners.html', {'table': table, 'system': system})
@@ -187,7 +187,19 @@ def systems_detail(request, systemname):
 
     return TemplateResponse(request, 'systems/system.html', context)
 
+def systems_index(request):
+    '''Table of system information including Latest snapshot info '''
+    ss_2016_start = getracedatetime(datetime.strptime("20160101", "%Y%m%d").date(), '12:00 AM')
+    ss_season2016_start = getracedatetime(datetime.strptime("20160402", "%Y%m%d").date(), '12:00 AM')
+    ss_hist_start = getracedatetime(datetime.strptime("20130101", "%Y%m%d").date(), '12:00 AM')
+    snaps = []
+    # s = System.objects.get(systemname='2016-S-01T')
+    for s in System.objects.all():
+        snaps.append(System.snapshot2016.get(systemname=s.systemname).systemsnapshots.values()[1])
+    #snaps is a list of snapshot dictionaries
+    table = SystemTable(System.objects.all())
 
+    return render(request, 'systems/systems.html', {'table': table, 'snaps': snaps})
 
 
 def systems_mylist(request):
