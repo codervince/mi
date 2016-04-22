@@ -7,10 +7,19 @@
     <meta charset="UTF-8">
     {%  block extendedheader %}
     <script type="text/css">
-
+     table#systemstable {
+         
+         padding: 100%;
+     }
       td.isActive, th.isActive {
         display:none;
       }
+
+    div.custom_column {
+        white-space: normal;
+        padding: 5px;
+
+    }
 
 
     </script>
@@ -22,7 +31,7 @@
 </head>
 <body>
 {% block content %}
-    <h2>System Runners</h2>
+    <h2>Systems</h2>
     <ul>
 	{% render_table table %}
     </ul>

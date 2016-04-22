@@ -14,21 +14,25 @@ from django.test import Client
 from datetime import datetime
 import pytz
 from pytz import timezone
-from systems.models import System
+from systems.models import System, SystemSnapshot
 from django.test import Client
 from django.test import RequestFactory
+from .utilities import getracedatetime
 
-#### UTILTIIES
-def getracedatetime(racedate, racetime):
 
-    _rt = datetime.strptime(racetime,'%I:%M %p').time()
-    racedatetime = datetime.combine(racedate, _rt)
-    localtz = timezone('Europe/London')
-    racedatetime = localtz.localize(racedatetime)
-    return racedatetime
+'''
+Purpose of the Systems Index View page
+1. Not logged in
+2. Logged in, not subscriber
+3. Subscriber and logged in
 
-class SystemPageTestCase(TestCase):
-    currencies = settings.CURRENCIES #tuple
+
+
+'''
+
+
+class SystemsIndexTestCase(TestCase):
+    currencies = settings.CURRENCIES            #tuple
     fixtures = ['investment/fixtures/initial_fund_data.json',
                 'investment/fixtures/initial_system_data.json',
                 'investment/fixtures/user_initial.json']
@@ -36,7 +40,7 @@ class SystemPageTestCase(TestCase):
     def setUp(self):
         self.factory = RequestFactory()
 
-    def testFixtures(self):
+    def test_fixtures(self):
         system = System.objects.all().count()
         self.assertEquals(2, system)
     # def test_OnlyLoggedInSeeTodaysCandidates(self):
@@ -74,19 +78,19 @@ class SystemPageTestCase(TestCase):
         #
         # self.assertTrue(len(bad_urls)== 0)
 
-    def testExtendingSystembase(self):
+    def test_systembase_included(self):
         request = HttpRequest()
         response = systems_index(request)
         # ## test systembase extended systembase
-        self.assertIn(b'<a href="/">Home</a>', self.response.content.strip())
+        self.assertIn(b'<a href="/">Home</a>', response.content.strip())
 
-    def testStaticContentLoaded(self):
+    def test_static_content_loaded(self):
         request = HttpRequest()
         response = systems_index(request)
         # ## static content loaded
         self.assertContains(response, 'cover.css')
 
-    def testHtmlPageLoaded(self):
+    def test_html_page_loaded(self):
 
         request = HttpRequest()
         response = systems_index(request)
@@ -94,29 +98,86 @@ class SystemPageTestCase(TestCase):
         self.assertIn(b'<!DOCTYPE html>', response.content)
         self.assertTrue(response.content.strip().endswith(b'</html>'))
 
-    def testSystemTableWithSystemsnapshotFields(self):
-        c = Client(HTTP_USER_AGENT='Mozilla/5.0')
-        response2 = self.client.get(reverse('systems:systems_index'))
+    def test_live_objects_should_be_one_per_snapshot(self):
+        #count no of systemsnapshots
+        #neeed full database
+        ct = SystemSnapshot.objects.all().count()
+        live_ct = SystemSnapshot.liveobjects.all().count()
+        self.assertEqual(ct, live_ct)
+
+    ### HOW TO CREATE A SNAPSHOT AFTER EACH UPDATE
+    def test_a_snapshot_should_return_correct_no_runs_live(self):
+        #count no of systemsnapshots
+        #2016-S-01T id=1 no live runs = systemid = 5
+        s = System.objects.get(system=s)
+        ct = SystemSnapshot.objects.all().count()
+        live_ct = SystemSnapshot.liveobjects.all().count()
+        self.assertEqual(ct, live_ct)
+
+    def test_a_snapshot_should_return_correct_no_runs_2016(self):
+        #count no of systemsnapshots
+        #2016-S-01T id=1 no live runs = systemid = 5
+        s = System.objects.get(system=s)
+        ct = SystemSnapshot.objects.all().count()
+        sixteen_ct = SystemSnapshot.liveobjects.all().count()
+        self.assertEqual(ct, sixteen_ct)
+
+    def test_a_snapshot_should_return_correct_no_runs_historical(self):
+        # count no of systemsnapshots
+        # 2016-S-01T id=1 no live runs = systemid = 5
+        s = System.objects.get(system=s)
+        ct = SystemSnapshot.objects.all().count()
+        hist_ct = SystemSnapshot.liveobjects.all().count()
+        self.assertEqual(ct, hist_ct)
+
+
+    def test_system_fields_displayed_correctly_in_table(self):
+        '''The system fields we need are: systemname, description, isActive, exposure, isLayWin, isLayPlace '''
         request = HttpRequest()
         response = systems_index(request)
+        self.assertIn(b'<a href="?sort=systemname">SYS</a>', response.content)
+        self.assertIn(b'<a href="?sort=exposure">Exposure</a>', response.content)
+        self.assertIn(b'<a href="?sort=description">Description</a>', response.content)
 
-        # ## On the right page
-        self.assertIn(b'<title>Systems Update</title>', response.content)
+    def test_systemsnapshot_fields_displayed_correctly_in_table(self):
+        request = HttpRequest()
+        response = systems_index(request)
+        self.assertIn(b'<a href="?sort=a_e">A/E</a>', response.content)
 
-        # "winsr" is a column header
-        self.assertIn(b'<a href="?sort=a_e">a_e</a>', response.content)
+    # def test_table_variable_passed_systems_index_template(self):
+    #     request = HttpRequest()
+    #     response = systems_index(request)
+    #     self.assertIn('', response.content.decode())
+    #     expected_html = render_to_string(
+    #         'systems/systems.html', {
+    #             'table': 'table'
+    #         }
+    #     )
 
-        #winsr is in the context variable
-        self.assertIsNotNone(response2.context['table'])
 
-        #testing a specific system a_e value for 2016-2-01T its 1.6
-        ## test that system.snapshot2016 returns the values you need!
-
-
-        #the liveanager is working, i.e it exists AND it returns the right value a_e 1.6 for this system
-        #need to create in test database!
-        livesnap2016_d= System.snapshot2016.get(systemname='2016-S-01T').systemsnapshots.values()[1]
-        self.assertEqual(livesnap2016_d['a_e'], 0.94)
+    # def testSystemTableWithSystemsnapshotFields(self):
+    #     c = Client(HTTP_USER_AGENT='Mozilla/5.0')
+    #     response2 = self.client.get(reverse('systems:systems_index'))
+    #     request = HttpRequest()
+    #     response = systems_index(request)
+    #
+    #     # ## On the right page
+    #     self.assertIn(b'<title>Systems Update</title>', response.content)
+    #
+    #     # "winsr" is a column header
+    #     self.assertIn(b'<a href="?sort=a_e">a_e</a>', response.content)
+    #
+    #     #winsr is in the context variable
+    #     self.assertIsNotNone(response2.context['table'])
+    #
+    #     #testing a specific system a_e value for 2016-2-01T its 1.6
+    #     ## test that system.snapshot2016 returns the values you need!
+    #
+    #
+    #     #the liveanager is working, i.e it exists AND it returns the right value a_e 1.6 for this system
+    #     #need to create in test database!
+    #     livesnap2016_d= System.snapshot2016.get(systemname='2016-S-01T').systemsnapshots.values()[1]
+    #     self.assertEqual(livesnap2016_d['a_e'], 0.94)
 
 
         # ss_2016_start = getracedatetime(datetime.strptime("20160101", "%Y%m%d").date(), '12:00 AM')

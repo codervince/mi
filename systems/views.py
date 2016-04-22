@@ -25,7 +25,7 @@ from guardian.shortcuts import assign_perm
 
 from investment_accounts.models import InvestmentAccount, SystemAccount, UserSubscription, Subscription, \
     _recurrence_unit_days, Transfer, Transaction
-from systems.models import System
+from systems.models import System, SystemSnapshot
 
 logger = logging.getLogger(__name__)
 
@@ -153,18 +153,18 @@ def systems_detail(request, systemname):
 
     context['system'] = system
     # get historical information need to create snapshots for 2013,14,15,16 aka funds
-    
-    ss_2016_start = getracedatetime(datetime.strptime("20160101", "%Y%m%d").date(), '12:00 AM')
-    ss_season2016_start = getracedatetime(datetime.strptime("20160402", "%Y%m%d").date(), '12:00 AM')
-    ss_hist_start = getracedatetime(datetime.strptime("20130101", "%Y%m%d").date(), '12:00 AM')
-    
-    hist_131415 = system.systemsnapshot.filter(snapshottype='HISTORICAL', validfrom__date__lt=ss_hist_start)
-    live_season2016 = system.systemsnapshot.filter(validfrom__date__lt=ss_season2016_start).only('runners', 'bfwins', 'bfruns', 'winsr', 'a_e',
-        'levelbspprofit', 'levelbsprofitpc', 'a_e_last50', 'archie_allruns', 'archie_last50', 'last50str', 'last28daysruns', 'longest_losing_streak',
-        'average_losing_streak', 'individualrunners', 'uniquewinners')
-    live_2016 = system.systemsnapshot.filter(validfrom__date__lt=ss_2016_start).only('runners', 'bfwins', 'bfruns', 'winsr', 'a_e',
-        'levelbspprofit', 'levelbsprofitpc', 'a_e_last50', 'archie_allruns', 'archie_last50', 'last50str', 'last28daysruns', 'longest_losing_streak',
-        'average_losing_streak', 'individualrunners', 'uniquewinners')
+
+    live_season2016 = SystemSnapshot.liveobjects.get(system__systemname=systemname)
+    live_2016 =  SystemSnapshot.yearobjects.get(system__systemname=systemname)
+    historical = SystemSnapshot.historicalobjects.get(system__systemname=systemname)
+
+    # live_season2016 = system.systemsnapshot.filter(validfrom__date__lt=ss_season2016_start).only('runners', 'bfwins', 'bfruns', 'winsr', 'a_e',
+    #     'levelbspprofit', 'levelbsprofitpc', 'a_e_last50', 'archie_allruns', 'archie_last50', 'last50str', 'last28daysruns', 'longest_losing_streak',
+    #     'average_losing_streak', 'individualrunners', 'uniquewinners')
+
+    # live_2016 = system.systemsnapshot.filter(validfrom__date__lt=ss_2016_start).only('runners', 'bfwins', 'bfruns', 'winsr', 'a_e',
+    #     'levelbspprofit', 'levelbsprofitpc', 'a_e_last50', 'archie_allruns', 'archie_last50', 'last50str', 'last28daysruns', 'longest_losing_streak',
+    #     'average_losing_streak', 'individualrunners', 'uniquewinners')
 
     ##why runners here?
     context['runners_count'] = system.runners.values().count()
@@ -172,9 +172,9 @@ def systems_detail(request, systemname):
     #LIVE SNAPSHOT from Bets
     livebets = Bet.objects.filter(system=system)
 
-     
+    context['live_2016'] = live_2016
     context['live_season2016'] = live_season2016
-    context['hist_131415'] = hist_131415
+    context['hist_131415'] = historical
     context['prices'] = get_prices_for_system(system)
 
     ### IF USER IS ANON DO NOT SHOW SUSCRIPTION FORM!
@@ -190,17 +190,11 @@ def systems_detail(request, systemname):
 
 def systems_index(request):
     '''Table of system information including Latest snapshot info '''
-    ss_2016_start = getracedatetime(datetime.strptime("20160101", "%Y%m%d").date(), '12:00 AM')
-    ss_season2016_start = getracedatetime(datetime.strptime("20160402", "%Y%m%d").date(), '12:00 AM')
-    ss_hist_start = getracedatetime(datetime.strptime("20130101", "%Y%m%d").date(), '12:00 AM')
-    snaps = []
-    # s = System.objects.get(systemname='2016-S-01T')
-    for s in System.objects.all():
-        snaps.append(System.snapshot2016.get(systemname=s.systemname).systemsnapshots.values()[1])
-    #snaps is a list of snapshot dictionaries
-    table = SystemTable(System.objects.all())
 
-    return render(request, 'systems/systems.html', {'table': table, 'snaps': snaps})
+    all_snaps = SystemSnapshot.liveobjects.all()
+    table = SystemTable(all_snaps, order_by=("-levelbspprofit", "runs"),empty_text='No systems here')
+    RequestConfig(request, paginate={"per_page": 25}).configure(table)
+    return render(request, 'systems/systems.html', {'table': table})
 
 
 def systems_mylist(request):

@@ -99,18 +99,26 @@ class Runner(models.Model):
 #enter manually initially or via CSV each day
 # racecourseid horseid including outcome as per rpraceday/races
 
-class SnapshotManager2016(models.Manager):
-    ''' Returns the most recent snapshot ??'''
+class SnapshotManagerThisSeason(models.Manager):
+    ''' Returns the most recent snapshot get LATEST ?? after_save hook '''
     def get_query_set(self):
-
-        ss_2016_start = getracedatetime(datetime.strptime("20160101", "%Y%m%d").date(), '12:00 AM')
         ss_season2016_start = getracedatetime(datetime.strptime("20160402", "%Y%m%d").date(), '12:00 AM')
-        ss_hist_start = getracedatetime(datetime.strptime("20130101", "%Y%m%d").date(), '12:00 AM')
-        return super(SnapshotManager2016, self).get_query_set().\
-                systemsnapshots.filter(validfrom__date__lt = ss_2016_start).latest()
+        return super(SnapshotManagerThisSeason, self).get_queryset().filter(validfrom__date__eq = ss_season2016_start).latest()
 
+class SnapshotManagerThisYear(models.Manager):
+    ''' Returns the most recent snapshot - get LATEST after_save hook'''
 
+    def get_query_set(self):
+        ss_2016_start = getracedatetime(datetime.strptime("20160101", "%Y%m%d").date(), '12:00 AM')
+        return super(SnapshotManagerThisYear, self).get_queryset().filter(
+                validfrom__date__gte=ss_2016_start).latest()
 
+class SnapshotManagerHistorical(models.Manager):
+    ''' FIXED DATES EASY'''
+    def get_query_set(self):
+        ss_hist_start = getracedatetime(datetime.strptime("20151129", "%Y%m%d").date(), '12:00 AM')
+        return super(SnapshotManagerHistorical, self).get_queryset().filter(
+                validuptonotincluding__date__eq=ss_hist_start).latest()
 # class LiveRunnersManager(models.Manager):
 #     ''' Returns the most recent snapshot of runners since the system began'''
 #     def get_query_set(self):
@@ -161,7 +169,7 @@ class System(models.Model):
     updated = models.DateTimeField(auto_now=True, blank=True)
     
     objects = models.Manager() #default
-    snapshot2016 = SnapshotManager2016()
+    # snapshot2016 = SnapshotManager2016()
     # liverunners = LiveRunnersManager()
     # historicalrunners = HistoricalRunnersManager()
 
@@ -228,12 +236,17 @@ class SystemSnapshot(models.Model):
     average_winning_streak=models.FloatField(default=None, null=True)
     individualrunners=  models.FloatField("No. Individual Runners", default=None, null=True)
     uniquewinners=  models.FloatField("No. Unique Winners", default=None, null=True)
-    uniquewinnerstorunnerspc= models.FloatField(default=None, null=True)
+    uniquewinnerstorunnerspc= models.FloatField(default=None, null=True) #dep
 
     validuptonotincluding = models.DateTimeField() #real tracker for HISTORICAL will be MAR 15 2016
     validfrom = models.DateTimeField(blank=True, null=True)
-    
-    #admin only
+
+    yearobjects = SnapshotManagerThisYear()
+    liveobjects = SnapshotManagerThisSeason()
+    historicalobjects = SnapshotManagerHistorical()
+    objects = models.Manager() #all objects
+
+
     created = models.DateTimeField(auto_now_add=True) #currently adding local not UTC time!
     updated = models.DateTimeField(auto_now=True, blank=True)#currently adding local not UTC time!
     
@@ -249,12 +262,4 @@ class SystemSnapshot(models.Model):
         ordering = ('-levelbsprofitpc',)
         get_latest_by = 'created'
 
-#when snapshot changes need to update premium in System based on levelbspprofitpc 
-@receiver(post_save, sender=SystemSnapshot)
-def update_premium(sender, **kwargs):
-    '''Assumption: levelbsprofitpc is > 100 i.e. a percentage '''
-    '''If premium is > 120 price new premium is 1.2 etc- if not created (ie not new runners) do nothing'''
-    if kwargs.get('created', False):
-        if kwargs.get('system'):
-            new_premium = float(kwargs.get('system').premium) * (float(kwargs.get('levelbspprofitpc', 100.0))/100.0)
-            System.objects.filter(kwargs.get('system')).update(premium=new_premium)
+
