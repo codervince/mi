@@ -1,0 +1,41 @@
+{% extends "investment/systembase.html" %}
+{% load staticfiles %}
+{% load render_table from django_tables2 %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {%  block extendedheader %}
+    <script type="text/css">
+     table#systemstable {
+         
+         padding: 100%;
+     }
+      td.isActive, th.isActive {
+        display:none;
+      }
+
+    div.custom_column {
+        white-space: normal;
+        padding: 5px;
+
+    }
+
+
+    </script>
+
+    {%  endblock %}
+
+    {% block title %}Systems Update{% endblock %}
+
+</head>
+<body>
+{% block content %}
+    <h2>Systems</h2>
+    <ul>
+	{% render_table table %}
+    </ul>
+
+{% endblock %}
+</body>
+</html>

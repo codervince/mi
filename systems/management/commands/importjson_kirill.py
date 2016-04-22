@@ -17,7 +17,7 @@ Imports data from SYSTEM/SNAPSHOT JSON
 /Users/vmac/PY/DJANGOSITES/SERVER/mi
 Directory:
 /Users/vmac/PY/DJANGOSITES/DATA/SYSTEMS/test
-python manage.py importjson_kirill '/Users/vmac/PY/DJANGOSITES/DATA/SYSTEMS/EXTRA2'
+python manage.py importjson_kirill '/Users/vmac/PY/DJANGOSITES/DATA/SYSTEMS/L/extra'
 
 #######################
 Need more systems?

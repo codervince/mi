@@ -1,16 +1,16 @@
+from django.conf import settings
+from django.contrib.auth.models import User, AnonymousUser
+from django.contrib.messages.storage.fallback import FallbackStorage
 from django.core.urlresolvers import reverse
 from django.test                import TestCase
-from django.contrib.auth.models import User, AnonymousUser
 from guardian.shortcuts         import assign_perm
 from guardian.shortcuts         import remove_perm
 
 from investment_accounts.models import SystemAccount, Subscription
 from systems.views import subscribe
-from django.conf import settings
-from django.contrib.messages.storage.fallback import FallbackStorage
 
-from django.test import Client
 
+#Should inherit from TransactionTestCase (DB) and SimpleTestCase
 class SystemPermissionsTestCase( TestCase ):
 
     def test_system_permissions( self ):
@@ -86,6 +86,8 @@ class TestSystemSubscribe(TestCase):
         ##THIS FAILS ON INTEGGRITY ERROR - WHY? 
         # Subscription.objects.get_or_create(name="Bad", recurrence_period='5', recurrence_unit='W', system=self.system, price=100)
         # Subscription.objects.get_or_create(name="Not Displayed", recurrence_period='5', recurrence_unit='D', system=self.system, price=0)
+
+
 
     def testFixtures(self):
         system = System.objects.all().count()

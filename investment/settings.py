@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 import os
 import re
 
+
 env = os.environ.copy()
 # export DJANGO_SETTINGS_MODULE=mi.investment.settings TRTING TO GET django-admin to work
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "investment.settings")

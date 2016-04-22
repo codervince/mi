@@ -78,23 +78,45 @@ newm = RPRacecourses(racecoursename=u'Newmarket', racecoursecode='Nmk', racecour
     speed='GALLOPING', surface='UNDULATING', location='MIDLANDS')
 chelm = RPRacecourses(racecoursename=u'Chelmsford (AW)', racecoursecode='Cfd', racecourseid=103, grade=3, straight=None, shape='OVAL', direction='LEFT', 
     speed='GALLOPING', surface='FLAT', location='MIDLANDS')
-###
+
 air= RPRacecourses(racecoursename=u'Air', racecoursecode='Air', racecourseid=3, grade=2, straight=6, shape='OVAL', direction='LEFT', 
     speed='GALLOPING', surface='FLAT', location='SCOTLAND')
-bath = RPRacecourses(racecoursename=u'Bath', racecoursecode='Bth', racecourseid=5, grade=4, straight=None, shape='OVAL', direction='LEFT', 
+bath = RPRacecourses(racecoursename=u'Bath', racecoursecode='Bth', racecourseid=5, grade=4, straight=None, shape='OVAL', direction='LEFT',
     speed='GALLOPING', surface='FLAT', location='SOUTH')
-newb = RPRacecourses(racecoursename=u'Newbury', racecoursecode='New', racecourseid=36, grade=2, straight=8, shape='OVAL', direction='LEFT', 
+newb = RPRacecourses(racecoursename=u'Newbury', racecoursecode='New', racecourseid=36, grade=2, straight=8, shape='OVAL', direction='LEFT',
     speed='GALLOPING', surface='FLAT', location='SOUTH')
-ballin = RPRacecourses(racecoursename=u'Ballinrobe (IRE)', racecoursecode='Bal', racecourseid=175, grade=None, straight=None, shape='OVAL', direction='RIGHT', 
+ballin = RPRacecourses(racecoursename=u'Ballinrobe (IRE)', racecoursecode='Bal', racecourseid=175, grade=None, straight=None, shape='OVAL', direction='RIGHT',
     speed='SHARP', surface='FLAT', location='IRE')
-font = RPRacecourses(racecoursename=u'Fontwell', racecoursecode='Fon', racecourseid=20, grade=None, straight=None, shape='OVAL', direction='LEFT', 
+font = RPRacecourses(racecoursename=u'Fontwell', racecoursecode='Fon', racecourseid=20, grade=None, straight=None, shape='OVAL', direction='LEFT',
     speed='SHARP', surface='FLAT', location='SOUTH')
-rip = RPRacecourses(racecoursename=u'Ripon', racecoursecode='Rip', racecourseid=49, grade=3, straight=6, shape='OVAL', direction='RIGHT', 
+rip = RPRacecourses(racecoursename=u'Ripon', racecoursecode='Rip', racecourseid=49, grade=3, straight=6, shape='OVAL', direction='RIGHT',
     speed='TIGHT', surface='UNDULATING', location='NORTH')
+
+catt = RPRacecourses(racecoursename=u'Catterick', racecoursecode='Cat', racecourseid= 10, grade=4, straight=5, shape='OVAL', direction='LEFT',
+    speed='TIGHT', surface='UNDULATING', location='NORTH')
+
+epsom = RPRacecourses(racecoursename=u'Epsom', racecoursecode='Eps', racecourseid= 17, grade=1, straight=5, shape='HORSESHOE', direction='LEFT',
+    speed='STIFF', surface='UNDULATING', location='SOUTH')
+
+bev = RPRacecourses(racecoursename=u'Beverley', racecoursecode='Bev', racecourseid=6, grade=3, straight=5, shape='OVAL', direction='RIGHT',
+    speed='STIFF', surface='UPHILL', location='NORTH')
+
+brighton = RPRacecourses(racecoursename=u'Brighton', racecoursecode='Bri', racecourseid= 7, grade=4, straight=None, shape='HORSESHOE', direction='LEFT',
+    speed='STIFF', surface='UNDULATING', location='SOUTH')
+
+perth = RPRacecourses(racecoursename=u'Perth', racecoursecode='Per', racecourseid= 41, grade=None, straight=None, shape=None, direction='RIGHT',
+    speed=None, surface=None, location='SCOTLAND')
+
+tipp = RPRacecourses(racecoursename=u'Tipperary (IRE)', racecoursecode='Tip', racecourseid=202 , grade=None, straight=None, shape=None, direction='LEFT',
+    speed='SHARP', surface="FLAT", location='IRE')
+
+thirsk = RPRacecourses(racecoursename=u'Thirsk', racecoursecode='Thr', racecourseid=80, grade=3, straight=6, shape='OVAL', direction='LEFT',
+    speed='GALLOPING', surface="UNDULATING", location='NORTH')
 
 THERACECOURSES = list()
 THERACECOURSES.extend([winds, redc, donc, wolv, wex, newc, leic, dund, taunt, south, lim, chelm, aint, nott, ling, leop, kemp, catt, ludl, fairy, pont,
- newton, newmjuly, newm, exeter,chelm, air, bath, newb, ballin, font, rip])
+ newton, newmjuly, newm, exeter,chelm, air, bath, newb, ballin, font, rip, catt, epsom, brighton, bev, perth, tipp, thirsk])
+THERACECOURSES = set(THERACECOURSES)
 
 BOOKMAKERS = [
 
@@ -152,7 +174,7 @@ class Command(BaseCommand):
         #rp runners for today from JSON
         # bets history from csv
 
-        bets_url = '/Users/vmac/PY/DJANGOSITES/DATA/BETS/2016bets_3.csv'
+        bets_url = '/Users/vmac/PY/DJANGOSITES/DATA/BETS/bets2016_3.csv'
         with open( bets_url) as csvfile:
             result  = {}
             reader  = csv.reader( csvfile )
@@ -163,27 +185,48 @@ class Command(BaseCommand):
                 row_num += 1
                 if row_num == 1:
                     continue
-
                 racedate = row[1].split( '/' ) #format M/D/y
+                if racedate == ['']:    #blank lines
+                    continue
+                print(racedate)
                 racedate = datetime.date( 2000 + int( racedate[2] ), int( racedate[0] ), int( racedate[1] ) )
                 systemname = row[2]
                 racetime = row[8]
-                racecourse = row[9]
+                racecourse = row[9].strip()
                 horse = row[10]
                 bookmakername = row[11]
-                stake = D(row[12])
-                avgodds = D(row[13])
+                _stake = row[12]
+                if _stake.isdigit():
+                    stake = D(row[12])
+                else:
+                    stake = D('0.0')
+                _odds = row[13]
+                if _odds.isdigit():
+                    avgodds = D(row[13])
+                else:
+                    avgodds = D('0.0')
                 isWinMarket = True if row[14] == '1' else False
                 isBack = True if row[15] == '1' else False
                 finalpos = row[16]
                 isPlaced = True if row[17] == '1' else False
                 isScratched = False
+                ##void bets due to scratching or abandoned meeting, etc.
+                if stake == 'V':
+                    continue
+
                 if finalpos == 'S':
                     isScratched = True
                 
                 try:
                     system         = System.objects.get( systemname = systemname )
-                    racecourse = Racecourse.objects.get( racecoursename = racecourse)
+
+                    #there are 2 newmarkets! July is 174, main course is 38,
+                    #TODO work out a way of distinguishing these 2 or do not bother? Only for Straight 10 vs 8
+                    print(racecourse)
+                    if racecourse.upper() == 'NEWMARKET':
+                        racecourse = Racecourse.objects.get(racecourse_id=38)
+                    else:
+                        racecourse = Racecourse.objects.get(racecoursename = racecourse)
                     bookmaker      = Bookmaker.objects.get(name = bookmakername)
                     print(system.systemname,racecourse.racecoursename, bookmaker.name)
                     #combine racedate time
