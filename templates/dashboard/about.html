@@ -1,0 +1,22 @@
+{% extends "dashboard/dashbase.html" %}
+
+{% block topstatic %}
+{% load staticfiles %}
+{% endblock %}
+{% block path %}<li>About</li>{% endblock %}
+{% block innerpath %}<h1 class="page-title txt-color-blueDark"><i class="fa-fw fa fa-home"></i> Dashboard <span>>About</span></h1>{% endblock %}
+{% block content %}
+
+Your text about here!
+
+{% endblock %}
+
+{% block bottomstatic %}
+    <script type="text/javascript">
+    // DO NOT REMOVE : GLOBAL FUNCTIONS!
+    $(document).ready(function() {
+        pageSetUp();
+    })
+
+    </script>
+{% endblock %}
