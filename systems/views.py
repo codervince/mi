@@ -279,8 +279,6 @@ def subscribe(request, system):
     else:
         #create subscription
         ##Subscription CREATE PERMISSION and ADD TO DATABASE
-        # permission = Permission.objects.create(codename='can_view',name='Can View This SYSTEM',content_type=content_type)
-        assign_perm( 'view_system', investor, system )
 
         #create UserSubscription with this investor
         subscription = Subscription.objects.filter(system=system, subscription_type='SYSTEM').first()
@@ -330,6 +328,9 @@ def subscribe(request, system):
         #teh credit to the destination account POSITIVE
         tdebit = Transaction.objects.create(transfer=transfer, account=investor_account, amount=amount*D('-1.0'))
         tcredit = Transaction.objects.create(transfer=transfer, account=system_account, amount=amount*D('1.0'))
+
+        # last step actual permission grant
+        assign_perm( 'view_system', investor, system )
 
         messages.add_message(request, messages.SUCCESS, 'Successfully placed your investment.')
 
