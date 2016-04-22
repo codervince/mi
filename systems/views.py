@@ -154,9 +154,9 @@ def systems_detail(request, systemname):
     context['system'] = system
     # get historical information need to create snapshots for 2013,14,15,16 aka funds
 
-    live_season2016 = SystemSnapshot.liveobjects.get(system__systemname=systemname)
-    live_2016 =  SystemSnapshot.yearobjects.get(system__systemname=systemname)
-    historical = SystemSnapshot.historicalobjects.get(system__systemname=systemname)
+    live_season2016 = SystemSnapshot.liveobjects.filter(system__systemname=systemname).first()
+    live_2016 = SystemSnapshot.yearobjects.filter(system__systemname=systemname).first()
+    historical = SystemSnapshot.historicalobjects.filter(system__systemname=systemname).first()
 
     # live_season2016 = system.systemsnapshot.filter(validfrom__date__lt=ss_season2016_start).only('runners', 'bfwins', 'bfruns', 'winsr', 'a_e',
     #     'levelbspprofit', 'levelbsprofitpc', 'a_e_last50', 'archie_allruns', 'archie_last50', 'last50str', 'last28daysruns', 'longest_losing_streak',

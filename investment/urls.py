@@ -32,7 +32,7 @@ urlpatterns = [
     url(r'^detail/aud/$', login_required(TemplateView.as_view(template_name='investment/AUD.html')), name='AUD'),
     url(r'^detail/tandcs/$', login_required(TemplateView.as_view(template_name='investment/tandcs.html')), name='tandcs'),
     url(r'^account/registration/$', views.register, name='register'),
-    url(r'^account/login/$', views.login_view, {'template_name': 'investment/account/login.html','authentication_form': UserAuthForm }),
+    url(r'^account/login/$', views.login_view, {'template_name': 'investment/account/login.html','authentication_form': UserAuthForm }, name='login'),
     url(r'^account/logout/$', views.logout_view, name='logout'),
     url(r'^account/password_change/$', auth_views.password_change,
         {'template_name': 'investment/account/change-password.html'}),

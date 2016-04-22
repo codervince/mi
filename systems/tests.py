@@ -87,8 +87,6 @@ class TestSystemSubscribe(TestCase):
         # Subscription.objects.get_or_create(name="Bad", recurrence_period='5', recurrence_unit='W', system=self.system, price=100)
         # Subscription.objects.get_or_create(name="Not Displayed", recurrence_period='5', recurrence_unit='D', system=self.system, price=0)
 
-
-
     def testFixtures(self):
         system = System.objects.all().count()
         self.assertEquals(2, system)

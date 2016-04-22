@@ -15,7 +15,7 @@ Your Balance: {{ current_balance_aud }}  AUD || Your Balance: {{ current_balance
     {% endfor %}
 {% endfor %}
 </div>
-
+{% if request.user.is_authenticated %}
 <form id="id_subscribe_form" action="" method="post">
     {% csrf_token %}
     <input type="hidden" name="currency" value="">
@@ -50,3 +50,8 @@ Your Balance: {{ current_balance_aud }}  AUD || Your Balance: {{ current_balance
         </tr>
     </table>
 </form>
+{% else %}
+<div>
+    <a href="{% url 'login' %}">Please Login To Subscribe</a>
+</div>
+{% endif %}
