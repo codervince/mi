@@ -92,23 +92,19 @@ class TestSystemSubscribe(TestCase):
         self.assertEquals(2, system)
 
     def testAnonUserCannotSeeSubscribeForm(self):
-        pass
-
-    def testCannotSubscribeToNonDisplayedSubscription(self):
-        self.assertFalse(self.user.has_perm('view_system', self.system))
-        request = self.factory.post(reverse('systems:subscribe_system', args=['2016-S-01T']), make_subparams(5,'D', 'AUD'))
-        request.user = self.user
-        request = add_message_fallback_storage_manually(request)
-        response = subscribe(request, '2016-S-01T')
-        self.assertEqual(response.status_code, 400)
+        self.assertEquals(1,2)
 
     def testAnonymousUsersCannotSubscribe(self):
         self.assertFalse(self.user.has_perm('view_system', self.system))
-        #create a legitimate post 
+        # create a legitimate post
         request = self.factory.post(reverse('systems:subscribe_system', args=['2016-S-01T']), make_subparams())
         request.user = self.anon_user
-        #should do what? should not see the form!!!
-        self.assertNotIn("Subscribe to this System", request) #form tag not present
+        response = subscribe(request, '2016-S-01T')
+        self.assertEquals(response.status_code, 405)
+
+    def testCannotSubscribeToNonDisplayedSubscription(self):
+    #     What is Considered as Non Displayed Subscription?
+        pass
 
     def testCannotSubscribeWithZeroBalance(self):
         # Check that User don't have permission for System initially

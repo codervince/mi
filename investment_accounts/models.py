@@ -83,8 +83,8 @@ class Subscription(models.Model):
     recurrence_unit = models.CharField(max_length=1, null=True,
                                        choices=((None, _("No recurrence")),)
                                        + _TIME_UNIT_CHOICES)
-    system = models.OneToOneField(System, null=True, blank=True)
-    fund = models.OneToOneField(Fund, null=True, blank=True)
+    system = models.ForeignKey(System, null=True, blank=True)
+    fund = models.ForeignKey(Fund, null=True, blank=True)
     # fund_account = models.OneToOneField(FundAccount, null=True, blank=True)
     subscription_type = models.CharField(choices=SUBSCRIPTION_TYPES, max_length=128)
 

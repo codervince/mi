@@ -6,7 +6,7 @@ from decimal import Decimal as D
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.models import User
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template.response import TemplateResponse
 from django_tables2   import RequestConfig
@@ -177,10 +177,20 @@ def systems_detail(request, systemname):
     context['hist_131415'] = historical
     context['prices'] = get_prices_for_system(system)
 
+    subscriptions = Subscription.objects.filter(system=system, subscription_type='SYSTEM')
+    context['subscriptions'] = subscriptions
+
     ### IF USER IS ANON DO NOT SHOW SUSCRIPTION FORM!
     if request.user.is_authenticated():
         context['currency'] = settings.CURRENCIES
-        ##THIS DOES NOT WORL FOR ANONYMOUS USERS
+
+
+        user_subscription = UserSubscription.objects.filter(subscription__in=subscriptions, user=request.user, expires__gte= datetime.now().date()).first()
+        if user_subscription:
+            context['already_subscribed'] = user_subscription.expires
+        else:
+            context['already_subscribed'] = False
+
         investment_balances = get_investment_balance(request.user)
 
         context['current_balance_aud'] = investment_balances['AUD']
@@ -229,7 +239,7 @@ def subscribe(request, system):
 
     '''
 
-    if request.method != 'POST':
+    if request.method != 'POST' or request.user.is_anonymous():
         return HttpResponse("Method not allowed ", status=405)
 
     if 'recurrence' not in request.POST or 'currency' not in request.POST:
@@ -293,13 +303,15 @@ def subscribe(request, system):
         subscription = Subscription.objects.filter(system=system, subscription_type='SYSTEM').first()
         if not subscription:
             messages.add_message(request, messages.ERROR, 'Subscription not found.')
-            return redirect("systems:systems_detail", systemname=system)
+            return systems_detail(request, system)
+            # return redirect("systems:systems_detail", systemname=system)
         # check if user is already subscribed
-        existing_subscription = UserSubscription.objects.filter(subscription=subscription, user=investor, expires__gte=datetime.now().date()).order_by('expires')
+        user_subscription, created = UserSubscription.objects.get_or_create(subscription=subscription, user=investor)
 
-        if len(existing_subscription) > 0:
-            messages.add_message(request, messages.INFO, 'Already Subscribed, expires st %s ' % existing_subscription.first().expires)
-            return redirect("systems:systems_detail", systemname=system)
+        if user_subscription and user_subscription.expires > datetime.now().date():
+            messages.add_message(request, messages.INFO, 'Already Subscribed, expires st %s ' % user_subscription.expires)
+            return systems_detail(request, system)
+            # return redirect("systems:systems_detail", systemname=system)
 
         # Calculate initial expire date based on subscription
         days_to_add = 0
@@ -312,7 +324,8 @@ def subscribe(request, system):
         delta = timedelta(days=days_to_add)
 
         expires = datetime.now() + delta
-        user_subscription = UserSubscription.objects.create(subscription=subscription, user=investor, expires=expires)
+        user_subscription.expires = expires
+        user_subscription.save()
 
 
         subscription = 1
@@ -327,7 +340,7 @@ def subscribe(request, system):
         logger.info(amount)
         investor_account.balance -= amount
         system_account.balance   += amount
-        
+
         investor_account.save()
         system_account.save()
 
@@ -343,5 +356,5 @@ def subscribe(request, system):
 
         messages.add_message(request, messages.SUCCESS, 'Successfully placed your investment.')
 
-    return redirect("systems:systems_detail", systemname=system)
+    return systems_detail(request, system)
     # return HttpResponseRedirect("systems:systems_detail", systemname=system) #or use reverse? return to same page
