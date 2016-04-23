@@ -26,7 +26,6 @@ pbr==1.8.1
 phonenumbers==7.2.8
 Pillow==2.9.0
 plotly==1.9.6
-psycopg2==2.6.1
 purl==1.2
 pymongo==3.2.1
 python-dateutil==2.5.2
