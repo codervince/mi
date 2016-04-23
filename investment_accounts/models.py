@@ -71,7 +71,7 @@ SUBSCRIPTION_TYPES = (
 
 class Subscription(models.Model):
     '''A Subscription model registers start date proposed end date of a subscription and price paid
-    LIMIT NUMBER of subscriptions to 100 for each systemname
+    LIMIT NUMBER of subscriptions to max_subscrpitions for each systemname = save
 
     '''
     name = models.CharField(max_length=100, null=False)
@@ -148,7 +148,7 @@ class UserSubscription(models.Model):
     user = models.ForeignKey(User)
     subscription = models.ForeignKey(Subscription)
     # For Funds: has a default subscription period end of the year
-    expires = models.DateField(null=True, default=datetime.now()) #why today?
+    expires = models.DateField(null=True) #why today?
     active = models.BooleanField(default=True)
     cancelled = models.BooleanField(default=False)
 

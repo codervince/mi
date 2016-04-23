@@ -78,25 +78,26 @@ def getracedatetime(racedate, racetime):
 
 class Command( BaseCommand ):
     help = 'Import data'
-    
+
+    def add_arguments(self, parser):
+        parser.add_argument('path', type=str)
+
     @transaction.atomic
     def handle( self, *args, **options ):
         from operator import itemgetter
-        lay_url = '/Users/vmac/PY/DJANGOSITES/DATA/RUNNERS/LAYINGSYSTEMS.csv'
-        # runner_url = '/Users/vmac/PY/DJANGOSITES/DATA/RUNNERS/fullrunners_2.csv' #elsewhere
-        live_url = '/Users/vmac/PY/DJANGOSITES/DATA/RUNNERS/LIVE/ALERTS-RES_2016.csv'
-        f_path = live_url
+
+
+        full_path = options['path']
         rlist = list()
         #read in CSV twice
-        cols = ('DATE', 'TIME', 'COURSE', 'HORSE', 'ALERTNAME', 'POS', 'RAN','SP_PLACED', 'BSP_PLACED', 'RATING', 'SP', 'BF_SP', 'BF_P_SP')
+        cols = ('DATE', 'TIME', 'COURSE', 'HORSE', 'ALERTNAME', 'POS', 'RAN','SP_PLACED', 'BSP_PLACED', 'RATING',\
+                'SP', 'BF_SP', 'BF_P_SP')
         valuesfor = itemgetter(*cols)
-        with open(f_path) as csvfile: 
+        with open(full_path) as csvfile:
             reader = csv.DictReader(csvfile)
             for d in reader:
                 rlist.append(dict(zip(cols, valuesfor(d))))
-        # print(rlist)
-        #pass1 get date and time for validfrom  validuptonotincluding
-        # rlist = sorted(rlist, key=itemgetter('racedate'), reverse=True)
+
         fromdate = min(rlist, key=lambda x:x['DATE'])['DATE']
         todate = max(rlist, key=lambda x:x['DATE'])['DATE']
         fromdate = fromdate.split( '/' )
