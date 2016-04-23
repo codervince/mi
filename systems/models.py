@@ -121,6 +121,8 @@ class SnapshotManagerHistorical(models.Manager):
     def get_query_set(self):
         return super(SnapshotManagerHistorical, self).get_queryset().filter(
                 validuptonotincluding__date__lte=ss_hist_start)
+
+
 # class LiveRunnersManager(models.Manager):
 #     ''' Returns the most recent snapshot of runners since the system began'''
 #     def get_query_set(self):
@@ -162,7 +164,8 @@ class System(models.Model):
     isToLay = models.BooleanField(default=False)
     premium  = models.FloatField("System price premium over base", default=1.0)   ##auto updated  based on current performance
 
-    runners = models.ManyToManyField(Runner)
+    runners = models.ManyToManyField(Runner) #dep
+
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True, blank=True)
     
@@ -233,8 +236,10 @@ class SystemSnapshot(models.Model):
     uniquewinners= models.FloatField("No. Unique Winners", default=None, null=True)
 
 
+    '''First one seen is default - dont let thisyear etc be default else could be a problem > 134 '''
+    objects = models.Manager()
     thisyear = SnapshotManagerThisYear()
-    thisyear.use_for_related_fields = True
+    # thisyear.use_for_related_fields = True
     thisseason = SnapshotManagerThisSeason()
     historical = SnapshotManagerHistorical()
 

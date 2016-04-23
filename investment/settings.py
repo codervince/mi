@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'django.contrib.flatpages',
     'django_tables2',
+    'debug_toolbar'
 ]
 #remove investments
 
@@ -172,7 +173,10 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-STATIC_ROOT  = '/mi/sites/metainvest.io/htdocs/static/'
+if not DEBUG:
+    STATIC_ROOT  = '/mi/sites/metainvest.io/htdocs/static/'
+
+
 
 ROOT_DIR =  os.path.abspath(os.path.dirname(__file__))
 
@@ -187,6 +191,9 @@ LOGIN_REDIRECT_URL = '/'
 SESSION_COOKIE_AGE = 2592000 # One month
 
 SITE_ID = 1
+
+#debug toolbar needs this
+INTERNAL_IPS = '127.0.0.1'
 
 
 DISALLOWED_USER_AGENTS = (
