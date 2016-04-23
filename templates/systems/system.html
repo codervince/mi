@@ -4,7 +4,7 @@
 {% load staticfiles %}
 {% load guardian_tags %}
 {% load humanize %}
-
+{% load render_table from django_tables2 %}
 {% block extendedheader %}
 
 <style>
@@ -48,7 +48,7 @@ $(function(){
 
 {% block content %}
 
-    {% if messages %}
+        {% if messages %}
     <ul class="messages">
         {% for message in messages %}
         <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
@@ -56,44 +56,39 @@ $(function(){
     </ul>
     {% endif %}
 
-    {% get_obj_perms request.user for system as "system_perms" %}
+    <div id="systempanel">
 
-    {% if "view_system" in system_perms %}
-
-        {{ live_season2016 }}
-        <div>
-            DATA TABLES first Get the Data to Systems and filter by systemsnapshot dates - remove from systemsnapshot?
-            {% for runner in system.runners.all %}
-                <p>{{ runner.runtype }}</p>
-                <p>{{ runner.racename }}</p>
-            {% endfor %}
-        </div>
-        <a href="#">permission specific data</a>
-        }
-    {% endif %}
-
-
-
-    <h1>{{ system.systemname }} - {{ system.systemtype }} </h1>
+        <h1>{{ system.systemname }} - {{ system.systemtype }}
+            - {{ system.isToLay|yesno:"laying,backing,unsure"  }}
+            {{ system.isToWin|yesno:"to win ,to place ,unsure" }}
+        </h1>
 
     <p> {{ system.description }} </p>
 
+    <p>{{ system.exposure |default_if_none:"nothing" }}</p>
 
-    <p>{{ system.exposure }}</p>
-    <p>{{ system.query }}</p>
-    <p>{{ system.rpquery }}</p>
-    <p>{{ system.isLayWin }}</p>
-    <p>{{ system.isLayPlace }}</p>
-    <p>{{ system.oddsconditions }}</p>
-    <p>{{ system.premium }}</p>
+    <p>{{ system.rpquery |cut:"{}" }}</p>
+
+    </div>
 
 
+    {% get_obj_perms request.user for system as "system_perms" %}
 
-{% include 'systems/2016.html' %}
+   {% if "view_system" in system_perms %}
 
-{#  commented because file not found  #}
-{#{% include 'systems/pastperformance.html' %}#}
 
+        {% include 'bets/todays_bets.html' with bets=bets %}
+
+
+    {% endif %}
+
+{% if runners|length > 0 %}
+    {% include 'systems/runners_list.html' with runners=runners %}
+{%  endif %}
+
+
+
+    <h2> Subscribe panel </h2>
 	<div class="basic">
 	{% include 'systems/_subscribe.html' %}  
 

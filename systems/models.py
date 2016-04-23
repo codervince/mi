@@ -21,7 +21,7 @@ def getracedatetime(racedate, racetime):
     racedatetime = localtz.localize(racedatetime)
     return racedatetime
 
-WORLD_CREATED = getracedatetime(datetime.strptime("20010101", "%Y%m%d"), '01:00 pm')
+WORLD_CREATED = getracedatetime(datetime.strptime("20010101", "%Y%m%d"), '12:00 am')
 
 ## Adapted to allow for RPRaces input
 class Runner(models.Model):
@@ -102,27 +102,25 @@ class Runner(models.Model):
 #System M:M with bets for keeping up to date with candidates
 #enter manually initially or via CSV each day
 # racecourseid horseid including outcome as per rpraceday/races
+ss_season2016_start = (getracedatetime(datetime.strptime("20160402", "%Y%m%d").date(), '12:00 AM')).date()
+ss_2016_start = (getracedatetime(datetime.strptime("20160101", "%Y%m%d").date(), '12:00 AM')).date()
+ss_hist_start = (getracedatetime(datetime.strptime("20151129", "%Y%m%d").date(), '12:00 AM')).date()
 
 class SnapshotManagerThisSeason(models.Manager):
-    ''' Returns the most recent snapshot get LATEST ?? after_save hook '''
+    ''' Returns the snapshots '''
     def get_query_set(self):
-        ss_season2016_start = getracedatetime(datetime.strptime("20160402", "%Y%m%d").date(), '12:00 AM')
-        return super(SnapshotManagerThisSeason, self).get_queryset().filter(validfrom__date__eq = ss_season2016_start).latest()
+        return super(SnapshotManagerThisSeason, self).get_queryset().filter(validfrom__date__eq=ss_season2016_start)
 
 class SnapshotManagerThisYear(models.Manager):
-    ''' Returns the most recent snapshot - get LATEST after_save hook'''
-
+    '''Get snapshot for this years runs'''
     def get_query_set(self):
-        ss_2016_start = getracedatetime(datetime.strptime("20160101", "%Y%m%d").date(), '12:00 AM')
         return super(SnapshotManagerThisYear, self).get_queryset().filter(
-                validfrom__date__gte=ss_2016_start).latest()
+                validfrom__date__eq=ss_2016_start)
 
 class SnapshotManagerHistorical(models.Manager):
-    ''' FIXED DATES EASY'''
     def get_query_set(self):
-        ss_hist_start = getracedatetime(datetime.strptime("20151129", "%Y%m%d").date(), '12:00 AM')
         return super(SnapshotManagerHistorical, self).get_queryset().filter(
-                validuptonotincluding__date__eq=ss_hist_start).latest()
+                validuptonotincluding__date__lte=ss_hist_start)
 # class LiveRunnersManager(models.Manager):
 #     ''' Returns the most recent snapshot of runners since the system began'''
 #     def get_query_set(self):
@@ -235,13 +233,11 @@ class SystemSnapshot(models.Model):
     uniquewinners= models.FloatField("No. Unique Winners", default=None, null=True)
 
 
+    thisyear = SnapshotManagerThisYear()
+    thisyear.use_for_related_fields = True
+    thisseason = SnapshotManagerThisSeason()
+    historical = SnapshotManagerHistorical()
 
-
-
-    yearobjects = SnapshotManagerThisYear()
-    liveobjects = SnapshotManagerThisSeason()
-    historicalobjects = SnapshotManagerHistorical()
-    objects = models.Manager() #all objects
 
 
     created = models.DateTimeField(auto_now_add=True) #currently adding local not UTC time!
@@ -257,6 +253,6 @@ class SystemSnapshot(models.Model):
         unique_together = ('system', 'validfrom', 'validuptonotincluding',)
         default_permissions = ('view', 'add', 'change', 'delete')
         ordering = ('-levelbspprofit',)
-        get_latest_by = 'created'
+        get_latest_by = 'updated'
 
 

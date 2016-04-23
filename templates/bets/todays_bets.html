@@ -1,0 +1,34 @@
+
+<h3>
+    TODAY'S CANDIDATES FOR YOUR SYSTEM
+</h3>
+
+{%  for b in bets %}
+    {%  if not b.isScratched %}
+        <div class="candidate">
+        <h2>{{  b.horsename  }}</h2>
+        <p>
+        running in the {{  b.racedatetime | date:"g:i"  }} at  {{  b.racecourse.racecoursename}}
+        </p>
+        <p>
+
+            1 unit to
+            {% if b.isBack == True %} back {% endif %}
+            {% if b.isBack != True %} lay {% endif %}
+        on a
+        {%  if b.isWinMarket %} win {% else %} place  {%  endif %}
+        line
+        </p>
+
+        <p>
+            current average odds approx. {{  b.avgodds }}
+        </p>
+    {%  endif %}
+{%  endfor %}
+
+<h3>
+   DAYTRADER TIPS TODAY
+</h3>
+
+If you had 50 pounds to invest today, what max gain, min risk investments would we recommend?
+Displays data from the DayTrader App

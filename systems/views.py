@@ -18,9 +18,9 @@ from systems.models import System, Runner
 from investment_accounts.balance import get_investment_balance
 from systems.tables import SystemTable
 
-
+from django.db.models import Count
 logger = logging.getLogger(__name__)
-
+from django.db.models import F
 from guardian.shortcuts import assign_perm
 
 from investment_accounts.models import InvestmentAccount, SystemAccount, UserSubscription, Subscription, \
@@ -154,9 +154,15 @@ def systems_detail(request, systemname):
     context['system'] = system
     # get historical information need to create snapshots for 2013,14,15,16 aka funds
 
-    live_season2016 = SystemSnapshot.liveobjects.get(system__systemname=systemname)
-    live_2016 =  SystemSnapshot.yearobjects.get(system__systemname=systemname)
-    historical = SystemSnapshot.historicalobjects.get(system__systemname=systemname)
+    live_season2016 = SystemSnapshot.thisseason.filter(system__systemname=systemname).latest()
+    live_2016 =  SystemSnapshot.thisyear.filter(system__systemname=systemname).latest()
+    live_2016_ru = system.runners.all().order_by('-racedatetime')
+    historical = SystemSnapshot.historical.filter(system__systemname=systemname).latest()
+
+    #today is?
+    today = datetime.today().date()
+
+    bets = Bet.objects.filter(racedatetime__date=today).filter(system=system)
 
     # live_season2016 = system.systemsnapshot.filter(validfrom__date__lt=ss_season2016_start).only('runners', 'bfwins', 'bfruns', 'winsr', 'a_e',
     #     'levelbspprofit', 'levelbsprofitpc', 'a_e_last50', 'archie_allruns', 'archie_last50', 'last50str', 'last28daysruns', 'longest_losing_streak',
@@ -168,9 +174,10 @@ def systems_detail(request, systemname):
 
     ##why runners here?
     context['runners_count'] = system.runners.values().count()
-    context['runners'] = system.runners.values() #list of runners , was the first one placed? s1.runners.values()[0]['isplaced']
-    #LIVE SNAPSHOT from Bets
-    livebets = Bet.objects.filter(system=system)
+    context['runners'] = live_2016_ru
+    context['bets'] = bets
+
+
 
     context['live_2016'] = live_2016
     context['live_season2016'] = live_season2016
@@ -185,16 +192,31 @@ def systems_detail(request, systemname):
 
         context['current_balance_aud'] = investment_balances['AUD']
         context['current_balance_gbp'] = investment_balances['GBP']
-
+        context['table'] = live_2016_ru
     return TemplateResponse(request, 'systems/system.html', context)
 
 def systems_index(request):
-    '''Table of system information including Latest snapshot info '''
+    ''''Each system is a div with Name, description isActive, isToLay, isToWin, Wins, Runs, WinSR , ChiAquared'''
 
-    all_snaps = SystemSnapshot.liveobjects.all()
-    table = SystemTable(all_snaps, order_by=("-levelbspprofit", "runs"),empty_text='No systems here')
+    #wish this would work with a Manager!
+    ss_2016_start = (getracedatetime(datetime.strptime("20160101", "%Y%m%d").date(), '12:00 AM')).date()
+    ss_season2016_start = (getracedatetime(datetime.strptime("20160328", "%Y%m%d").date(), '12:00 AM')).date()
+
+
+
+    all_snaps_2016 = SystemSnapshot.thisyear.filter(validfrom__date=ss_2016_start).annotate(null_position=Count('levelbspprofit')).order_by('-null_position', '-levelbspprofit')
+
+    ##none so far!
+    all_snaps_season = SystemSnapshot.thisseason.filter(validfrom__date=ss_season2016_start).annotate(
+        null_position=Count('levelbspprofit')).order_by('-null_position', '-levelbspprofit')
+
+    table = SystemTable(all_snaps_2016, order_by=("-levelbspprofit", "runs"),empty_text='No systems here')
     RequestConfig(request, paginate={"per_page": 25}).configure(table)
-    return render(request, 'systems/systems.html', {'table': table})
+    return render(request, 'systems/systems.html', {
+        'table': table,
+        'snaps': all_snaps_2016,
+        'seasonsnaps': all_snaps_season
+        })
 
 
 def systems_mylist(request):

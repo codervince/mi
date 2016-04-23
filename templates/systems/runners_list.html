@@ -1,8 +1,40 @@
-{% block content %}
-    <h2>Runners</h2>
-    <ul>
-        {% for runner in object_list %}
-            <li>{{ runner.horsename }}</li>
-        {% endfor %}
-    </ul>
-{% endblock %}
+
+    Runners Table for DataTables
+    <table id="example" class="display" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>Racedate</th>
+                <th>Racetime</th>
+                <th>Racecoursename</th>
+                <th>Racecoursenid</th>
+                <th>No runners</th>
+                <th>Horse</th>
+                <th>Allowance</th>
+                <th>Position</th>
+            </tr>
+        </thead>
+        <tbody>
+        {%  for r in runners %}
+        <tr>
+            <td>{{ r.racedate }}</td>
+            <td>{{ r.racetime }}</td>
+            <td>{{ r.racecourse }}</td>
+            <td>{{ r.racecourseid }}</td>
+            <td>{{ r.norunners }}</td>
+            <td>{{ r.horsename }}</td>
+            <td>{{ r.allowance}}</td>
+            <td>{{r.finalpos  }}</td>
+        </tr>
+        {%  endfor  %}
+        </tbody>
+    </table>
+
+    <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>
+
+<script type="javascript">
+
+$(document).ready(function() {
+    $('#example').DataTable();
+} );
+</script>

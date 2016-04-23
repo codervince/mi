@@ -108,7 +108,7 @@ class Command( BaseCommand ):
         validuptonotincluding = getracedatetime(validuptonotincluding,'12:00 AM')
         seasonstart2016 =  getracedatetime(datetime.strptime("20160328", "%Y%m%d").date(), '12:00 AM')
         yearstart2016 =  getracedatetime(datetime.strptime("20160101", "%Y%m%d").date(), '12:00 AM')
-        snapshottype = ('LIVE' if validfrom >= seasonstart2016 else 'HISTORICAL' )
+        isHistorical = (False if validfrom >= yearstart2016 else True)
         todays_systemsnapshots = set()
 
         # print(validuptonotincluding, validfrom,racecourseid)
@@ -145,6 +145,7 @@ class Command( BaseCommand ):
                 'horsename': horsename,
                 'racedate': date,
                 'racedatetime': racedatetime,
+                'racecoursename': racecoursename,
                 'racecourseid': racecourse_id,
                 'norunners': norunners,
                 'finalpos': finalpos,
@@ -153,7 +154,11 @@ class Command( BaseCommand ):
                 'racetime': racetime,
                 'isplaced': isplaced,
                 'isbfplaced': isbfplaced,
-            } 
+            }
+
+            snapshot_defaults = {
+             'isHistorical':    isHistorical,
+            }
             # print(runner_defaults)
         #look up based on horsename, racedate
             try:
@@ -165,10 +170,10 @@ class Command( BaseCommand ):
                 #     defaults = runner_defaults,
                 # )
                 print(created, runner.pk, runner.finalpos, system.id)
-                systemsnapshot,sscreated = SystemSnapshot.objects.get_or_create( validfrom =validfrom, validuptonotincluding= validuptonotincluding, 
-                        system = system, snapshottype = snapshottype,  )
+                systemsnapshot,sscreated = SystemSnapshot.objects.update_or_create(validfrom =validfrom, validuptonotincluding= validuptonotincluding,
+                        system = system, defaults=snapshot_defaults )
                 system.runners.add(runner)
-                systemsnapshot.runners.add( runner )
+                # systemsnapshot.runners.add( runner )
                 # print(systemsnapshot.runners.first().finalpos)
                 todays_systemsnapshots.add(systemsnapshot)
                 print(systemsnapshot.id, sscreated)

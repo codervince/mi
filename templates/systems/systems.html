@@ -1,5 +1,6 @@
 {% extends "investment/systembase.html" %}
 {% load staticfiles %}
+ {% load as_percentage_of_filter %}
 {% load render_table from django_tables2 %}
 <!DOCTYPE html>
 <html lang="en">
@@ -31,6 +32,46 @@
 </head>
 <body>
 {% block content %}
+
+    <div id="2016block">
+        <h2> 2016 Performance</h2>
+                {%  for s in snaps  %}
+                    <div class="system_panel">
+                    <h2><a href="{% url 'systems:systems_detail' s.system.systemname %}">{{ s.system.systemname }}</a></h2>
+                    <h2> Level Stakes Profit: {{ s.levelbspprofit }} % | Actual/Expected: {{ s.a_e| floatformat:2  }} | ChiSquared: {{ s.archie_allruns | floatformat:2 }}</h2>
+                        <p> Wins/runs: {{ s.bfwins }} / {{ s.bfruns }} which is a win strike rate of {{s.bfwins|as_percentage_of:s.bfruns   }}</p>
+                        <p>
+                           Longest Losing Streak {{ s.longest_losing_streak }} , on Average {{  s.average_losing_streak }} <br/>
+                            Last 50: {{ s.last50str }} <br/>
+                            A/E L50: {{ s.a_e_last50 }}
+                        </p>
+                    </div>
+                {%  endfor %}
+    </div>
+    <hr>
+    <h2> Season Performance</h2>
+    {%  if seasonsnaps %}
+    <div id="seasonblock">
+
+                {%  for s in seasonsnaps  %}
+                    <div class="system_panel">
+                    <h2><a href="{% url 'systems:systems_detail' s.system.systemname %}">{{ s.system.systemname }}</a></h2>
+                    <h2> Profit: {{ s.levelbspprofit }} % | A_E: {{ s.a_e| floatformat:2  }} | ChiSquared: {{ s.archie_allruns| floatformat:2 }}</h2>
+                        <p>
+                           Longest/Avg Losing Streak {{ s.longest_losing_streak }} , {{  s.average_losing_streak }} <br/>
+                            Last 50: {{ s.last50str }} <br/>
+                            A/E L50: {{ s.a_e_last50 }}
+                        </p>
+                    </div>
+                    ------------
+                {%  endfor %}
+    </div>
+    {%  else %}
+        Not enough stats as yet. Please check back later.
+
+    {%  endif %}
+
+
     <h2>Systems</h2>
     <ul>
 	{% render_table table %}
