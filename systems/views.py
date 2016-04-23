@@ -187,9 +187,7 @@ def systems_detail(request, systemname):
 
         user_subscription = UserSubscription.objects.filter(subscription__in=subscriptions, user=request.user, expires__gte= datetime.now().date()).first()
         if user_subscription:
-            context['already_subscribed'] = user_subscription.expires
-        else:
-            context['already_subscribed'] = False
+            context['expires'] = user_subscription.expires
 
         investment_balances = get_investment_balance(request.user)
 

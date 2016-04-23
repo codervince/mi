@@ -93,9 +93,12 @@ $(function(){
 
 {#  commented because file not found  #}
 {#{% include 'systems/pastperformance.html' %}#}
-
-	<div class="basic">
-	{% include 'systems/_subscribe.html' %}
+    <div class="basic">
+    {% if "view_system" in system_perms %}
+        <h2>Already Subscribed - expires at : {{ expires }}</h2>
+    {% else %}
+	    {% include 'systems/_subscribe.html' %}
+    {% endif %}
 	</div>
 
 {% endblock %}

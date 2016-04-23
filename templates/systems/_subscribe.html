@@ -43,11 +43,7 @@ Your Balance: {{ current_balance_aud }}  AUD || Your Balance: {{ current_balance
         </td>
         <td>
             <div class="padded" style="padding: 5px 10px;">
-                {% if already_subscribed %}
-                    <a>Subscription expires at {{ already_subscribed }}</a>
-                {% else %}
-                    <button padding="5px;" type="submit" class="btn btn-primary">Subscribe to this System</button>
-                {% endif %}
+                <button padding="5px;" type="submit" class="btn btn-primary">Subscribe to this System</button>
             </div>
         </td>
         </tr>
