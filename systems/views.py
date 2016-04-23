@@ -184,7 +184,6 @@ def systems_detail(request, systemname):
     if request.user.is_authenticated():
         context['currency'] = settings.CURRENCIES
 
-
         user_subscription = UserSubscription.objects.filter(subscription__in=subscriptions, user=request.user, expires__gte= datetime.now().date()).first()
         if user_subscription:
             context['expires'] = user_subscription.expires
@@ -290,13 +289,13 @@ def subscribe(request, system):
 
 
     #CAN USER AFFORD IT?
-    if investor_account.balance < price:
+    # TODO add credit_limit check`
+    if investor_account.balance < price + investor_account.credit_limit:
         # investor.message_set.create(message=_("Sorry: insufficient balance. Please transfer funds"))
         messages.add_message(request, messages.ERROR, 'Sorry: insufficient balance. Please transfer funds.')
     else:
         #create subscription
         ##Subscription CREATE PERMISSION and ADD TO DATABASE
-
         #create UserSubscription with this investor
         subscription = Subscription.objects.filter(system=system, subscription_type='SYSTEM').first()
         if not subscription:
@@ -306,7 +305,7 @@ def subscribe(request, system):
         # check if user is already subscribed
         user_subscription, created = UserSubscription.objects.get_or_create(subscription=subscription, user=investor)
 
-        if user_subscription and user_subscription.expires > datetime.now().date():
+        if user_subscription and user_subscription.expires.date() > datetime.today().date():
             messages.add_message(request, messages.INFO, 'Already Subscribed, expires st %s ' % user_subscription.expires)
             return systems_detail(request, system)
             # return redirect("systems:systems_detail", systemname=system)

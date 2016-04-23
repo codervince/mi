@@ -193,3 +193,6 @@ DISALLOWED_USER_AGENTS = (
     re.compile(r'^OmniExplorer_Bot'),
     re.compile(r'^Googlebot'),
     )
+
+
+ANONYMOUS_USER_NAME = 'Tester1'
