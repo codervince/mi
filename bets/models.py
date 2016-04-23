@@ -278,11 +278,11 @@ class Bet(models.Model):
     avgodds = models.DecimalField(max_digits=6, decimal_places=2)
     isWinMarket = models.BooleanField(default=True)
     isBack = models.BooleanField(default=True) #else lay
-    finalpos = models.CharField(max_length=2,null=True)
-    winnings = models.DecimalField(max_digits=6, decimal_places=2, null=True)
-    profit = models.DecimalField(max_digits=6, decimal_places=2, null=True)
-    didWin = models.NullBooleanField()
-    isPlaced = models.NullBooleanField()
+    finalpos = models.CharField(max_length=2,null=True, blank=True)
+    winnings = models.DecimalField(max_digits=6, decimal_places=2, null=True,blank=True)
+    profit = models.DecimalField(max_digits=6, decimal_places=2, null=True,blank=True)
+    didWin = models.NullBooleanField(blank=True, default=None)
+    isPlaced = models.NullBooleanField(blank=True, default=None)
     created = models.DateTimeField(auto_now_add=True)
     isScratched = models.BooleanField(default=False)
 

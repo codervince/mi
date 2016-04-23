@@ -18,9 +18,10 @@ Imports data from SYSTEM/SNAPSHOT JSON
 Directory:
 /Users/vmac/PY/DJANGOSITES/DATA/SYSTEMS/test
 python manage.py importjson_kirill '/Users/vmac/PY/DJANGOSITES/DATA/SYSTEMS/L/extra'
-
+python manage.py importjson_kirill '/Users/vmac/PY/DJANGOSITES/DATA/SYSTEMS/EXTRA_APR23'
 #######################
 Need more systems?
+1. maxflatstats.py -> get HTML
 flatstats2 offline from HTML to JSON
 
 '''
@@ -38,7 +39,7 @@ def get_all_field_names(model):
 
 
 class Command(BaseCommand):
-    help = 'Import data from json file- specify path'
+    help = 'Import SYSTEM SNAPSHOT data from json file- specify path'
 
     def add_arguments(self, parser):
         parser.add_argument('path', type=str)
@@ -57,10 +58,12 @@ class Command(BaseCommand):
 
             with open(full_path, 'r', errors='ignore') as f:
                 json_data = json.load(f)[0] #sticks here
-            #manually edit oddsconditions if app.
+            #manually edit oddsconditions if applicable
             data = {
-                'rpquery': {},
-                'oddsconditions': None
+                "isActive": True,
+                "isToWin": True,
+                "isToLay": False,
+                "isInUse": True,
             }
             for field_name in system_fields:
                 if field_name in json_data:

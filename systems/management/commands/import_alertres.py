@@ -78,25 +78,26 @@ def getracedatetime(racedate, racetime):
 
 class Command( BaseCommand ):
     help = 'Import data'
-    
+
+    def add_arguments(self, parser):
+        parser.add_argument('path', type=str)
+
     @transaction.atomic
     def handle( self, *args, **options ):
         from operator import itemgetter
-        lay_url = '/Users/vmac/PY/DJANGOSITES/DATA/RUNNERS/LAYINGSYSTEMS.csv'
-        # runner_url = '/Users/vmac/PY/DJANGOSITES/DATA/RUNNERS/fullrunners_2.csv' #elsewhere
-        live_url = '/Users/vmac/PY/DJANGOSITES/DATA/RUNNERS/LIVE/ALERTS-RES_2016.csv'
-        f_path = live_url
+
+
+        full_path = options['path']
         rlist = list()
         #read in CSV twice
-        cols = ('DATE', 'TIME', 'COURSE', 'HORSE', 'ALERTNAME', 'POS', 'RAN','SP_PLACED', 'BSP_PLACED', 'RATING', 'SP', 'BF_SP', 'BF_P_SP')
+        cols = ('DATE', 'TIME', 'COURSE', 'HORSE', 'ALERTNAME', 'POS', 'RAN','SP_PLACED', 'BSP_PLACED', 'RATING',\
+                'SP', 'BF_SP', 'BF_P_SP')
         valuesfor = itemgetter(*cols)
-        with open(f_path) as csvfile: 
+        with open(full_path) as csvfile:
             reader = csv.DictReader(csvfile)
             for d in reader:
                 rlist.append(dict(zip(cols, valuesfor(d))))
-        # print(rlist)
-        #pass1 get date and time for validfrom  validuptonotincluding
-        # rlist = sorted(rlist, key=itemgetter('racedate'), reverse=True)
+
         fromdate = min(rlist, key=lambda x:x['DATE'])['DATE']
         todate = max(rlist, key=lambda x:x['DATE'])['DATE']
         fromdate = fromdate.split( '/' )
@@ -107,7 +108,7 @@ class Command( BaseCommand ):
         validuptonotincluding = getracedatetime(validuptonotincluding,'12:00 AM')
         seasonstart2016 =  getracedatetime(datetime.strptime("20160328", "%Y%m%d").date(), '12:00 AM')
         yearstart2016 =  getracedatetime(datetime.strptime("20160101", "%Y%m%d").date(), '12:00 AM')
-        snapshottype = ('LIVE' if validfrom >= seasonstart2016 else 'HISTORICAL' )
+        isHistorical = (False if validfrom >= yearstart2016 else True)
         todays_systemsnapshots = set()
 
         # print(validuptonotincluding, validfrom,racecourseid)
@@ -144,6 +145,7 @@ class Command( BaseCommand ):
                 'horsename': horsename,
                 'racedate': date,
                 'racedatetime': racedatetime,
+                'racecoursename': racecoursename,
                 'racecourseid': racecourse_id,
                 'norunners': norunners,
                 'finalpos': finalpos,
@@ -152,7 +154,11 @@ class Command( BaseCommand ):
                 'racetime': racetime,
                 'isplaced': isplaced,
                 'isbfplaced': isbfplaced,
-            } 
+            }
+
+            snapshot_defaults = {
+             'isHistorical':    isHistorical,
+            }
             # print(runner_defaults)
         #look up based on horsename, racedate
             try:
@@ -164,10 +170,10 @@ class Command( BaseCommand ):
                 #     defaults = runner_defaults,
                 # )
                 print(created, runner.pk, runner.finalpos, system.id)
-                systemsnapshot,sscreated = SystemSnapshot.objects.get_or_create( validfrom =validfrom, validuptonotincluding= validuptonotincluding, 
-                        system = system, snapshottype = snapshottype,  )
+                systemsnapshot,sscreated = SystemSnapshot.objects.update_or_create(validfrom =validfrom, validuptonotincluding= validuptonotincluding,
+                        system = system, defaults=snapshot_defaults )
                 system.runners.add(runner)
-                systemsnapshot.runners.add( runner )
+                # systemsnapshot.runners.add( runner )
                 # print(systemsnapshot.runners.first().finalpos)
                 todays_systemsnapshots.add(systemsnapshot)
                 print(systemsnapshot.id, sscreated)

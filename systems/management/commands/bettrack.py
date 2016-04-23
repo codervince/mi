@@ -113,10 +113,28 @@ tipp = RPRacecourses(racecoursename=u'Tipperary (IRE)', racecoursecode='Tip', ra
 thirsk = RPRacecourses(racecoursename=u'Thirsk', racecoursecode='Thr', racecourseid=80, grade=3, straight=6, shape='OVAL', direction='LEFT',
     speed='GALLOPING', surface="UNDULATING", location='NORTH')
 
+sand = RPRacecourses(racecoursename=u'Sandown', racecoursecode='San', racecourseid=54, grade=2, straight=5, shape='OVAL', direction='RIGHT',
+    speed='STIFF', surface="UPHILL", location='SOUTH')
+
+haydock = RPRacecourses(racecoursename=u'Haydock', racecoursecode='Hay', racecourseid=23, grade=2, straight=6, shape='OVAL', direction='LEFT',
+    speed='GALLOPING', surface="FLAT", location='NORTH')
+
+chepstow = RPRacecourses(racecoursename=u'Chepstow', racecoursecode='Chep', racecourseid=12, grade=4, straight=8, shape='OVAL', direction='LEFT',
+    speed='STIFF', surface="UNDULATING", location='SOUTH')
+
+kilbeggan = RPRacecourses(racecoursename=u'Kilbegann (IRE)', racecoursecode='Kil', racecourseid=203, grade=None, straight=None, shape='OVAL', direction='RIGHT',
+    speed='SHARP', surface="UNDULATING", location='IRE')
+
+plumpton = RPRacecourses(racecoursename=u'Plumpton', racecoursecode='Plum', racecourseid=44, grade=None, straight=None, shape='OVAL', direction='LEFT',
+    speed='SHARP', surface="UNDULATING", location='SOUTH')
+
 THERACECOURSES = list()
-THERACECOURSES.extend([winds, redc, donc, wolv, wex, newc, leic, dund, taunt, south, lim, chelm, aint, nott, ling, leop, kemp, catt, ludl, fairy, pont,
- newton, newmjuly, newm, exeter,chelm, air, bath, newb, ballin, font, rip, catt, epsom, brighton, bev, perth, tipp, thirsk])
+THERACECOURSES.extend([winds, redc, donc, wolv, wex, newc, leic, dund, taunt, south, lim, chelm, aint, nott, ling,\
+                       leop, kemp, catt, ludl, fairy, pont,newton, newmjuly, newm, exeter,chelm, air, bath, newb,\
+                       ballin, font, rip, catt, epsom, brighton, bev, perth, tipp, thirsk, sand, haydock, chepstow,\
+                       kilbeggan, plumpton])
 THERACECOURSES = set(THERACECOURSES)
+
 
 BOOKMAKERS = [
 
@@ -186,7 +204,7 @@ class Command(BaseCommand):
                 if row_num == 1:
                     continue
                 racedate = row[1].split( '/' ) #format M/D/y
-                if racedate == ['']:    #blank lines
+                if racedate == ['']:    #blank lin
                     continue
                 print(racedate)
                 racedate = datetime.date( 2000 + int( racedate[2] ), int( racedate[0] ), int( racedate[1] ) )
@@ -221,10 +239,12 @@ class Command(BaseCommand):
                     system         = System.objects.get( systemname = systemname )
 
                     #there are 2 newmarkets! July is 174, main course is 38,
-                    #TODO work out a way of distinguishing these 2 or do not bother? Only for Straight 10 vs 8
+                    #TODO MANUALLY work out a way of distinguishing these 2 or do not bother? Only for Straight 10 vs 8
                     print(racecourse)
                     if racecourse.upper() == 'NEWMARKET':
                         racecourse = Racecourse.objects.get(racecourse_id=38)
+                    elif racecourse.upper() == 'NEWMARKET JULY':
+                        racecourse = Racecourse.objects.get(racecourse_id=174)
                     else:
                         racecourse = Racecourse.objects.get(racecoursename = racecourse)
                     bookmaker      = Bookmaker.objects.get(name = bookmakername)
