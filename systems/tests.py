@@ -1,19 +1,13 @@
-from django.core.urlresolvers import reverse
-from django.test                import TestCase, client
+from django.conf import settings
 from django.contrib.auth.models import User, AnonymousUser
+from django.contrib.messages.storage.fallback import FallbackStorage
+from django.core.urlresolvers import reverse
+from django.test                import TestCase
 from guardian.shortcuts         import assign_perm
 from guardian.shortcuts         import remove_perm
-from django.http    import HttpRequest
+
 from investment_accounts.models import SystemAccount, Subscription
-from systems.models             import System
-from systems.views import subscribe, systems_index
-from django.conf import settings
-from systems.test_utilities import MyHTMLLinkParser
-from django.template.loader import render_to_string
-from django.test import Client
-from datetime import datetime
-import pytz
-from pytz import timezone
+from systems.views import subscribe
 
 
 #Should inherit from TransactionTestCase (DB) and SimpleTestCase
@@ -30,7 +24,7 @@ class SystemPermissionsTestCase( TestCase ):
 
         # Set permissions on User for System
         assign_perm( 'view_system', user, system )
-        
+
         # Check that User have permission for System
         self.assertTrue( user.has_perm( 'view_system', system ) )
 
@@ -42,16 +36,23 @@ class SystemPermissionsTestCase( TestCase ):
 
 
 from systems.models import System
-from django.test import Client
 from django.test import RequestFactory
+
 
 def make_subparams(recurrence_period=3, recurrence_unit='M',currency='GBP'):
     '''the default case is legitimate POST'''
     return {
-        'recurrence_period': recurrence_period,
-        'recurrence_unit': recurrence_unit,
+        'recurrence': '%s-%s' %(recurrence_unit, recurrence_period),
         'currency': currency
     }
+
+# after installing requirements, I had to add _messages fallback manually
+def add_message_fallback_storage_manually(request):
+    setattr(request, 'session', 'session')
+    messages = FallbackStorage(request)
+    setattr(request, '_messages', messages)
+    return request
+
 
 class TestSystemSubscribe(TestCase):
     currencies = settings.CURRENCIES #tuple
@@ -59,10 +60,9 @@ class TestSystemSubscribe(TestCase):
                 'investment/fixtures/initial_system_data.json',
                 'investment/fixtures/user_initial.json']
 
-
     def setUp(self):
         user = User.objects.get(username='Tester1')
-        
+
         #assumes user has an investment_account these two currencies!
         investment_account_aud = user.investmentaccounts.get(currency='AUD')
         investment_account_gbp = user.investmentaccounts.get(currency='GBP')
@@ -78,39 +78,33 @@ class TestSystemSubscribe(TestCase):
         self.factory = RequestFactory()
 
         User.objects.get_or_create(is_superuser=True, username='superadmin')
-        
 
         self.system = System.objects.get(systemname='2016-S-01T')
         SystemAccount.objects.get_or_create(system=self.system, currency='AUD')
         SystemAccount.objects.get_or_create(system=self.system, currency='GBP')
-        Subscription.objects.get_or_create(name="Good", recurrence_period='3', recurrence_unit='M', system=self.system, price=10)
+        Subscription.objects.get_or_create(name="Good", recurrence_period='3', recurrence_unit='M', system=self.system, price=10, subscription_type='SYSTEM')
         ##THIS FAILS ON INTEGGRITY ERROR - WHY? 
         # Subscription.objects.get_or_create(name="Bad", recurrence_period='5', recurrence_unit='W', system=self.system, price=100)
         # Subscription.objects.get_or_create(name="Not Displayed", recurrence_period='5', recurrence_unit='D', system=self.system, price=0)
-
-
 
     def testFixtures(self):
         system = System.objects.all().count()
         self.assertEquals(2, system)
 
     def testAnonUserCannotSeeSubscribeForm(self):
-        pass
-
-    def testCannotSubscribeToNonDisplayedSubscription(self):
-        self.assertFalse(self.user.has_perm('view_system', self.system))
-        request = self.factory.post(reverse('systems:subscribe_system', args=['2016-S-01T']), make_subparams(5,'D', 'AUD'))
-        request.user = self.user
-        response = subscribe(request, '2016-S-01T')
-        self.assertEqual(response.status_code, 400)
+        self.assertEquals(1,2)
 
     def testAnonymousUsersCannotSubscribe(self):
         self.assertFalse(self.user.has_perm('view_system', self.system))
-        #create a legitimate post 
+        # create a legitimate post
         request = self.factory.post(reverse('systems:subscribe_system', args=['2016-S-01T']), make_subparams())
         request.user = self.anon_user
-        #should do what? should not see the form!!!
-        self.assertNotIn("Subscribe to this System", request) #form tag not present
+        response = subscribe(request, '2016-S-01T')
+        self.assertEquals(response.status_code, 405)
+
+    def testCannotSubscribeToNonDisplayedSubscription(self):
+    #     What is Considered as Non Displayed Subscription?
+        pass
 
     def testCannotSubscribeWithZeroBalance(self):
         # Check that User don't have permission for System initially
@@ -118,26 +112,27 @@ class TestSystemSubscribe(TestCase):
    
         request = self.factory.post(reverse('systems:subscribe_system', args=['2016-S-01T']), make_subparams(3,'M', 'AUD'))
         request.user = self.user
-        
+        request = add_message_fallback_storage_manually(request)
+
         response = subscribe(request, '2016-S-01T')
         #check presence of error message response.context['messages']
 
-        self.assertContains(response, "Sorry: insufficient balance")  
-
+        self.assertContains(response, "Sorry: insufficient balance")
 
     def testSubscribeWithFactory(self):
 
         # Check that User don't have permission for System initially
         self.assertFalse(self.user.has_perm('view_system', self.system))
 
-
         request = self.factory.post(reverse('systems:subscribe_system', args=['2016-S-01T']), make_subparams())
         request.user = self.user
+
+        request = add_message_fallback_storage_manually(request)
 
         response = subscribe(request, '2016-S-01T')
 
         # what about HttpResponseRedirect?
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 302)
 
         # Check that now user has permission on system
         self.assertTrue(self.user.has_perm('view_system', self.system))

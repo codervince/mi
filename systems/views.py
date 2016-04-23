@@ -6,7 +6,7 @@ from decimal import Decimal as D
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.models import User
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template.response import TemplateResponse
 from django_tables2   import RequestConfig
@@ -78,73 +78,8 @@ def runners_list(request, systemname):
         RequestConfig(request).configure(table)
         return render(request, 'systems/systemrunners.html', {'table': table, 'system': system})
 
-#'Custom' generic view
-# class RunnersList(ListView):
-#     template_name = 'systems/systemrunners.html'
-#     allow_empty = True
-
-#     def get_queryset(self):
-#         self.system = get_object_or_404(System, systemname=self.args[0])
-#         table = SystemTable(System.objects.all())
-#         RequestConfig(request).configure(table)
-#         return render(request, 'people.html', {'table': table})
-
-#         # return Runner.objects.all()
-#         # return self.system.runners.order_by('-racedatetime')
-#         # return System.objects.filter(systemname=self.system).runners.order_by('-racedatetime')
-#         # return Runner.objects.filter(systemname=self.system).order_by('-racedatetime')
-
-#     def get_context_data(self, **kwargs):
-#         # Call the base implementation first to get a context
-#         context = super(RunnersList, self).get_context_data(**kwargs)
-#         # Add in a QuerySet of all the books
-#         context['system'] = self.system
-#         return context
 
 def systems_detail(request, systemname):
-    # for systemname
-
-    '''
-    System: systemname, description , isActive, isTurf, exposure, 
-    # isLayWin, isLawPlace, oddsconditions, 
-    runners 
-    #Snapshots: 
-    1 x LIVE 1/1/2016 -> LATEST LIVE
-    1 x HISTORICAL 
-    
-        Display: 
-        template 1 specific system data  _system.html
-
-        template 2 latest results (2016) _system_2016.html
-        T3      latest charts 
-
-        2015 charts and data _system_2015.html
-        2014 
-        2013  
-    
-        Subscribe button
-        
-
-        if system isActive
-        systemname, 
-        [ exposure, isTurf, isLayWin, isLayPlace, oddsconditions, ] 
-
-        snapshot = HISTORICAL
-        bfwins, bfruns winsr, expectedwins, a_e, levelbspprofit, a_e_last50, archie_allruns, archie_last50, last50wins, last50str,
-        last28daysruns, profit_last50, longest_losing_streak, average_losing_streak,individualrunners, uniquewinners, validuptonotincluding
-
-        ## getSnapshot(systemid, startdate, enddate)
-        # get system, get snapshot 
-        #doesnt matter if its LIVE NEEDS RUNNERS
-
-        list ALL RUNNERS
-
-        Use this whatever the dates
-        for main page = default = LIVE i.e. startdate= startofseason, enddate = TODAY
-
-        ISSUE : Is Runners uptodate for live?
-        ''' 
-    #is system active? ex   2016-S-10A
 
     logger.error("Systemname: %s", systemname)
     context = {}
@@ -163,6 +98,11 @@ def systems_detail(request, systemname):
     today = datetime.today().date()
 
     bets = Bet.objects.filter(racedatetime__date=today).filter(system=system)
+
+    # live_season2016 = SystemSnapshot.liveobjects.filter(system__systemname=systemname).first()
+    # live_2016 = SystemSnapshot.yearobjects.filter(system__systemname=systemname).first()
+    # historical = SystemSnapshot.historicalobjects.filter(system__systemname=systemname).first()
+
 
     # live_season2016 = system.systemsnapshot.filter(validfrom__date__lt=ss_season2016_start).only('runners', 'bfwins', 'bfruns', 'winsr', 'a_e',
     #     'levelbspprofit', 'levelbsprofitpc', 'a_e_last50', 'archie_allruns', 'archie_last50', 'last50str', 'last28daysruns', 'longest_losing_streak',
@@ -184,10 +124,18 @@ def systems_detail(request, systemname):
     context['hist_131415'] = historical
     context['prices'] = get_prices_for_system(system)
 
+    subscriptions = Subscription.objects.filter(system=system, subscription_type='SYSTEM')
+    context['subscriptions'] = subscriptions
+
     ### IF USER IS ANON DO NOT SHOW SUSCRIPTION FORM!
     if request.user.is_authenticated():
         context['currency'] = settings.CURRENCIES
-        ##THIS DOES NOT WORL FOR ANONYMOUS USERS
+
+
+        user_subscription = UserSubscription.objects.filter(subscription__in=subscriptions, user=request.user, expires__gte= datetime.now().date()).first()
+        if user_subscription:
+            context['expires'] = user_subscription.expires
+
         investment_balances = get_investment_balance(request.user)
 
         context['current_balance_aud'] = investment_balances['AUD']
@@ -222,6 +170,7 @@ def systems_index(request):
 def systems_mylist(request):
 
     '''
+    necessary?
     systems/mysystems
     returns a list of links to systems pages of systems - ordered by
     systems subscribed to by user followed by unsubscribed systems.
@@ -251,7 +200,7 @@ def subscribe(request, system):
 
     '''
 
-    if request.method != 'POST':
+    if request.method != 'POST' or request.user.is_anonymous():
         return HttpResponse("Method not allowed ", status=405)
 
     if 'recurrence' not in request.POST or 'currency' not in request.POST:
@@ -310,20 +259,20 @@ def subscribe(request, system):
     else:
         #create subscription
         ##Subscription CREATE PERMISSION and ADD TO DATABASE
-        # permission = Permission.objects.create(codename='can_view',name='Can View This SYSTEM',content_type=content_type)
-        assign_perm( 'view_system', investor, system )
 
         #create UserSubscription with this investor
         subscription = Subscription.objects.filter(system=system, subscription_type='SYSTEM').first()
         if not subscription:
             messages.add_message(request, messages.ERROR, 'Subscription not found.')
-            return redirect("systems:systems_detail", systemname=system)
+            return systems_detail(request, system)
+            # return redirect("systems:systems_detail", systemname=system)
         # check if user is already subscribed
-        existing_subscription = UserSubscription.objects.filter(subscription=subscription, user=investor, expires__gte=datetime.now().date()).order_by('expires')
+        user_subscription, created = UserSubscription.objects.get_or_create(subscription=subscription, user=investor)
 
-        if len(existing_subscription) > 0:
-            messages.add_message(request, messages.INFO, 'Already Subscribed, expires st %s ' % existing_subscription.first().expires)
-            return redirect("systems:systems_detail", systemname=system)
+        if user_subscription and user_subscription.expires > datetime.now().date():
+            messages.add_message(request, messages.INFO, 'Already Subscribed, expires st %s ' % user_subscription.expires)
+            return systems_detail(request, system)
+            # return redirect("systems:systems_detail", systemname=system)
 
         # Calculate initial expire date based on subscription
         days_to_add = 0
@@ -336,7 +285,8 @@ def subscribe(request, system):
         delta = timedelta(days=days_to_add)
 
         expires = datetime.now() + delta
-        user_subscription = UserSubscription.objects.create(subscription=subscription, user=investor, expires=expires)
+        user_subscription.expires = expires
+        user_subscription.save()
 
 
         subscription = 1
@@ -351,7 +301,7 @@ def subscribe(request, system):
         logger.info(amount)
         investor_account.balance -= amount
         system_account.balance   += amount
-        
+
         investor_account.save()
         system_account.save()
 
@@ -362,7 +312,10 @@ def subscribe(request, system):
         tdebit = Transaction.objects.create(transfer=transfer, account=investor_account, amount=amount*D('-1.0'))
         tcredit = Transaction.objects.create(transfer=transfer, account=system_account, amount=amount*D('1.0'))
 
+        # last step actual permission grant
+        assign_perm( 'view_system', investor, system )
+
         messages.add_message(request, messages.SUCCESS, 'Successfully placed your investment.')
 
-    return redirect("systems:systems_detail", systemname=system)
+    return systems_detail(request, system)
     # return HttpResponseRedirect("systems:systems_detail", systemname=system) #or use reverse? return to same page

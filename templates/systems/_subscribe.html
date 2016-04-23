@@ -15,7 +15,7 @@ Your Balance: {{ current_balance_aud }}  AUD || Your Balance: {{ current_balance
     {% endfor %}
 {% endfor %}
 </div>
-
+{% if request.user.is_authenticated %}
 <form id="id_subscribe_form" action="" method="post">
     {% csrf_token %}
     <input type="hidden" name="currency" value="">
@@ -25,10 +25,9 @@ Your Balance: {{ current_balance_aud }}  AUD || Your Balance: {{ current_balance
             <td width="59%" align="left" valign="middle">
                 <select name="recurrence" id="category1">
                     <option value="---">Please select an option</option>
-                    <option value="M-1">1 month</option>
-                    <option value="M-3">3 months</option>
-                    <option value="S-1">Season</option>
-                    <option value="Y-1">1 Calendar year</option>
+                    {% for sb in subscriptions %}
+                        <option value="{{ sb.recurrence_unit }}-{{ sb.recurrence_period }}">{{ sb.name }} - {{ sb.price }}</option>
+                    {% endfor %}
                 </select>
             </td>
         </tr>
@@ -50,3 +49,8 @@ Your Balance: {{ current_balance_aud }}  AUD || Your Balance: {{ current_balance
         </tr>
     </table>
 </form>
+{% else %}
+<div>
+    <a href="{% url 'login' %}">Please Login To Subscribe</a>
+</div>
+{% endif %}
