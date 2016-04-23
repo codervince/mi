@@ -58,12 +58,11 @@ $(function(){
 
     <div id="systempanel">
 
-<<<<<<< HEAD
+
         <h1>{{ system.systemname }} - {{ system.systemtype }}
             - {{ system.isToLay|yesno:"laying,backing,unsure"  }}
             {{ system.isToWin|yesno:"to win ,to place ,unsure" }}
         </h1>
-=======
     {% if "view_system" in system_perms %}
 
         {{ live_season2016 }}
@@ -77,7 +76,6 @@ $(function(){
         <a href="#">permission specific data</a>
 
     {% endif %}
->>>>>>> 8ce72b582273e36e17755286ed3edddf6214e7f4
 
     <p> {{ system.description }} </p>
 
@@ -103,13 +101,6 @@ $(function(){
 {%  endif %}
 
 
-<<<<<<< HEAD
-
-    <h2> Subscribe panel </h2>
-	<div class="basic">
-	{% include 'systems/_subscribe.html' %}  
-
-=======
 {#  commented because file not found  #}
 {#{% include 'systems/pastperformance.html' %}#}
     <div class="basic">
@@ -118,7 +109,6 @@ $(function(){
     {% else %}
 	    {% include 'systems/_subscribe.html' %}
     {% endif %}
->>>>>>> 8ce72b582273e36e17755286ed3edddf6214e7f4
 	</div>
 
 {% endblock %}
