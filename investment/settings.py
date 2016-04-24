@@ -35,11 +35,10 @@ SECRET_KEY = '!1mhk49#$6#n(vp(8=464a%)!-f3w$ph8ahd4!cg^h4!lj)_h7'
 # SECURITY WARNING: don't run with debug turned on in production!
 if socket.gethostname() == 'metainvest':
     DEBUG = False
+    ALLOWED_HOSTS = ['139.59.249.64' , 'metainvest.io' ]
 else:
     DEBUG = True
-
-ALLOWED_HOSTS = []
-# ALLOWED_HOSTS = ['139.59.249.64' , 'metainvest.io' ]
+    ALLOWED_HOSTS = []
 
 
 # Application definition
