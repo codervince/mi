@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 
 import os
 import re
+import socket
 
 
 env = os.environ.copy()
@@ -32,7 +33,10 @@ CURRENCIES = ( (CURRENCY_AUD, 'AUD'), (CURRENCY_GBP, 'GBP'), )
 SECRET_KEY = '!1mhk49#$6#n(vp(8=464a%)!-f3w$ph8ahd4!cg^h4!lj)_h7'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+if socket.gethostname() == 'metainvest':
+    DEBUG = False
+else:
+    DEBUG = True
 
 ALLOWED_HOSTS = []
 # ALLOWED_HOSTS = ['139.59.249.64' , 'metainvest.io' ]
