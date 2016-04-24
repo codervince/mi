@@ -40,6 +40,10 @@ def _divide(a,b):
     if b != 0:
         return D(round(a/b, 2))
 
+def getArchie(runners, winners, expectedwins):
+    ''' archie.pdf'''
+    return _divide( runners * math.pow(winners-expectedwins,2), expectedwins * (runners - expectedwins) )
+
 def get_winsr(wins, runs):
     return _divide(wins, runs)
 
@@ -77,6 +81,8 @@ def getracedatetime(racedate, racetime):
     racedatetime = localtz.localize(racedatetime)
     return racedatetime
 
+
+#this will become a post-save function when system.runners is updated
 
 def do_snapshot_calculations(snap,validfrom=None,validuptonotincluding=None):
     # create a new snapshot with the correct params
@@ -121,7 +127,8 @@ def do_snapshot_calculations(snap,validfrom=None,validuptonotincluding=None):
         expectedwins = sum([float(1 / x['bfsp']) for x in runners_list if x['bfsp'] and x['bfsp'] != 0])  # BF
         expectedwins_l50 = sum([float(1 / x['bfsp']) for x in runners_l50 if x['bfsp'] and x['bfsp'] != 0])  # BF
         to_up['winsr'] = get_winsr(bfwins, bfruns)
-        archie_allruns = get_archie(bfruns, bfwins, expectedwins)
+        archie_allruns =  getArchie(bfruns, bfwins, expectedwins)
+        print(archie_allruns)
         to_up['archie_allruns'] = archie_allruns
         to_up['expectedwins'] = expectedwins
         to_up['a_e'] = get_a_e(bfwins, expectedwins)

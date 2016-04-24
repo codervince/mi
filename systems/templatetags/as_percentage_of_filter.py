@@ -10,3 +10,5 @@ def as_percentage_of(part, whole):
         return ""
 
 register.filter('as_percentage_of', as_percentage_of)
+
+

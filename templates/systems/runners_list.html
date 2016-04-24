@@ -28,7 +28,7 @@ link to raceid on RP site
             <td>{{ r.racecoursename }}</td>
             <td>{{ r.horsename }}</td>
             <td>{{ r.norunners }}</td>
-            <td class="pos {% if r.finalpos == '1' %} win {% elif r.finalpos == '2' %} place {% else %}  {%  endif %}">{{r.finalpos  }}</td>
+            <td class="pos {% if r.finalpos == '1' %} win {% elif r.isbfplaced %} place {% else %}  {%  endif %}">{{r.finalpos  }}</td>
             <td>{{ r.winsp }}</td>
             <td>{{ r.bfsp }}</td>
         </tr>

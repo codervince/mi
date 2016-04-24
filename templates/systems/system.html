@@ -4,10 +4,22 @@
 {% load staticfiles %}
 {% load guardian_tags %}
 {% load humanize %}
+ {% load as_percentage_of_filter %}
 {% load render_table from django_tables2 %}
 {% block extendedheader %}
 
 <style>
+    .good {
+        color: #00C853;
+    }
+
+    .medium {
+        color: #b1811d;
+    }
+
+    .bad {
+        color: #db0435;
+    }
 
     .pos.win {
 
@@ -112,8 +124,36 @@ $(function(){
     {% endif %}
 
 
-  Wins/Runs {{ live_2016.bfwins }} /  {{ live_2016.bfruns }}
-  A/E {{ live_2016.a_e }}
+    <div id="2016">
+
+        <div id="profit" class="{% if live_2016.levelbspprofit >= 50 %}good {% elif live_2016.levelbspprofit >= 20 %} medium {%  else %} bad {%  endif %}">
+        Profit {{ live_2016.levelbspprofit|floatformat:2  }}
+        </div>
+            <div id="expected" class="{% if live_2016.expectedwins >= 10 %}good {% elif live_2016.expectedwins >= 5 %} medium {%  else %} bad {%  endif %}">
+        Expected: {{  live_2016.expectedwins|floatformat:2  }}</div>
+        <div id="chisq" class="{% if live_2016.archie_allruns >= 5.0 %}good {% elif live_2016.archie_allruns >= 3.0 %} medium {%  else %} bad {%  endif %}">
+        Chi Squared {{ live_2016.archie_allruns|floatformat:2   }} </div>
+    <div class="live">
+        A/E {{ live_2016.a_e }}
+        Wins/runs: {{ live_2016.bfwins }} / {{ live_2016.bfruns }} which is a win strike rate of {{live_2016.bfwins|as_percentage_of:live_2016.bfruns   }}
+
+        </div>
+        <div class="historical">
+
+            </div>
+        2013 stats
+        2014 2015
+        arhcie
+        5% stakes plan current balance (100)
+        10% stakes plan current_balance (100)
+
+    </div>
+
+
+    </div>
+
+
+
 
 {% if runners|length > 0 %}
     {% include 'systems/runners_list.html' with runners=runners %}

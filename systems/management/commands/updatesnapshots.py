@@ -4,7 +4,7 @@ from django.core.management.base import BaseCommand, CommandError
 from systems.models import System, SystemSnapshot, Runner
 from datetime import datetime, timedelta
 from statistics import mean
-
+import math
 
 from decimal import Decimal as D
 from datetime import datetime
@@ -18,6 +18,9 @@ def GetPercentage(f):
 	def withpc():
 		return f()*100.0
 
+def getArchie(runners, winners, expectedwins):
+    ''' archie.pdf'''
+    return _divide( runners * math.pow(winners-expectedwins,2), expectedwins * (runners - expectedwins) )
 
 def _divide(a,b):
 	if b != 0:
@@ -65,7 +68,7 @@ def getracedatetime(racedate, racetime=None):
 
 
 class Command(BaseCommand):
-    help = 'Updates the 2016 system snapshots facts after each race day'
+    help = 'Updates the 2016 system snapshots facts from a runners file after each race day- what it doesnt do: CHI SQUARED'
 
     # def add_arguments(self, parser):
     #     parser.add_argument('--systems', type=list)
@@ -150,6 +153,7 @@ class Command(BaseCommand):
                 'bfwins': bfwins,
                 'winsr': winsr,
                 'a_e': a_e,
+                'archie_allruns': getArchie(bfruns, bfwins, expected),
                 'expectedwins': expected,
                 'levelbsprofit': levelbspprofit,
                 'longest_losing_streak': max_all,
