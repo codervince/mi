@@ -8,9 +8,20 @@
 {% block extendedheader %}
 
 <style>
-#category2 option{
+
+    .pos.win {
+
+        background-color: #00C853;
+    }
+
+    .pos.place {
+
+        background-color: #4d90fe;
+    }
+
+    #category2 option{
     display:none;
-}
+    }
 
 #category2 option.label{
     display:block;
@@ -63,19 +74,23 @@ $(function(){
             - {{ system.isToLay|yesno:"laying,backing,unsure"  }}
             {{ system.isToWin|yesno:"to win ,to place ,unsure" }}
         </h1>
-    {% if "view_system" in system_perms %}
+{#    {% if "view_system" in system_perms %}#}
+{#        #show candidates#}
+{#        #}
+{#        {{ live_season2016 }}#}
+{#        <div>#}
+{#            DATA TABLES first Get the Data to Systems and filter by systemsnapshot dates - remove from systemsnapshot?#}
+{#            {% for runner in system.runners.all %}#}
+{#                <p>{{ runner.runtype }}</p>#}
+{#                <p>{{ runner.racename }}</p>#}
+{#            {% endfor %}#}
+{#        </div>#}
+{#        <a href="#">permission specific data</a>#}
+{##}
+{#    {% endif %}#}
 
-        {{ live_season2016 }}
-        <div>
-            DATA TABLES first Get the Data to Systems and filter by systemsnapshot dates - remove from systemsnapshot?
-            {% for runner in system.runners.all %}
-                <p>{{ runner.runtype }}</p>
-                <p>{{ runner.racename }}</p>
-            {% endfor %}
-        </div>
-        <a href="#">permission specific data</a>
-
-    {% endif %}
+        Add 2012,2014, 2013 in greater detail here
+        LINK TO CHARTS?
 
     <p> {{ system.description }} </p>
 
@@ -95,6 +110,10 @@ $(function(){
 
 
     {% endif %}
+
+
+  Wins/Runs {{ live_2016.bfwins }} /  {{ live_2016.bfruns }}
+  A/E {{ live_2016.a_e }}
 
 {% if runners|length > 0 %}
     {% include 'systems/runners_list.html' with runners=runners %}

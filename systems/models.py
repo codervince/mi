@@ -152,7 +152,7 @@ class System(models.Model):
     ('other', 'Other'),
     )
     systemtype = models.CharField(choices=SYSTEMTYPES, default='tg',max_length=50)
-    systemname =  models.CharField("system name", max_length=50,unique=True) #2016-T-21T unique=true?
+    systemname =  models.CharField("system name", max_length=50,unique=True, db_index=True)
     snapshotid  = models.IntegerField() #internal fs id
     description= models.TextField(null=True)
     isActive = models.BooleanField("is an active system") #is an active versus a test system

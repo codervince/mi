@@ -1,8 +1,89 @@
+
+
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
-
+from django.test import Client, TestCase
 import unittest
+
+USER_NAME = 'tester1'
+PASSWORD = 'pa$$w0rd'
+
+
+
+
+
+
+
+class SignedUpUserTest(unittest.TestCase):
+
+    def setUp(self):
+        self.browser = webdriver.Firefox()
+
+    def tearDown(self):
+        self.browser.quit()
+
+    def check_for_row_in_runners_table(self,row_text):
+        table = self.browser.find_element_by_id('runnerstable')
+        rows = table.find_elements_by_tag_name('tr')
+        self.assertIn(row_text, [row.text for row in rows])
+
+
+    def dologin(self):
+        self.browser.get('http://localhost:8000')
+        # logged out
+        navbar = self.browser.find_element_by_css_selector('.nav')
+
+        self.assertIn('Login', navbar.text)
+        # log in
+        self.browser.find_element_by_css_selector("a[href*='login']").click()
+
+        self.browser.find_element_by_id('id_username').send_keys(USER_NAME)
+        self.browser.find_element_by_id('id_password').send_keys(PASSWORD)
+        self.browser.find_element_by_name("login").click()
+
+    def test_racecoursename_for_all_rows(self):
+        #go to systems/systems
+        self.dologin()
+        self.browser.get('http://localhost:8000/systems/system/2016-MI-S-02A/')
+        self.check_for_row_in_runners_table('Southwell (AW)')
+
+    def test_welcome_page_for_visitor(self):
+
+        #user anon sees welcome page at ('/')
+        #User tester1 has logged in and returns to site.
+
+        self.browser.get('http://localhost:8000/')
+        #am I logged in?
+        navbar = self.browser.find_element_by_css_selector('.nav')
+        self.assertIn('Login', navbar.text)
+        self.assertIn('Modern technology helps you track ', self.browser.find_element_by_tag_name('body').text)
+
+    def test_login(self):
+
+        self.browser.get('http://localhost:8000')
+        # logged out
+        navbar = self.browser.find_element_by_css_selector('.nav')
+
+        self.assertIn('Login', navbar.text)
+        # log in
+        self.browser.find_element_by_css_selector("a[href*='login']").click()
+
+        self.browser.find_element_by_id('id_username').send_keys(USER_NAME)
+        self.browser.find_element_by_id('id_password').send_keys(PASSWORD)
+        self.browser.find_element_by_name("login").click()
+
+        self.assertIn('Logout', navbar.text)
+
+    # def test_welcome_page_for_loggedin_user(self):
+    #     # User tester1 has logged in and returns to home page.
+    #     # is redirected to systems/systems
+    #
+    #     self.dologin()
+    #     #go to home
+    #     self.browser.get('http://localhost:8000/')
+    #     self.assertEquals(response['location'], '/systems/systems/')
+
 
 
 
@@ -16,7 +97,7 @@ class VisitorSystemsTest(unittest.TestCase):
     def tearDown(self):
         self.driver.quit()
 
-    def testCanViewSystemPerformanceSummaryOnSystemsPage(self):
+    def CanViewSystemPerformanceSummaryOnSystemsPage(self):
 
         #Bob hears about this site and wants to read more about it and look at how the systems
         # are currently performing

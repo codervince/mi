@@ -10,6 +10,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template.response import TemplateResponse
 from django_tables2   import RequestConfig
+import pytz
 from pytz import timezone
 
 from bets.models import Bet
@@ -89,12 +90,15 @@ def systems_detail(request, systemname):
     context['system'] = system
     # get historical information need to create snapshots for 2013,14,15,16 aka funds
 
+    # live_season2016 = System.objects.prefetch_related('systemsnapshots').get(id=system.pk)
+    # live_season2016 = everything.filter
+
     live_season2016 = SystemSnapshot.thisseason.filter(system__systemname=systemname).latest()
     live_2016 =  SystemSnapshot.thisyear.filter(system__systemname=systemname).latest()
     live_2016_ru = system.runners.all().order_by('-racedatetime')
     historical = SystemSnapshot.historical.filter(system__systemname=systemname).latest()
 
-    #today is?
+
     today = datetime.today().date()
 
     bets = Bet.objects.filter(racedatetime__date=today).filter(system=system)
@@ -112,7 +116,7 @@ def systems_detail(request, systemname):
     #     'levelbspprofit', 'levelbsprofitpc', 'a_e_last50', 'archie_allruns', 'archie_last50', 'last50str', 'last28daysruns', 'longest_losing_streak',
     #     'average_losing_streak', 'individualrunners', 'uniquewinners')
 
-    ##why runners here?
+
     context['runners_count'] = system.runners.values().count()
     context['runners'] = live_2016_ru
     context['bets'] = bets

@@ -7,7 +7,7 @@
     <form action="." method="post">
         {{ form.as_p }}
         {% csrf_token %}
-        <p><input type="submit" value="Login"></p>
+        <p><input name="login" type="submit" value="Login"></p>
     </form>
     <p>Forgot your password? <a href="{% url 'password_reset'  %}">Reset</a></p>
 </div>

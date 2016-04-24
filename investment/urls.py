@@ -25,7 +25,8 @@ from .forms import UserAuthForm
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^$', TemplateView.as_view(template_name='investment/landing.html'), name='index'),
+    url(r'^$', views.landing, name='index'),
+    # url(r'^$', TemplateView.as_view(template_name='investment/landing.html'), name='index'),
     url(r'newlanding/$', TemplateView.as_view(template_name='investment/newlanding.html'), name='newindex'),
     url(r'^detail/$', login_required(TemplateView.as_view(template_name='investment/userdetail.html')), name='userdetail'),
     url(r'^detail/gbp/$', login_required(TemplateView.as_view(template_name='investment/GBP.html')), name='GBP'),

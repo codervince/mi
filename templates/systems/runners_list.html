@@ -1,15 +1,20 @@
 
-    Runners Table for DataTables
-    <table id="example" class="display" cellspacing="0" width="100%">
+ <div>
+
+ODDS!!
+Features to come: run comment (rpresults) function for background,
+attributes for the system J/T/S/C from RPResults
+link to raceid on RP site
+
+
+    <table id="runnerstable" class="display" cellspacing="0" width="100%">
         <thead>
             <tr>
                 <th>Racedate</th>
                 <th>Racetime</th>
                 <th>Racecoursename</th>
-                <th>Racecoursenid</th>
-                <th>No runners</th>
                 <th>Horse</th>
-                <th>Allowance</th>
+                <th>No runners</th>
                 <th>Position</th>
             </tr>
         </thead>
@@ -18,19 +23,16 @@
         <tr>
             <td>{{ r.racedate }}</td>
             <td>{{ r.racetime }}</td>
-            <td>{{ r.racecourse }}</td>
-            <td>{{ r.racecourseid }}</td>
-            <td>{{ r.norunners }}</td>
+            <td>{{ r.racecoursename }}</td>
             <td>{{ r.horsename }}</td>
-            <td>{{ r.allowance}}</td>
-            <td>{{r.finalpos  }}</td>
+            <td>{{ r.norunners }}</td>
+            <td class="pos {% if r.finalpos == '1' %} win {% elif r.finalpos == '2' %} place {% else %}  {%  endif %}">{{r.finalpos  }}</td>
         </tr>
         {%  endfor  %}
         </tbody>
     </table>
-
-    <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>
+<br/>
+</div>
 
 <script type="javascript">
 
