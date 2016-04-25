@@ -50,7 +50,7 @@ class Racecourse(models.Model):
     ('FIBRESAND', 'FIBRESAND'),
      )
     racecourse_id = models.IntegerField(unique=True)
-    racecoursename= models.CharField(max_length=35)
+    racecoursename= models.CharField(max_length=35, db_index=True)
     racecoursecode= models.CharField(max_length=35, default="")
     racecoursegrade= models.IntegerField(null=True) #number
     straight= models.IntegerField(null=True) 
@@ -66,6 +66,7 @@ class Racecourse(models.Model):
 
     class Meta:
         ordering = ('racecoursename',)
+
 
 '''
 Retrieves all runners for today from rpraces
@@ -140,7 +141,7 @@ class RPRunner(models.Model):
 
     racecourse = models.ForeignKey(Racecourse, related_name='rprunner_racecourse')
     racedatetime =models.DateTimeField()
-    racedate = models.DateField(help_text=_('race date'),)
+    racedate = models.DateField(help_text=_('race date'),db_index=True)
     race_id =models.IntegerField()
     season = models.CharField(max_length=35)
     racemonth = models.CharField(max_length=15)
@@ -269,7 +270,7 @@ class Bet(models.Model):
     with horsename and racedate, racetime, racecoursename should be able to look up results and raceid
     from results database
     '''
-    racedatetime = models.DateTimeField(help_text=_('race date time - LOCAL!'),)
+    racedatetime = models.DateTimeField(help_text=_('race date time - LOCAL!'),db_index=True)
     horsename = models.CharField(help_text=_('horse name'),max_length=250)
     bookmaker = models.ForeignKey(Bookmaker, related_name='bookmakerbet', null=True)
     system = models.ForeignKey(System, related_name='systembet')

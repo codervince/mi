@@ -30,12 +30,12 @@ class Runner(models.Model):
     '''
     RPfields LIVE racedate, racecoursename, racecourseid, racename, racetypehorse, racetypeconditins, racetypehs, ages...
     '''
-    RUNTYPE = (
-    ('LIVE', 'LIVE'),
-    ('HISTORICAL', 'HISTORICAL'),
-    )
+    # RUNTYPE = (
+    # ('LIVE', 'LIVE'),
+    # ('HISTORICAL', 'HISTORICAL'),
+    # )
     #unique identifiers
-    runtype = models.CharField(max_length=20, help_text=_('live_or_historical'), choices=RUNTYPE, default='HISTORICAL')
+    # runtype = models.CharField(max_length=20, help_text=_('live_or_historical'), choices=RUNTYPE, default='HISTORICAL')
     racedate = models.DateField(help_text=_('race date'),)
     racedatetime = models.DateTimeField(null=True)
     racecoursename = models.CharField(help_text=_('racecourse'), max_length=35)
@@ -46,11 +46,11 @@ class Runner(models.Model):
     racetypehs= models.CharField(help_text=_('handicap or stakes'),max_length=35,null=True)
     ages = models.CharField(help_text=_('entry type ages'),max_length=35,null=True)
     oldraceclass = models.CharField(help_text=_('old raceclass'),max_length=35, null=True)
-    newraceclass = models.CharField(help_text=_('new raceclass'),max_length=35, blank=True)
+    newraceclass = models.CharField(help_text=_('new raceclass'),max_length=35, blank=True, null=True)
     distance = models.FloatField(help_text=_('distance furlongs'), null=True)
     going = models.CharField(help_text=_('going'),max_length=35,null=True) 
     rpgoing = models.CharField(help_text=_('going'),max_length=35, null=True)
-    norunners = models.SmallIntegerField(help_text=_('number of runners'),)
+    norunners = models.SmallIntegerField(help_text=_('number of runners'),null=True)
     horsename = models.CharField(help_text=_('horse name'),max_length=250)
     horseid = models.IntegerField(help_text=_('Horse id'),blank=True,default=None, null=True)
     sirename = models.CharField(help_text=_('sire name'),max_length=250,null=True)
@@ -76,12 +76,12 @@ class Runner(models.Model):
     damsireid = models.IntegerField(help_text=_('Dam sire id'),blank=True, default=None, null=True)
     ownerid = models.IntegerField(help_text=_('Owner id'),blank=True,default=None, null=True)
     ownername = models.CharField(help_text=_('Owner\'s name'),max_length=250, null=True)
-    racetime  = models.CharField(help_text=_('Race off time'),max_length=250)
+    racetime  = models.CharField(help_text=_('Race off time'),max_length=250, null=True)
     totalruns =  models.SmallIntegerField(help_text=_('total runs horse'), default=None, null=True)
     totalwins =  models.FloatField(help_text=_('total wins horse'),default=None,null=True)
-    isplaced = models.NullBooleanField(help_text=_('Placed?'))
-    isbfplaced= models.NullBooleanField(help_text=_('is Placed on Betfair?'))
-    stats = JSONField(blank=True,default={}) #remove
+    isplaced = models.NullBooleanField(help_text=_('Placed?'), null=True)
+    isbfplaced= models.NullBooleanField(help_text=_('is Placed on Betfair?'), null=True)
+    # stats = JSONField(blank=True,default={}) #remove
     
     # def __str__(self):
     #     return 'racedate: %s, racecourseid %d, horsename %s norunners %s finished %s' % (datetime.strftime(self.racedate, '%Y%m%d'), self.racecourseid, self.horsename. self.norunners, self.finalpos)
@@ -185,15 +185,12 @@ class System(models.Model):
 ## Many to One Relationship Between System and its SystemSnapshots ##
 class SystemSnapshot(models.Model):
 
-    #either it is historical 2013-2015 and has FS data or it is LIVE ie. 2016/Season2016 DEPCRETAED
-    # snapshottype = models.CharField(help_text=_('initial(historical/live) '),choices=SNAPSHOTTYPES, default='HISTORICAL',max_length=15)
+
     isHistorical = models.NullBooleanField() #NOT IN CURRENT LIVE USE
     system = models.ForeignKey(System, on_delete=models.CASCADE, related_name='systemsnapshots')
     validuptonotincluding = models.DateTimeField()
     validfrom = models.DateTimeField(default=WORLD_CREATED)
 
-    ### REPLACE WITH SYSTEM RUNNERS QUERY
-    # runners = models.ManyToManyField(Runner, related_name='snapshotrunners', verbose_name="Runners for this Snapshot")
     #HISTORICAL FS ONLY FIELDS
     bluerows = JSONField(default={})
     greenrows = JSONField(default={})
@@ -256,6 +253,7 @@ class SystemSnapshot(models.Model):
 
     class Meta:
         unique_together = ('system', 'validfrom', 'validuptonotincluding',)
+        index_together = [ ['system', 'validfrom', 'validuptonotincluding']]
         default_permissions = ('view', 'add', 'change', 'delete')
         ordering = ('-levelbspprofit',)
         get_latest_by = 'updated'

@@ -10,6 +10,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template.response import TemplateResponse
 from django_tables2   import RequestConfig
+from django.http import Http404
 import pytz
 from pytz import timezone
 
@@ -29,6 +30,10 @@ from investment_accounts.models import InvestmentAccount, SystemAccount, UserSub
 from systems.models import System, SystemSnapshot
 
 logger = logging.getLogger(__name__)
+
+####TO UTILS>>>>>>>>>>
+
+
 
 
 def get_prices_for_system(system):
@@ -79,15 +84,39 @@ def runners_list(request, systemname):
         RequestConfig(request).configure(table)
         return render(request, 'systems/systemrunners.html', {'table': table, 'system': system})
 
+ss_season2016_start = (getracedatetime(datetime.strptime("20160402", "%Y%m%d").date(), '12:00 AM')).date()
+ss_2016_start = (getracedatetime(datetime.strptime("20160101", "%Y%m%d").date(), '12:00 AM')).date()
+ss_hist_end = (getracedatetime(datetime.strptime("20151129", "%Y%m%d").date(), '12:00 AM')).date()
+
+##################
 
 def systems_detail(request, systemname):
+
+    if not systemname:
+        return redirect('systems/systems', {'message': 'No system found.'})
 
     logger.error("Systemname: %s", systemname)
     context = {}
 
-    system = get_object_or_404(System, systemname=systemname, isActive=True)
+    #most efficient way using prefetch_related
+    s = get_object_or_404(System, systemname=systemname, isActive=True)
+    snaps = System.objects.filter(systemname='2016-S-01T').prefetch_related('systemsnapshots')
+    historical = [list(s.systemsnapshots.filter(validuptonotincluding__date__lte=ss_hist_end)) for s in snaps][0]
+    year = [list(s.systemsnapshots.filter(validfrom__date__eq=ss_2016_start)) for s in snaps][0]
+    season = [list(s.systemsnapshots.filter(validfrom__date__eq=ss_season2016_start)) for s in snaps][0]
+    year_ru = [list(s.runners.filter(racedate__gte='2016-01-01')) for s in snaps]
+    season_ru = [list(s.runners.filter(racedate__gte='2016-03-28')) for s in snaps]
+    hist_ru = [list(s.runners.filter(racedate__lte='2015-12-01')) for s in snaps]
+
+    #### indivdual years here for historical 2015,2014, 2013 indivdiually once baked
 
     context['system'] = system
+    context['historical'] = historical
+    context['year'] = year
+    context['season'] = season
+
+
+
     # get historical information need to create snapshots for 2013,14,15,16 aka funds
 
     # live_season2016 = System.objects.prefetch_related('systemsnapshots').get(id=system.pk)

@@ -11,7 +11,13 @@ from systems.views import subscribe, systems_detail
 
 
 
+class testSystemDetail(TestCase):
+    DEFAULT_SYSTEM = '2016-T-01A'
 
+
+    def test_nonexistent_system_goesto_default_system(self):
+        ''' alternatively go to 404 and then back to systems_index'''
+        pass
 
 
 

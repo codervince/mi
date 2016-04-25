@@ -39,11 +39,11 @@ def update_premium(sender, **kwargs):
             System.objects.filter(kwargs.get('system')).update(premium=new_premium)
 
 # moved to management task
-@receiver(post_save, sender=Runner)
-def update_snapshot_2016(sender, update_fields,**kwargs):
-
-    # what systems have been updated today?
-    today = datetime.today().date()
-    updated_systems = [ s.systemname for s in System.objects.all().only('systemname') if s.updated.date() == today]
-    call_command('updatesnapshots', systems=updated_systems) #list of objects
-    # print('Saved: {}'.format(kwargs['instance'].__dict__))
+# @receiver(post_save, sender=Runner)
+# def update_snapshot_2016(sender, update_fields,**kwargs):
+#
+#     # what systems have been updated today?
+#     today = datetime.today().date()
+#     updated_systems = [ s.systemname for s in System.objects.all().only('systemname') if s.updated.date() == today]
+#     call_command('updatesnapshots', systems=updated_systems) #list of objects
+#     # print('Saved: {}'.format(kwargs['instance'].__dict__))

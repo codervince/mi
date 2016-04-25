@@ -42,6 +42,8 @@ class SignedUpUserTest(unittest.TestCase):
         self.browser.find_element_by_id('id_password').send_keys(PASSWORD)
         self.browser.find_element_by_name("login").click()
 
+
+
     def test_racecoursename_for_all_rows(self):
         #go to systems/systems
         self.dologin()
