@@ -1,6 +1,7 @@
 from django.shortcuts import render
-from systems.models import System, SystemSnapshot, Fund, FundSnapshot
+from systems.models import System, SystemSnapshot
 from guardian.shortcuts import get_objects_for_user
+from .forms import RPRunnerSearchForm
 # A System is a fund with 1 member!
 
 #use links to system/fund detail
@@ -41,6 +42,21 @@ ISSUE : Is Runners uptodate for live?
 
 #http://django-tables2.readthedocs.org/en/latest/?
 
+def search(request):
+    if request.method == 'POST':
+        form = RPRunnerSearchForm(request.POST)
+
+        if form.is_valid():
+
+            horsename = form.cleaned_data['horsename']
+
+
+    else:
+        form = RPRunnerSearchForm()
+
+    return render(request, 'bets/search.html', {'form': form})
+
+
 def alerts_to_csv(request):
     pass
 
@@ -54,8 +70,8 @@ def alerts(request):
     #systems are funds cleverer way to combine?
     funds = get_objects_for_user(request.user, 'funds.view_fund')
     #what are the systems for this fund?
-    fundbets = Fund.objects.filter(fund_id__in=funds) #check this
-    systembets = Bet.objects.filter(system__in=systems)
+    # fundbets = Fund.objects.filter(fund_id__in=funds) #check this
+    # systembets = Bet.objects.filter(system__in=systems)
 
     return render(request, "_myalerts.html", {"systembets": systembets, 'fundbets': fundbets})
 
@@ -66,47 +82,47 @@ def alerts(request):
 #narrow down fields!
 
 
-snapshottype = models.CharField(help_text=_('initial(historical/live) '),choices=SNAPSHOTTYPES, default='HISTORICAL',max_length=15)
-    system = models.ForeignKey(System, related_name='systemsnapshot')
-    runners = models.ManyToManyField(Runner)
-    bluerows = JSONField(default={})
-    greenrows = JSONField(default={})
-    redrows = JSONField(default={})
-    yearcolorcounts = JSONField(default={})
-    yearstats = JSONField(default={})
-    stats = JSONField(default={})
-    bfwins = models.SmallIntegerField(default=None, null=True)
-    bfruns = models.SmallIntegerField(default=None, null=True)
-    winsr = models.FloatField(default=None, null=True)
-    expectedwins= models.FloatField(default=None, null=True)
-    a_e = models.FloatField(default=None, null=True)
-    levelbspprofit= models.DecimalField(max_digits=10, decimal_places=2,default=None, null=True)
-    levelbsprofitpc= models.FloatField(default=None, null=True)
-    a_e_last50 = models.FloatField(default=None, null=True)
-    archie_allruns= models.FloatField(default=None, null=True)
-    expected_last50= models.FloatField(default=None, null=True)
-    archie_last50= models.FloatField(default=None, null=True)
-    last50wins= models.SmallIntegerField(default=None, null=True)
-    last50pc= models.FloatField(default=None, null=True)
-    last50str= models.CharField(max_length=250,default=None, null=True)
-    last28daysruns=  models.SmallIntegerField(default=None, null=True)
-    profit_last50= models.DecimalField(max_digits=10, decimal_places=2,default=None, null=True)
-    longest_losing_streak=models.SmallIntegerField(default=None, null=True)
-    average_losing_streak=models.FloatField(default=None, null=True)
-    average_winning_streak=models.FloatField(default=None, null=True)
-    red_rows_ct = models.SmallIntegerField(default=None, null=True)
-    blue_rows_ct  = models.SmallIntegerField(default=None, null=True)
-    green_rows_ct = models.SmallIntegerField(default=None, null=True)
-    total_rows_ct = models.SmallIntegerField(default=None, null=True)
-    red_rows_pc= models.FloatField(default=None, null=True)
-    blue_rows_pc= models.FloatField(default=None, null=True)
-    green_rows_pc= models.FloatField(default=None, null=True)
-    individualrunners=  models.FloatField(default=None, null=True)
-    uniquewinners=  models.FloatField(default=None, null=True)
-    uniquewinnerstorunnerspc= models.FloatField(default=None, null=True)
-    yearstats= JSONField(default={})
-    yearcolorcounts= JSONField(default={})
-    totalbackyears = models.SmallIntegerField(default=None, null=True)
-    validuptonotincluding = models.DateTimeField() #real tracker for HISTORICAL will be MAR 15 2016
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True, blank=True)
+# snapshottype = models.CharField(help_text=_('initial(historical/live) '),choices=SNAPSHOTTYPES, default='HISTORICAL',max_length=15)
+#     system = models.ForeignKey(System, related_name='systemsnapshot')
+#     runners = models.ManyToManyField(Runner)
+#     bluerows = JSONField(default={})
+#     greenrows = JSONField(default={})
+#     redrows = JSONField(default={})
+#     yearcolorcounts = JSONField(default={})
+#     yearstats = JSONField(default={})
+#     stats = JSONField(default={})
+#     bfwins = models.SmallIntegerField(default=None, null=True)
+#     bfruns = models.SmallIntegerField(default=None, null=True)
+#     winsr = models.FloatField(default=None, null=True)
+#     expectedwins= models.FloatField(default=None, null=True)
+#     a_e = models.FloatField(default=None, null=True)
+#     levelbspprofit= models.DecimalField(max_digits=10, decimal_places=2,default=None, null=True)
+#     levelbsprofitpc= models.FloatField(default=None, null=True)
+#     a_e_last50 = models.FloatField(default=None, null=True)
+#     archie_allruns= models.FloatField(default=None, null=True)
+#     expected_last50= models.FloatField(default=None, null=True)
+#     archie_last50= models.FloatField(default=None, null=True)
+#     last50wins= models.SmallIntegerField(default=None, null=True)
+#     last50pc= models.FloatField(default=None, null=True)
+#     last50str= models.CharField(max_length=250,default=None, null=True)
+#     last28daysruns=  models.SmallIntegerField(default=None, null=True)
+#     profit_last50= models.DecimalField(max_digits=10, decimal_places=2,default=None, null=True)
+#     longest_losing_streak=models.SmallIntegerField(default=None, null=True)
+#     average_losing_streak=models.FloatField(default=None, null=True)
+#     average_winning_streak=models.FloatField(default=None, null=True)
+#     red_rows_ct = models.SmallIntegerField(default=None, null=True)
+#     blue_rows_ct  = models.SmallIntegerField(default=None, null=True)
+#     green_rows_ct = models.SmallIntegerField(default=None, null=True)
+#     total_rows_ct = models.SmallIntegerField(default=None, null=True)
+#     red_rows_pc= models.FloatField(default=None, null=True)
+#     blue_rows_pc= models.FloatField(default=None, null=True)
+#     green_rows_pc= models.FloatField(default=None, null=True)
+#     individualrunners=  models.FloatField(default=None, null=True)
+#     uniquewinners=  models.FloatField(default=None, null=True)
+#     uniquewinnerstorunnerspc= models.FloatField(default=None, null=True)
+#     yearstats= JSONField(default={})
+#     yearcolorcounts= JSONField(default={})
+#     totalbackyears = models.SmallIntegerField(default=None, null=True)
+#     validuptonotincluding = models.DateTimeField() #real tracker for HISTORICAL will be MAR 15 2016
+#     created = models.DateTimeField(auto_now_add=True)
+#     updated = models.DateTimeField(auto_now=True, blank=True)

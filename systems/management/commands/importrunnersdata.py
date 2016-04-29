@@ -85,11 +85,14 @@ def going_fromfs_torp(going):
     'Sft': 'Sft'
     }.get(going, going)
 
-#CHECK RACECOURSES AND RUN
-class Command( BaseCommand ):
-    help = 'Import data'
 
-    @transaction.atomic
+### SEEMS OK - 2016-L-01A/MuliplexGeldings Do not exist
+###
+
+class Command( BaseCommand ):
+    help = 'Import data- python manage.py importrunnersdata - prereqs: all systems in csv have been added to system'
+
+    # @transaction.atomic
     def handle( self, *args, **options ):
         full_path= '/Users/vmac/PY/DJANGOSITES/DATA/RUNNERS/ALLHISTORICALRUNNERS_backlay.csv'
 
@@ -143,123 +146,120 @@ class Command( BaseCommand ):
 
         for row in rlist:
 
-            non_existing_systems = Counter()
+            non_existing_systems = set()
             seen_before = set()
-            result  = {}
-
             row_num = 0
             runner_num = 0
-            skipped_num = 0
 
-            for row in rlist:
+            try:
+                systemname = row['SYSTEMNAME']
+                system = System.objects.get(systemname=systemname)
+            except System.DoesNotExist:
+                print('System %s does not exist' % (systemname,))
+                non_existing_systems.add(systemname)
+                continue
+            row_num += 1
 
+            racecoursename = get_standard_rc_name(row['racecoursename'].strip())
+            fsraceno   = row['fsraceno']
+            if racecoursename.upper() == 'NEWMARKET':
+                racecourse_id = Racecourse.objects.get(racecourse_id=38).racecourse_id
+            else:
                 try:
-                    systemname = row['SYSTEMNAME'].strip()
-                    system = System.objects.get(systemname=systemname)
-                except System.DoesNotExist:
-                    print('System %s does not exist' % (systemname,))
-                    non_existing_systems.update(systemname)
-                    continue
-                row_num += 1
+                    racecourse_id = Racecourse.objects.get(racecoursename=racecoursename).racecourse_id
+                except ObjectDoesNotExist:
+                    racecourse_id = None
 
-                racecoursename = get_standard_rc_name(row['racecoursename'].strip())
-                fsraceno   = row['fsraceno']
-                if racecoursename.upper() == 'NEWMARKET':
-                    racecourse_id = Racecourse.objects.get(racecourse_id=38).racecourse_id
+            _going = going_fromfs_torp(row['going'].strip())
+            horsename = row['horsename'].strip()
+            if horsename == ' ':
+                continue
+            date = row['racedate'].split('/') # %m%d%Y
+            racetime = row['racetime'].strip()
+            racedate = datetime(2000 + int(date[2]), int(date[0]), int(date[1]))
+            print(racedate, horsename,Runner.objects.filter(horsename=horsename, racedate=racedate, ))
+
+            # ##RUNNER IS UNIQUE ON RACEDATE AND HORSENAME
+            thisru = Runner.objects.filter(horsename=horsename, racedate=racedate, )
+            # if this raceno has been seen before get runner add runner to system and continue
+            if len(thisru) > 0:
+                #if systemrunner already in system but not
+                system.runners.add(thisru[0])
+                system.save()
+                seen_before.add(system.id)
+                continue
+            else:
+                validfrom =  getracedatetime(datetime.strptime("20130101", "%Y%m%d").date(), '12:00 AM')
+                validuptonotincluding =   getracedatetime(datetime.strptime("20151115", "%Y%m%d").date(), '12:00 AM')
+                    racedatetime
+                fsraceno = row['fsraceno']
+                racetimes_d[fsraceno] = racetime
+                if racetime == '':
+                    #has this racetime been seen before?
+                    racetime = racetimes_d.get(fsraceno, None)
+                    if not racetime:
+                        racetime = "06:00 AM"
+                    racedatetime = getracedatetime(racedate, racetime)
                 else:
-                    try:
-                        racecourse_id = Racecourse.objects.get(racecoursename=racecoursename).racecourse_id
-                    except ObjectDoesNotExist:
-                        racecourse_id = None
-
-                _going = going_fromfs_torp(row['going'].strip())
-                horsename = row['horsename'].strip()
-                if horsename == ' ':
-                    continue
-                date = row['racedate'].split('/')
-                racetime = row['racetime'].strip()
-                racedate = datetime(2000 + int(date[2]), int(date[0]), int(date[1]))
-                ##RUNNER IS UNIQUE ON RACEDATE AND HORSENAME
-                thisru = Runner.objects.filter(horsename=horsename, racedate=racedate, )
-                # if this raceno has been seen before get runner add runner to system and continue
-                if len(thisru) > 0:
-                    #if systemrunner already in system but not
-                    system.runners.add(thisru[0])
-                    system.save()
-                    seen_before.add(system.id)
-                    continue
+                    racetime = racetime + ' PM'
+                    racedatetime = getracedatetime(racedate, racetime)
+                _damname = row['damname'].strip() or None
+                _damsirename = row['damsirename'].strip() or None
+                _isplaced = row['isPlaced']
+                if _isplaced == '':
+                    isplaced = None
                 else:
-                    # validfrom =  getracedatetime(datetime.strptime("20130101", "%Y%m%d").date(), '12:00 AM')
-                    # validuptonotincluding =   getracedatetime(datetime.strptime("20151115", "%Y%m%d").date(), '12:00 AM')
-                        #racedatetime
-                    fsraceno = row['fsraceno']
-                    racetimes_d[fsraceno] = racetime
-                    if racetime == '':
-                        #has this racetime been seen before?
-                        racetime = racetimes_d.get(fsraceno, None)
-                        if not racetime:
-                            racetime = "06:00 AM"
-                        racedatetime = getracedatetime(racedate, racetime)
-                    else:
-                        racetime = racetime + ' PM'
-                        racedatetime = getracedatetime(racedate, racetime)
-                    _damname = row['damname'].strip() or None
-                    _damsirename = row['damsirename'].strip() or None
-                    _isplaced = row['isPlaced']
-                    if _isplaced == '':
-                        isplaced = None
-                    else:
-                        isplaced = (True if int(_isplaced) == 1 else False)
-                    _isbfplaced = row['isBFplaced']
-                    if _isbfplaced == '':
-                        isbfplaced = None
-                    else:
-                        isbfplaced = (True if int(_isbfplaced) == 1 else False)
-                    defaults_all = {'horsename': horsename,
-                        'racedate': racedate,
-                        'racedatetime': racedatetime,
-                        'racecoursename': racecoursename,
-                        'racecourseid': racecourse_id,
-                        'racetime': racetime,
-                        'norunners': int( row['norunners'] ),
-                        'finalpos': row['FINALPOS'],
-                        'winsp': float( row['winsp'] ),
-                        'bfsp': float( row['bfsp'] ),
-                        'isplaced': isplaced,
-                        'isbfplaced': isbfplaced,
-                        'racetypehorse' : row['racetypehorse'],
-                        'racetypeconditions' : row['racetypeconditions'],
-                        'racetypehs' : row['racetypehs'],
-                        'ages' : row['ages'],
-                         'oldraceclass' : row['oldraceclass'],
-                         'distance' : float(row['distance']),
-                        'rpgoing' : _going,
-                        'sirename' : row['sirename'].strip(),
-                         'trainername' : row['trainername'].strip(),
-                        'jockeyname' : row['jockeyname'].strip(),
-                        'damname': _damname,
-                        'damsirename': _damsirename,
-                        'lbw': float( row['lbw'] ),
-                         'winsppos': int( row['winsppos'] ),
-                        'bfpsp': float( row['bfpsp'] ),
-                        'totalruns':int( row['totalruns'] ),
-                    }
+                    isplaced = (True if int(_isplaced) == 1 else False)
+                _isbfplaced = row['isBFplaced']
+                if _isbfplaced == '':
+                    isbfplaced = None
+                else:
+                    isbfplaced = (True if int(_isbfplaced) == 1 else False)
+                defaults_all = {'horsename': horsename,
+                    'racedate': racedate,
+                    'racedatetime': racedatetime,
+                    'racecoursename': racecoursename,
+                    'racecourseid': racecourse_id,
+                    'racetime': racetime,
+                    'norunners': int( row['norunners'] ),
+                    'finalpos': row['FINALPOS'],
+                    'winsp': float( row['winsp'] ),
+                    'bfsp': float( row['bfsp'] ),
+                    'isplaced': isplaced,
+                    'isbfplaced': isbfplaced,
+                    'racetypehorse' : row['racetypehorse'],
+                    'racetypeconditions' : row['racetypeconditions'],
+                    'racetypehs' : row['racetypehs'],
+                    'ages' : row['ages'],
+                     'oldraceclass' : row['oldraceclass'],
+                     'distance' : float(row['distance']),
+                    'rpgoing' : _going,
+                    'sirename' : row['sirename'].strip(),
+                     'trainername' : row['trainername'].strip(),
+                    'jockeyname' : row['jockeyname'].strip(),
+                    'damname': _damname,
+                    'damsirename': _damsirename,
+                    'lbw': float( row['lbw'] ),
+                     'winsppos': int( row['winsppos'] ),
+                    'bfpsp': float( row['bfpsp'] ),
+                    'totalruns':int( row['totalruns'] ),
+                }
 
-                    # defaults_lay = defaults_all.delete('isplaced').delete('isbfplaced')
+                # defaults_lay = defaults_all.delete('isplaced').delete('isbfplaced')
 
-                    runner, created = Runner.objects.update_or_create(horsename=horsename, racedate=racedate,
-                                                                      defaults=defaults_all)
-                    tracker.update(system.systemname)
+                runner, created = Runner.objects.update_or_create(horsename=horsename, racedate=racedate,
+                                                                  defaults=defaults_all)
+                tracker.update(system.systemname)
 
-                    if runner:
-                        runner_num +=1
+                if runner:
+                    runner_num +=1
 
-                    system.runners.add(runner)
-                    system.save()
+                system.runners.add(runner)
+                system.save()
 
     # with open( 'superresult.txt', 'w' ) as outfile:
     #     json.dump( result, outfile, indent = 2 )
-            self.stdout.write('Successfully imported data into database %d runners' % runner_num)
-            print(tracker['2016-S-01T'])
-            print(non_existing_systemsØ)
+        self.stdout.write('Successfully imported data into database %d runners' % runner_num)
+        print(tracker['2016-S-01T'])
+        print(non_existing_systems)
 

@@ -175,28 +175,32 @@ def systems_detail(request, systemname):
         context['table'] = live_2016_ru
     return TemplateResponse(request, 'systems/system.html', context)
 
+
 def systems_index(request):
     ''''Each system is a div with Name, description isActive, isToLay, isToWin, Wins, Runs, WinSR , ChiAquared'''
 
-    #wish this would work with a Manager!
-    ss_2016_start = (getracedatetime(datetime.strptime("20160101", "%Y%m%d").date(), '12:00 AM')).date()
-    ss_season2016_start = (getracedatetime(datetime.strptime("20160328", "%Y%m%d").date(), '12:00 AM')).date()
+    if not request.user.is_authenticated():
+        return HttpResponseRedirect('/')
+    else:
+        #wish this would work with a Manager!
+        ss_2016_start = (getracedatetime(datetime.strptime("20160101", "%Y%m%d").date(), '12:00 AM')).date()
+        ss_season2016_start = (getracedatetime(datetime.strptime("20160328", "%Y%m%d").date(), '12:00 AM')).date()
 
 
 
-    all_snaps_2016 = SystemSnapshot.thisyear.filter(validfrom__date=ss_2016_start).annotate(null_position=Count('levelbspprofit')).order_by('-null_position', '-levelbspprofit')
+        all_snaps_2016 = SystemSnapshot.thisyear.filter(validfrom__date=ss_2016_start).annotate(null_position=Count('levelbspprofit')).order_by('-null_position', '-levelbspprofit')
 
-    ##none so far!
-    all_snaps_season = SystemSnapshot.thisseason.filter(validfrom__date=ss_season2016_start).annotate(
-        null_position=Count('levelbspprofit')).order_by('-null_position', '-levelbspprofit')
+        ##none so far!
+        all_snaps_season = SystemSnapshot.thisseason.filter(validfrom__date=ss_season2016_start).annotate(
+            null_position=Count('levelbspprofit')).order_by('-null_position', '-levelbspprofit')
 
-    table = SystemTable(all_snaps_2016, order_by=("-levelbspprofit", "runs"),empty_text='No systems here')
-    RequestConfig(request, paginate={"per_page": 25}).configure(table)
-    return render(request, 'systems/systems.html', {
-        'table': table,
-        'snaps': all_snaps_2016,
-        'seasonsnaps': all_snaps_season
-        })
+        table = SystemTable(all_snaps_2016, order_by=("-levelbspprofit", "runs"),empty_text='No systems here')
+        RequestConfig(request, paginate={"per_page": 25}).configure(table)
+        return render(request, 'systems/systems.html', {
+            'table': table,
+            'snaps': all_snaps_2016,
+            'seasonsnaps': all_snaps_season
+            })
 
 
 def systems_mylist(request):

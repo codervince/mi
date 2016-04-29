@@ -46,5 +46,6 @@ urlpatterns = [
     url(r'^account/', include('django.contrib.auth.urls')),
     url(r'^funds/', include('funds.urls')),
     url(r'^systems/', include('systems.urls')),
+    url(r'^bets/', include('bets.urls')),
     url(r'^user/', include('dashboard.urls')),
 ]

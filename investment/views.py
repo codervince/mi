@@ -44,7 +44,7 @@ def register(request):
             user.save()
             user = authenticate(username=request.POST.get('username'), password=request.POST.get('password'))
             login(request, user)
-            return HttpResponseRedirect(reverse('userdetail'))
+            return HttpResponseRedirect(reverse('systems:systems_index'))
     else:
         user_form = UserRegistrationForm()
     return render(request, 'investment/account/registration.html', {'user_form': user_form})

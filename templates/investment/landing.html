@@ -3,7 +3,7 @@
   {% load staticfiles %}
 <div class="inner">
  {% load i18n %}
-
+{% block title %} Metainvest.io {% endblock %}
     {% if not user.is_authenticated %}
 
           <div class="col-md-12 text-right">
@@ -27,7 +27,7 @@
                 <a class="btn btn-lg btn-success" href="{% url 'register' %}">Sign up</a>
               </p>
               </div>
-
+                {% include "investment/_subscriptionsinfo.html" %}
               <!-- <div class="col-md-6 col-md-offset-3 col-sm-6 col-sm-offset-3 col-sx-12 text-center"> -->
               <div class="row">
                 <div class="col-md-12">

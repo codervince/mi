@@ -164,7 +164,8 @@ class System(models.Model):
     isToLay = models.BooleanField(default=False)
     premium  = models.FloatField("System price premium over base", default=1.0)   ##auto updated  based on current performance
 
-    runners = models.ManyToManyField(Runner) #dep
+    runners = models.ManyToManyField(Runner)
+    newrunners = models.ManyToManyField(Runner, through ="NewSystemRunners", related_name="newrunners")
 
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True, blank=True)
@@ -179,6 +180,13 @@ class System(models.Model):
         ordering = ('snapshotid',)
 
 
+# group.members.all():
+class NewSystemRunners(models.Model):
+    system = models.ForeignKey(System, on_delete=models.CASCADE)
+    newrunner = models.ForeignKey(Runner, on_delete=models.CASCADE)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True, blank=True)
+
 
 #base model variation for Simple, Advanced also Fund, System
 #unique on time created
@@ -188,8 +196,27 @@ class SystemSnapshot(models.Model):
 
     isHistorical = models.NullBooleanField() #NOT IN CURRENT LIVE USE
     system = models.ForeignKey(System, on_delete=models.CASCADE, related_name='systemsnapshots')
+
     validuptonotincluding = models.DateTimeField()
     validfrom = models.DateTimeField(default=WORLD_CREATED)
+    name = models.CharField(max_length=50, null=True, blank=True)
+
+    # IMPORT SNAPSHOT FIELDS
+    runseq  = models.TextField(null=True)
+    winseq = models.TextField(null=True)
+    season_runs = models.SmallIntegerField(default=0, null=True)
+    season_wins = models.SmallIntegerField(default=0, null=True)
+    season_runseq = models.CharField(max_length=50, null=True)
+    season_winseq = models.CharField(max_length=50, null=True)
+    season_archie = models.FloatField(default=None, null=True)
+    season_expected = models.FloatField(default=None, null=True)
+
+    l50_runseq = models.CharField(max_length=50, null=True)
+    season_runseq = models.TextField(null=True)
+
+    win_days = models.SmallIntegerField( default=0, null=True)
+
+    top10_stakeplans = JSONField(default={})
 
     #HISTORICAL FS ONLY FIELDS
     bluerows = JSONField(default={})
@@ -197,7 +224,7 @@ class SystemSnapshot(models.Model):
     redrows = JSONField(default={})
     yearcolorcounts = JSONField(default={})
     yearstats = JSONField(default={})
-    stats = JSONField(default={}) #dep
+    # stats = JSONField(default={})
     red_rows_ct = models.SmallIntegerField(default=None, null=True)
     blue_rows_ct  = models.SmallIntegerField(default=None, null=True)
     green_rows_ct = models.SmallIntegerField(default=None, null=True)
@@ -225,10 +252,11 @@ class SystemSnapshot(models.Model):
     last50str= models.CharField("Last 50 Results", max_length=250,default=None, null=True)
     last28daysruns=  models.CharField("Last 28 Days Summary", max_length=250,default=None, null=True)
     profit_last50= models.DecimalField(max_digits=10, decimal_places=2,default=None, null=True)
-    shortest_losing_streak = models.SmallIntegerField(default=None, null=True)
+
     longest_losing_streak=models.SmallIntegerField(default=None, null=True)
     average_losing_streak=models.FloatField(default=None, null=True)
     average_winning_streak=models.FloatField(default=None, null=True)
+
     individualrunners= models.FloatField("No. Individual Runners", default=None, null=True)
     uniquewinners= models.FloatField("No. Unique Winners", default=None, null=True)
 
