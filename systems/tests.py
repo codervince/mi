@@ -1,3 +1,4 @@
+import datetime
 from django.conf import settings
 from django.contrib.auth.models import User, AnonymousUser
 from django.contrib.messages.storage.fallback import FallbackStorage
@@ -46,7 +47,7 @@ class SystemPermissionsTestCase( TestCase ):
         self.assertFalse( user.has_perm( 'view_task', system ) )
 
 
-from systems.models import System
+from systems.models import System, SystemSnapshot
 from django.test import RequestFactory
 
 
@@ -96,6 +97,8 @@ class TestSystemSubscribe(TestCase):
         Subscription.objects.get_or_create(name="Good", recurrence_period='3', recurrence_unit='M', system=self.system, price=10, subscription_type='SYSTEM')
         Subscription.objects.get_or_create(name="Bad", recurrence_period='5', recurrence_unit='W', system=self.system, price=100, subscription_type='SYSTEM')
         Subscription.objects.get_or_create(name="Not Displayed", recurrence_period='5', recurrence_unit='D', system=self.system, price=0, subscription_type='SYSTEM')
+
+        SystemSnapshot.objects.get_or_create(system=self.system, validuptonotincluding=datetime.datetime.now())
 
     def testFixtures(self):
         system = System.objects.all().count()

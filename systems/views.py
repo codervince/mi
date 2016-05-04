@@ -99,11 +99,11 @@ def systems_detail(request, systemname):
     context = {}
 
     #most efficient way using prefetch_related
-    s = get_object_or_404(System, systemname=systemname, isActive=True)
+    system = get_object_or_404(System, systemname=systemname, isActive=True)
     snaps = System.objects.filter(systemname='2016-S-01T').prefetch_related('systemsnapshots')
     historical = [list(s.systemsnapshots.filter(validuptonotincluding__date__lte=ss_hist_end)) for s in snaps][0]
-    year = [list(s.systemsnapshots.filter(validfrom__date__eq=ss_2016_start)) for s in snaps][0]
-    season = [list(s.systemsnapshots.filter(validfrom__date__eq=ss_season2016_start)) for s in snaps][0]
+    year = [list(s.systemsnapshots.filter(validfrom__date=ss_2016_start)) for s in snaps][0]
+    season = [list(s.systemsnapshots.filter(validfrom__date=ss_season2016_start)) for s in snaps][0]
     year_ru = [list(s.runners.filter(racedate__gte='2016-01-01')) for s in snaps]
     season_ru = [list(s.runners.filter(racedate__gte='2016-03-28')) for s in snaps]
     hist_ru = [list(s.runners.filter(racedate__lte='2015-12-01')) for s in snaps]
@@ -305,7 +305,7 @@ def subscribe(request, system):
         # check if user is already subscribed
         user_subscription, created = UserSubscription.objects.get_or_create(subscription=subscription, user=investor)
 
-        if user_subscription and user_subscription.expires.date() > datetime.today().date():
+        if not created and user_subscription and user_subscription.expires.date() > datetime.today().date():
             messages.add_message(request, messages.INFO, 'Already Subscribed, expires st %s ' % user_subscription.expires)
             return systems_detail(request, system)
             # return redirect("systems:systems_detail", systemname=system)
