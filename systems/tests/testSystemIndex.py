@@ -1,24 +1,10 @@
-from django.core.urlresolvers import reverse
-from django.test                import TestCase, client
-from django.contrib.auth.models import User, AnonymousUser
-from guardian.shortcuts         import assign_perm
-from guardian.shortcuts         import remove_perm
-from django.http    import HttpRequest
-from investment_accounts.models import SystemAccount, Subscription
-from systems.models             import System
-from systems.views import subscribe, systems_index
 from django.conf import settings
-from systems.test_utilities import MyHTMLLinkParser
-from django.template.loader import render_to_string
-from django.test import Client
-from datetime import datetime
-import pytz
-from pytz import timezone
-from systems.models import System, SystemSnapshot
-from django.test import Client
+from django.http    import HttpRequest
 from django.test import RequestFactory
-from .utilities import getracedatetime
+from django.test                import TestCase
 
+from systems.models import System, SystemSnapshot
+from systems.views import systems_index
 
 '''
 Purpose of the Systems Index View page
