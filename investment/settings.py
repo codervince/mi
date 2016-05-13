@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'systems',
     'funds',
     'bets',
+    'rp',
     'django.contrib.humanize',
     'django.contrib.sites',
     'django.contrib.flatpages',

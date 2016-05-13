@@ -333,34 +333,37 @@ def getracedatetime(racedate, racetime=None, format=None):
         racedatetime = localtz.localize(racedatetime)
     return racedatetime
 
+#TODO django.db.utils.ProgrammingError: column systems_system.isToPlace does not exist - restart? migrate
 
-def update_system_snapshot(systemname, validfrom, validuptoandincluding):
+def create_update_system_snapshot(sname, validfrom, validuptoandincluding):
     # previous way
     # runs = System.objects.filter(systemname=systemname).prefetch_related('runners')
 
-    # livesince default is this season start
+    # we have the systemname does the syste,m exist? if so get ID .DoesNotExist
+    try:
+        s = System.objects.get(systemname=sname)
+    except System.DoesNotExist:
+        return
 
-    ## season starts again
-    SEASON_STARTS = {'2016': (getracedatetime(datetime.strptime("20160328", "%Y%m%d").date(), '12:00 AM')).date(),
-                     '2015': (getracedatetime(datetime.strptime("20150328", "%Y%m%d").date(), '12:00 AM')).date(),
-                     '2014': (getracedatetime(datetime.strptime("20140328", "%Y%m%d").date(), '12:00 AM')).date(),
-                     '2013': (getracedatetime(datetime.strptime("20130328", "%Y%m%d").date(), '12:00 AM')).date(),
-                     }
-
-
-    runs = System.objects.filter(systemname=systemname).prefetch_related('newrunners')
-    # this_system = runs[0]
+    print(validfrom, validuptoandincluding)
 
 
-    # results needs to be timezone-based correct and return here
+    # get ALL runners for this system
+
+    runs = System.objects.filter(id= s.id).prefetch_related('newrunners')
+    this_system = runs[0]
+
+    assert this_system.systemname == s.systemname, "%s should equal %s" % (this_system.systemname,s.systemname )
 
     # runners_list = s.runners.filter(racedate__gte=validfrom, racedate__lte=validuptoandincluding).all()
     runners_list = [list(s.newrunners.filter(
         racedate__gte=validfrom,
         racedate__lte=validuptoandincluding
     )) for s in runs][0]
-    print("chk out runners list")
-    print(runners_list[0].racedate, runners_list[0].racetime, runners_list[0].racedatetime, getracedatetime(runners_list[0].racedate,runners_list[0].racetime, format='%H:%M'))
+
+    print("check out runners list")
+    print(runners_list, type(runners_list))
+    # print(runners_list[0].racedate, runners_list[0].racetime, runners_list[0].racedatetime, getracedatetime(runners_list[0].racedate,runners_list[0].racetime, format='%H:%M'))
 
     assert False
 
@@ -1130,40 +1133,63 @@ def update_system_snapshot(systemname, validfrom, validuptoandincluding):
     assert False
 
 
+
+
 ##this will be the primary snapshot creater python manage.py createdailysnapshots --system=2016-S-01T --validfrom=2015-01-01 --validuptoandincluding=2015-11-01
 
 class Command(BaseCommand):
-    help = 'python manage.py createdailysnapshots --system=2016-S-01T --validfrom=2015-04-05 --validuptoandincluding=2015-10-31 --isDelta=1 --days=2'
+    help = '''
+    Use this to create a series of HISTORICAL snapshots 2013,2014, 2015, 2016SoFAR for todaysdate for an individual systemname and end_date
+
+    '''
+
+    # help = 'python manage.py createdailysnapshots --system=2016-S-01T --validfrom=2015-04-05 --validuptoandincluding=2015-10-31 --isDelta=1 --days=2'
 
     def add_arguments(self, parser):
-        parser.add_argument('--system', type=str) #or systems array
-        parser.add_argument('--validfrom', type=str)
-        parser.add_argument('--validuptoandincluding', type=str)
-        parser.add_argument('--isDelta', type=str)
-        parser.add_argument('--days', type=str)
+        parser.add_argument('--systemname', type=str)
+        parser.add_argument('--end_date', type=str)
+
 
     def handle(self, *args, **options):
 
-        # convert dates
-        validfrom = (getracedatetime(datetime.strptime(options['validfrom'], "%Y-%m-%d").date(), '12:00 AM')).date()
-        validuptoandincluding = (getracedatetime(datetime.strptime(options['validuptoandincluding'], "%Y-%m-%d").date(), '12:00 AM')).date()
+        today = datetime.now().date
+        # default "Calendar_YR", "Season_YR" 2013 to 2016
+        systemname = options['systemname']
+        ## season starts again
+        SEASON_STARTS = {'2016': (getracedatetime(datetime.strptime("20160328", "%Y%m%d").date(), '12:00 AM')).date(),
+                         '2015': (getracedatetime(datetime.strptime("20150328", "%Y%m%d").date(), '12:00 AM')).date(),
+                         '2014': (getracedatetime(datetime.strptime("20140328", "%Y%m%d").date(), '12:00 AM')).date(),
+                         '2013': (getracedatetime(datetime.strptime("20130328", "%Y%m%d").date(), '12:00 AM')).date(),
+                         }
 
+        # if need to update system use dosystemupdate
 
+        ## start with calendar years
+        # years = [2013,2014,2015,2016]
+        years = ["2015"]
+        for yr in years:
+            y = str(yr)
+            _s= y+ "-01-01"
+            _e = y + "-12-31"
+            validfrom = getracedatetime(datetime.strptime(_s, "%Y-%m-%d").date(), '12:00 AM').date()
+            validto = getracedatetime(datetime.strptime(_e, "%Y-%m-%d").date(), '12:00 AM').date()
 
+            # get all runnners for this system for these dates
+            assert options['systemname'], "please enter a system name"
+            create_update_system_snapshot(systemname, validfrom, validto)
 
-        if options['isDelta'] == "1":
-            runs_collection = list()
-            try:
-                days_ago = int(options['days'])
-            except AttributeError:
-                pass
-            today_uk = getracedatetime(datetime.utcnow().date(), '12:00 AM').date()
-            n_days_ago = today_uk + timedelta(days=-days_ago)
-
-            # Get all systems recently updated
-            SYSTEM_NAMES_SET = set(System.objects.filter(newsystemrunners__created__gte=n_days_ago).only('systemname'))
-            for systemname in SYSTEM_NAMES_SET:
-                update_system_snapshot(systemname, validfrom, validuptoandincluding)
+            # runs_collection = list()
+            # try:
+            #     days_ago = int(options['days'])
+            # except AttributeError:
+            #     pass
+            # today_uk = getracedatetime(datetime.utcnow().date(), '12:00 AM').date()
+            # n_days_ago = today_uk + timedelta(days=-days_ago)
+            #
+            # # Get all systems recently updated
+            # SYSTEM_NAMES_SET = set(System.objects.filter(newsystemrunners__created__gte=n_days_ago).only('systemname'))
+            # for systemname in SYSTEM_NAMES_SET:
+            #     update_system_snapshot(systemname, validfrom, validupto)
 
 
 

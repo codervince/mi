@@ -23,24 +23,30 @@ def getracedatetime(racedate, racetime):
 
 WORLD_CREATED = getracedatetime(datetime.strptime("20010101", "%Y%m%d"), '12:00 am')
 
-## Adapted to allow for RPRaces input
+### USE FOR FS INPUT FROM CSV
+### RP INPUT?
+
 class Runner(models.Model):
     # objects = models.Manager()
     # live = LiveManager()
     '''
     RPfields LIVE racedate, racecoursename, racecourseid, racename, racetypehorse, racetypeconditins, racetypehs, ages...
     '''
-    # RUNTYPE = (
-    # ('LIVE', 'LIVE'),
-    # ('HISTORICAL', 'HISTORICAL'),
-    # )
+    CODE = (
+    ('A', 'AWT'),
+    ('F', 'Flat'),
+    ('J', 'Jumps')
+    )
     #unique identifiers
     # runtype = models.CharField(max_length=20, help_text=_('live_or_historical'), choices=RUNTYPE, default='HISTORICAL')
     racedate = models.DateField(help_text=_('race date'),)
     racedatetime = models.DateTimeField(null=True)
+    racetime = models.CharField(help_text=_('Race off time'), max_length=250, null=True)
     racecoursename = models.CharField(help_text=_('racecourse'), max_length=35)
     racecourseid = models.IntegerField(help_text=_('racecourseid'),blank=True,null=True)
     racename = models.CharField(help_text=_('race name'), max_length=250,null=True)
+    racecode =  models.CharField(max_length=1, choices=CODE, default=None, null=True)
+    # race attributes
     racetypehorse = models.CharField(help_text=_('entry type horse'),max_length=35,null=True)
     racetypeconditions = models.CharField(help_text=_('entry conditions'),max_length=35,null=True)
     racetypehs= models.CharField(help_text=_('handicap or stakes'),max_length=35,null=True)
@@ -50,7 +56,10 @@ class Runner(models.Model):
     distance = models.FloatField(help_text=_('distance furlongs'), null=True)
     going = models.CharField(help_text=_('going'),max_length=35,null=True) 
     rpgoing = models.CharField(help_text=_('going'),max_length=35, null=True)
+
     norunners = models.SmallIntegerField(help_text=_('number of runners'),null=True)
+
+    # entities
     horsename = models.CharField(help_text=_('horse name'),max_length=250)
     horseid = models.IntegerField(help_text=_('Horse id'),blank=True,default=None, null=True)
     sirename = models.CharField(help_text=_('sire name'),max_length=250,null=True)
@@ -59,30 +68,37 @@ class Runner(models.Model):
     trainerid = models.IntegerField(help_text=_('Trainerid'),blank=True,default=None,null=True)
     jockeyname = models.CharField(help_text=_('jockey'),max_length=250,null=True)
     jockeyid = models.IntegerField(help_text=_('Jockey id'),blank=True,default=None,null=True)
+    damname = models.CharField(help_text=_('Dam\'s name'), max_length=250, null=True)
+    damid = models.IntegerField(help_text=_('Dam id'), blank=True, default=None, null=True)
+    damsirename = models.CharField(help_text=_('Dam\'s sire name'), max_length=250, null=True)
+    damsireid = models.IntegerField(help_text=_('Dam sire id'), blank=True, default=None, null=True)
+    ownerid = models.IntegerField(help_text=_('Owner id'), blank=True, default=None, null=True)
+    ownername = models.CharField(help_text=_('Owner\'s name'), max_length=250, null=True)
+
+
+    # attributes of entities
     allowance = models.SmallIntegerField(help_text=_('jockey allowance'), default=0, null=True)
     finalpos = models.CharField(help_text=_('Final position'),max_length=5)
     lbw = models.FloatField(help_text=_('Beaten by L'),null=True)
-    winsp = models.FloatField(help_text=_('final starting price win'),null=True) #may need to be converted
-    winsppos = models.SmallIntegerField(help_text=_('rank final starting price'),null=True)
-    bfsp = models.DecimalField(help_text=_('Betfair SP win'),max_digits=6, decimal_places=2,null=True)
-    bfpsp = models.DecimalField(help_text=_('Betfair SP place'),max_digits=6, decimal_places=2, null=True)
-    fsratingrank = models.SmallIntegerField(help_text=_('FS Rating rank'),null=True)
-    fsrating = models.FloatField(help_text=_('FS Rating'),null=True)
-    fsraceno = models.CharField(help_text=_('distance'),max_length=250, unique=True,null=True)
-    draw = models.SmallIntegerField(help_text=_('barrier'),null=True)
-    damname = models.CharField(help_text=_('Dam\'s name'),max_length=250, null=True)
-    damid = models.IntegerField(help_text=_('Dam id'),blank=True,default=None, null=True)
-    damsirename  = models.CharField(help_text=_('Dam\'s sire name'),max_length=250, null=True)
-    damsireid = models.IntegerField(help_text=_('Dam sire id'),blank=True, default=None, null=True)
-    ownerid = models.IntegerField(help_text=_('Owner id'),blank=True,default=None, null=True)
-    ownername = models.CharField(help_text=_('Owner\'s name'),max_length=250, null=True)
-    racetime  = models.CharField(help_text=_('Race off time'),max_length=250, null=True)
+    draw = models.SmallIntegerField(help_text=_('barrier'), null=True)
     totalruns =  models.SmallIntegerField(help_text=_('total runs horse'), default=None, null=True)
     totalwins =  models.FloatField(help_text=_('total wins horse'),default=None,null=True)
     isplaced = models.NullBooleanField(help_text=_('Placed?'), null=True)
     isbfplaced= models.NullBooleanField(help_text=_('is Placed on Betfair?'), null=True)
-    # stats = JSONField(blank=True,default={}) #remove
-    
+
+    # market data
+    winsp = models.FloatField(help_text=_('final starting price win'),null=True) #may need to be converted
+    winsppos = models.SmallIntegerField(help_text=_('rank final starting price'),null=True)
+    bfsp = models.DecimalField(help_text=_('Betfair SP win'),max_digits=6, decimal_places=2,null=True)
+    bfpsp = models.DecimalField(help_text=_('Betfair SP place'),max_digits=6, decimal_places=2, null=True)
+
+    # fs specific
+    fsratingrank = models.SmallIntegerField(help_text=_('FS Rating rank'),null=True)
+    fsrating = models.FloatField(help_text=_('FS Rating'),null=True)
+    fsraceno = models.CharField(help_text=_('distance'),max_length=250, unique=True,null=True)
+
+
+
     # def __str__(self):
     #     return 'racedate: %s, racecourseid %d, horsename %s norunners %s finished %s' % (datetime.strftime(self.racedate, '%Y%m%d'), self.racecourseid, self.horsename. self.norunners, self.finalpos)
     #snapshotid runnerid--> system_runner table
@@ -141,10 +157,6 @@ ALl users can always view historical snapshots for system
 '''
 class System(models.Model):
 
-    # def get_absolute_url(self):
-    #     return reverse('systems:detail', args=[self.systemname])
-    ##_systemtype = fs, custom, id
-    #to display called s.get_systemtypes_display()
     SYSTEMTYPES = (
     ('tg', 'Trainglot'),
     ('mi', 'Metainvest'),
@@ -153,23 +165,22 @@ class System(models.Model):
     )
     systemtype = models.CharField(choices=SYSTEMTYPES, default='tg',max_length=50)
     systemname =  models.CharField("system name", max_length=50,unique=True, db_index=True)
+    # publicname = models.CharField(max_length=50, default="A System")
     snapshotid  = models.IntegerField() #internal fs id
     description= models.TextField(null=True)
-    isActive = models.BooleanField("is an active system") #is an active versus a test system
+    # isActive = models.BooleanField("is an active system") #is an active versus a test system
     isInUse = models.BooleanField("is currently in use", default=True)  # currently in use
     isTurf = models.BooleanField("is turf only")
-    exposure = ArrayField(models.CharField(max_length=500),)
+    # exposure = ArrayField(models.CharField(max_length=500),)
     rpquery = JSONField(null=True,blank=True)
     isToWin = models.BooleanField(default=True)
+    isToPlace = models.BooleanField(default=False)
     isToLay = models.BooleanField(default=False)
-    premium  = models.FloatField("System price premium over base", default=1.0)   ##auto updated  based on current performance
-
+    premium  = models.FloatField("System price premium over base", default=1.0)
     runners = models.ManyToManyField(Runner)
     newrunners = models.ManyToManyField(Runner, through ="NewSystemRunners", related_name="newrunners")
-
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True, blank=True)
-    
     objects = models.Manager()
 
     def __str__(self):
@@ -186,6 +197,9 @@ class NewSystemRunners(models.Model):
     newrunner = models.ForeignKey(Runner, on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True, blank=True)
+
+    def __str__(self):
+        return "systemname %s : date %s : horse %s" % (self.system.systemname, datetime.strptime(self.newrunner.racedatetime, "%Y%m%d"), self.newrunner.horsename,)
 
 
 #base model variation for Simple, Advanced also Fund, System

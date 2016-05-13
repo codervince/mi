@@ -73,6 +73,7 @@ Retrieves all runners for today from rpraces
 Query this table to get candidates
 Bets in separate table-> see Bet model 
 
+USE RP APP
 
 '''
 class RPRunner(models.Model):
@@ -140,6 +141,9 @@ class RPRunner(models.Model):
     )
 
     racecourse = models.ForeignKey(Racecourse, related_name='rprunner_racecourse')
+
+
+    racecoursename = models.CharField(max_length=35, null=True)
     racedatetime =models.DateTimeField()
     racedate = models.DateField(help_text=_('race date'),db_index=True)
     race_id =models.IntegerField()
@@ -228,8 +232,9 @@ class RPRunner(models.Model):
     newtrainerl1= models.NullBooleanField()
     newownerl1 = models.NullBooleanField()
     firsttimethisracetypehs= models.NullBooleanField()
+    l1distancechange = models.FloatField(null=True)
     l1classchange= models.CharField(max_length=135, null=True, choices=CHANGES) #string Up Same Down
-    l1distancechange= models.CharField(max_length=135, null=True,choices=CHANGES) #as classchange
+    # l1distancechange= models.CharField(max_length=135, null=True,choices=CHANGES) #as classchange
     allowance = models.IntegerField(null=True,default=None)
     ###extra fields
     finalpos = models.CharField(max_length=5,null=True)
