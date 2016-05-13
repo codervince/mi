@@ -122,19 +122,23 @@ ss_season2016_start = (getracedatetime(datetime.strptime("20160402", "%Y%m%d").d
 ss_2016_start = (getracedatetime(datetime.strptime("20160101", "%Y%m%d").date(), '12:00 AM')).date()
 ss_hist_start = (getracedatetime(datetime.strptime("20151129", "%Y%m%d").date(), '12:00 AM')).date()
 
+
 class SnapshotManagerThisSeason(models.Manager):
     ''' Returns the snapshots '''
-    def get_query_set(self):
-        return super(SnapshotManagerThisSeason, self).get_queryset().filter(validfrom__date__eq=ss_season2016_start)
+    def get_queryset(self):
+        return super(SnapshotManagerThisSeason, self).get_queryset().filter(
+            validfrom__date=ss_season2016_start)
+
 
 class SnapshotManagerThisYear(models.Manager):
     '''Get snapshot for this years runs'''
-    def get_query_set(self):
+    def get_queryset(self):
         return super(SnapshotManagerThisYear, self).get_queryset().filter(
-                validfrom__date__eq=ss_2016_start)
+                validfrom__date=ss_2016_start)
+
 
 class SnapshotManagerHistorical(models.Manager):
-    def get_query_set(self):
+    def get_queryset(self):
         return super(SnapshotManagerHistorical, self).get_queryset().filter(
                 validuptonotincluding__date__lte=ss_hist_start)
 
